@@ -82,6 +82,8 @@ void entity_update(Entity* self)
     Vector2D normal = { 0,0 };
     if (!self)return;
 
+    //comment
+
     vector2d_add(self->position, self->position, self->velocity);
     //   if (level_bounds_test_circle(level_get_active(), self->position, self->radius, &normal))
     //   {
