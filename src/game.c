@@ -1,9 +1,12 @@
 #include <SDL.h>
+#include "gf2d_draw.h"
+
 #include "gf2d_graphics.h"
 #include "gf2d_sprite.h"
 #include "simple_logger.h"
 #include "entity.h"
 #include "bug.h"
+#include "vector_map.h"
 
 int main(int argc, char * argv[])
 {
@@ -16,7 +19,7 @@ int main(int argc, char * argv[])
     float mf = 0;
     Sprite *mouse;
     Vector4D mouseColor = {255,100,255,200};
-    
+    VectorMap *testMap;
     Entity* bug;
 
 
@@ -42,6 +45,14 @@ int main(int argc, char * argv[])
 
     bug = bug_new(vector2d(100, 100), vector2d(gfc_crandom(), gfc_crandom()));
 
+    Vector2D p1 = { 20, 670 };
+    Vector2D p2 = { 1180, 670 };
+    Vector4D pinkColor = { 255, 105, 190, 255 };
+
+    testMap = vectormap_load("maps/test.json");
+  
+    
+
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
@@ -56,6 +67,7 @@ int main(int argc, char * argv[])
         // all drawing should happen betweem clear_screen and next_frame
             //backgrounds drawn first
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
+
             //entity_draw_all();
             
              entity_draw(bug);
@@ -70,6 +82,15 @@ int main(int argc, char * argv[])
                 NULL,
                 &mouseColor,
                 (int)mf);
+
+           
+
+            
+
+           gf2d_draw_line(p1, p2, pinkColor);
+           // gf2d_draw_line();
+
+            
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
         
         entity_update_all();

@@ -138,7 +138,7 @@ void entity_draw(Entity* self)
         NULL,
         NULL,
         (Uint32)self->frame);
-   // gf2d_draw_circle(self->position, self->radius, vector4d(255, 0, 255, 255));
+    //gf2d_draw_circle(self->position, self->radius, vector4d(255, 0, 255, 255));
     gfc_rect_set(rect,self->position.x,self->position.y,self->size.x,self->size.y);
     //gf2d_draw_rect(rect, vector4d(255, 0, 255, 255));
 }
