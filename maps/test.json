@@ -2,10 +2,11 @@
 
   "background": "images/backgrounds/bg_flat.png",
   "bounding_box": [0, 0, 0, 0],
-  "plat1": 
-  [
+  "plat1": [
     [ 20, 670 ],
-    [ 1180, 670 ]
+    [ 1180, 670 ],
+    [ 20, 600 ],
+    [ 1180, 600 ]
   ]
 
 
