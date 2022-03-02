@@ -51,7 +51,7 @@ int main(int argc, char * argv[])
 
     testMap = vectormap_load("maps/test.json");
   
-    
+
 
     while(!done)
     {
@@ -87,10 +87,11 @@ int main(int argc, char * argv[])
 
             
 
-           gf2d_draw_line(p1, p2, pinkColor);
+           //gf2d_draw_line(p1, p2, pinkColor);
            // gf2d_draw_line();
 
-            
+            vectormap_draw(testMap);
+
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
         
         entity_update_all();

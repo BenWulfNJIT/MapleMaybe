@@ -7,12 +7,16 @@
 #include "gf2d_sprite.h"
 
 
-typedef struct
+typedef struct VectorMap
 {
 
 	TextLine filename;
 	Sprite *backgroundImage;
-	char* testTest;
+	char *testTest;
+	int *platformCount;
+	int *platformCoords;
+	//vector4d* Test;
+	
 	//json object for each map? with 2d vectors? sounds complicated, point pairs
 
 
