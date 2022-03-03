@@ -76,6 +76,19 @@ VectorMap *vectormap_load(char *filename)
 
     }
 
+    //this is the loop that will store properly in 2dvec
+    for (int p=0; p < map->platformCount; p++)
+    {
+        columns = sj_array_get_nth(platforms, p);
+        for (int k = 0; k < sj_array_get_count(columns); k++)
+        {
+            element = sj_array_get_nth(columns, k);
+            sj_get_integer_value(element, &e);
+
+           // slog("possibly coords: %i", e);
+        }
+    }
+
     //working??!!
     //need to change ^^ loop so that it adds into platformMaybe[i]
     //also change da variable names u fool.
