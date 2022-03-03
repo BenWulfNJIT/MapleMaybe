@@ -14,7 +14,7 @@ VectorMap *vectormap_new()
     map = (VectorMap*)malloc(sizeof(VectorMap));
     if (!map)
     {
-        slog("failed to allocate memory for a new tilemap");
+        slog("Failed to allocate memory for a new Vector Map");
         return NULL;
     }
     memset(map, 0, sizeof(VectorMap));
@@ -23,13 +23,18 @@ VectorMap *vectormap_new()
 
 VectorMap *vectormap_load(char *filename)
 {
+
+    //need to add bounding box
+
     const char* backgroundFile = NULL;
-    SJson *json, *platforms, *columns, *element;
+    SJson *json, *platforms, *columns, *element, *bbRow, *bbColumn;
     VectorMap* map;
     int platformArraySize;
     int tempArray[12];
     int tempFirstNum;
     int i, r, c, e;
+    int bbx, bby;
+
 
     if (!filename)return NULL;
     json = sj_load(filename);
@@ -38,18 +43,12 @@ VectorMap *vectormap_load(char *filename)
     map = vectormap_new();
 
     map->testTest = sj_get_string_value(sj_object_get_value(json, "background"));
-    // rows = platforms
-    // columns = columns
     platforms = sj_object_get_value(json, "platforms");
     map->platformCount = sj_array_get_count(platforms);
     platformArraySize = sj_array_get_count(platforms) * 4;
     
     columns = sj_array_get_nth(platforms, 0);
-    
-   // slog("Rows: %i Columns: %i", sj_array_get_count(platforms),sj_array_get_count(columns) );
-
-    //slog("plats: %i, arraycount: %i",  map->platformCount, platformArraySize);
-
+  
 
     map->platformCoords = (Uint32*)gfc_allocate_array(sizeof(Uint32), platformArraySize);
     if (!map->platformCoords)
@@ -60,8 +59,6 @@ VectorMap *vectormap_load(char *filename)
 
     //loop inserts all plat coords into gross array
     //formatted like: (x1, y1, x2, y2, 
-
-
     for (i = 0, r = 0; r < map->platformCount; r++)
     {
         columns = sj_array_get_nth(platforms, r);
@@ -75,44 +72,76 @@ VectorMap *vectormap_load(char *filename)
         }
     }
 
-    //for (int p = 0; p < platformArraySize; p++)
-    //{
-    //    slog("Idk: %i", map->platformCoords[p]);
-    //}
-    //slog("Idk: %i", map->platformCoords[0])
+    // 0 0 x y
+    // 1 2
+    // 3 2
+    // 1 4
+    // 3 4
+    map->topLeftBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
+    map->topRightBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
+    map->bottomLeftBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
+    map->bottomRightBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
+
+    if (!map->platformCoords)
+    {
+        sj_free(json);
+        return map;
+    }
+    bbRow = sj_object_get_value(json, "bounding_box");
+
+    bbColumn = sj_array_get_nth(bbRow, 0);
+    sj_get_integer_value(bbColumn, &bbx);
+
+    bbColumn = sj_array_get_nth(bbRow, 1);
+    sj_get_integer_value(bbColumn, &bby);
+
+    slog("TEST %i %i", bbx, bby);
+
+
+    
+    map->topLeftBound[0] = 0;
+    map->topLeftBound[1] = 0;
+    
+    map->topRightBound[0] = bbx ;
+    map->topRightBound[1] =  0;
+
+    map->bottomLeftBound[0] = 0;
+    map->bottomLeftBound[1] = bby;
+
+    map->bottomRightBound[0] = bbx;
+    map->bottomRightBound[1] = bby;
+
+    
+
+    
+
+
     sj_free(json);
     return map;
 
-
-    
-
-    //total array space is gonna be platformCount * 4
-    //remember to free the json
-    // 4d vector for each platform?? hmmmmmmmmm??
-    //also need to add json platform data into an array, and also clear up this code a bit
-    // will probably be easiest to draw 1px wide rects instead of vectors? we'll see
-    //will need to possibly change format for map files
-    
-
-
 }
 
-void vectormap_free()
+void vectormap_free(VectorMap* map)
 {
-
+    if (!map)return;
+    free(map->platformCoords);
+    free(map);
 }
 
 void vectormap_draw(VectorMap* mapToDraw)
 {
 
-    //This is ugly im sorry
-    // Wanted to put mapToDraw->platformCoords as Vector4D but instead its a huge array of coordinates repeating
+    // This is ugly
+    // Wanted to put mapToDraw->platformCoords as Vector4D
+    // instead its a huge array of coordinates repeating
     int x1 = 0;
     int y1 = 1;
     int x2 = 2;
     int y2 = 3;
     Vector4D pinkColor = { 255, 105, 190, 255 };
+    Vector4D greenColor = { 105, 255, 190, 255 };
 
+   // Vector2D tl, tr, bl, br;
 
     for (int i = 0; i < mapToDraw->platformCount; i++)
     {
@@ -126,5 +155,23 @@ void vectormap_draw(VectorMap* mapToDraw)
         y1 += 4;
         y2 += 4;
     }
+
+
+    //slog("TEST: %i", mapToDraw->topLeftBound[0]);
+
+    Vector2D tl = { mapToDraw->topLeftBound[0], mapToDraw->topLeftBound[1] };
+    Vector2D  tr = {mapToDraw->topRightBound[0], mapToDraw->topRightBound[1]};
+    Vector2D  bl = {mapToDraw->bottomLeftBound[0], mapToDraw->bottomLeftBound[1]};
+    Vector2D   br = {mapToDraw->bottomRightBound[0], mapToDraw->bottomRightBound[1]};
+
+   // slog("TEST: %i %i", mapToDraw->topLeftBound[0], mapToDraw->topLeftBound[1]);
+
+    gf2d_draw_line(tl, tr, greenColor);
+    gf2d_draw_line(tl, bl, greenColor);
+    gf2d_draw_line(tr, br, greenColor);
+    gf2d_draw_line(bl, br, greenColor);
+
+  
+   // gf2d_draw_line(*mapToDraw->topLeftBound, *mapToDraw->topLeftBound, pinkColor);
 
 }

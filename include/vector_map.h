@@ -13,26 +13,19 @@ typedef struct VectorMap
 	TextLine filename;
 	Sprite *backgroundImage;
 	char *testTest;
+	int *topLeftBound;
+	int* topRightBound;
+	int* bottomLeftBound;
+	int* bottomRightBound;
 	int *platformCount;
 	int *platformCoords;
-	//vector4d* Test;
 	
-	//json object for each map? with 2d vectors? sounds complicated, point pairs
-
-
-
-
 
 }VectorMap;
 
 VectorMap* vectormap_load(char* filename);
 void vectormap_free(VectorMap* map);
 void vectormap_draw(VectorMap* map);
-
-
-
-
-
 
 
 
