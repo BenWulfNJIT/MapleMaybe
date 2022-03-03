@@ -51,6 +51,8 @@ VectorMap *vectormap_load(char *filename)
   
 
     map->platformCoords = (Uint32*)gfc_allocate_array(sizeof(Uint32), platformArraySize);
+    //map->platformTEST = (Vector2D*)gfc_allocate_array(sizeof(Vector2D), platformArraySize);
+
     if (!map->platformCoords)
     {
         sj_free(json);
@@ -62,21 +64,27 @@ VectorMap *vectormap_load(char *filename)
     for (i = 0, r = 0; r < map->platformCount; r++)
     {
         columns = sj_array_get_nth(platforms, r);
-        if (!columns)continue;
+        //if (!columns)continue;
         for (c = 0; c < sj_array_get_count(columns); c++)
         {
             element = sj_array_get_nth(columns, c);
             if (!element)continue;
             sj_get_integer_value(element, &e);
             map->platformCoords[i++] = e;
+
         }
+
     }
 
-    // 0 0 x y
-    // 1 2
-    // 3 2
-    // 1 4
-    // 3 4
+    //working??!!
+    //need to change ^^ loop so that it adds into platformMaybe[i]
+    //also change da variable names u fool.
+    Vector2D TempVec = { 7,10 };
+    map->platformsMaybe[0] = &TempVec;
+    Vector2D printVec = *map->platformsMaybe[0];
+    slog("map coord x: %f  map coord y: %f", map->platformsMaybe[0]->x, map->platformsMaybe[0]->y);
+    slog("printVec.x: %f  printVec.y: %f", printVec.x, printVec.y);
+
     map->topLeftBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
     map->topRightBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
     map->bottomLeftBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
