@@ -133,48 +133,27 @@ void vectormap_free(VectorMap* map)
 
 void vectormap_draw(VectorMap* mapToDraw)
 {
-
-    // This is ugly
-    // Wanted to put mapToDraw->platformCoords as Vector4D
-    // instead its a huge array of coordinates repeating
-    int x1 = 0;
-    int y1 = 1;
-    int x2 = 2;
-    int y2 = 3;
     Vector4D pinkColor = { 255, 105, 190, 255 };
     Vector4D greenColor = { 105, 255, 190, 255 };
 
-   // Vector2D tl, tr, bl, br;
-
     for (int i = 0; i < mapToDraw->platformCount; i++)
     {
-       // Vector2D p1 = { mapToDraw->platformCoords[x1],mapToDraw->platformCoords[y1] };
-        //Vector2D p2 = { mapToDraw->platformCoords[x2],mapToDraw->platformCoords[y2] };
+        Vector2D p1 = { mapToDraw->platformCoords[i].x,mapToDraw->platformCoords[i].y };
+        Vector2D p2 = { mapToDraw->platformCoords[i].z,mapToDraw->platformCoords[i].w };
 
-      //  gf2d_draw_line(p1, p2, pinkColor);
-
-        x1 += 4;
-        x2 += 4;
-        y1 += 4;
-        y2 += 4;
+        gf2d_draw_line(p1, p2, pinkColor);
     }
-
-
-    //slog("TEST: %i", mapToDraw->topLeftBound[0]);
 
     Vector2D tl = { mapToDraw->topLeftBound[0], mapToDraw->topLeftBound[1] };
     Vector2D  tr = {mapToDraw->topRightBound[0], mapToDraw->topRightBound[1]};
     Vector2D  bl = {mapToDraw->bottomLeftBound[0], mapToDraw->bottomLeftBound[1]};
     Vector2D   br = {mapToDraw->bottomRightBound[0], mapToDraw->bottomRightBound[1]};
 
-   // slog("TEST: %i %i", mapToDraw->topLeftBound[0], mapToDraw->topLeftBound[1]);
 
     gf2d_draw_line(tl, tr, greenColor);
     gf2d_draw_line(tl, bl, greenColor);
     gf2d_draw_line(tr, br, greenColor);
     gf2d_draw_line(bl, br, greenColor);
 
-  
-   // gf2d_draw_line(*mapToDraw->topLeftBound, *mapToDraw->topLeftBound, pinkColor);
 
 }
