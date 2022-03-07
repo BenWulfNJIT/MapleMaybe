@@ -24,16 +24,14 @@ VectorMap *vectormap_new()
 VectorMap *vectormap_load(char *filename)
 {
 
-    //need to add bounding box
-
     const char* backgroundFile = NULL;
-    SJson *json, *platforms, *columns, *element, *bbRow, *bbColumn;
+    SJson *json, *platforms, *columns, *element1, * element2, * element3, * element4, *bbRow, *bbColumn;
     VectorMap* map;
-    int platformArraySize;
-    int tempArray[12];
-    int tempFirstNum;
-    int i, r, c, e;
-    int bbx, bby;
+    //int platformArraySize;
+    //int tempArray[12];
+    //int tempFirstNum;
+    int i, r, c, e1, e2, e3, e4, bbx, bby;
+  //  int bbx, bby;
 
 
     if (!filename)return NULL;
@@ -45,13 +43,11 @@ VectorMap *vectormap_load(char *filename)
     map->testTest = sj_get_string_value(sj_object_get_value(json, "background"));
     platforms = sj_object_get_value(json, "platforms");
     map->platformCount = sj_array_get_count(platforms);
-    platformArraySize = sj_array_get_count(platforms) * 4;
+    //platformArraySize = sj_array_get_count(platforms) * 4;
     
     columns = sj_array_get_nth(platforms, 0);
-  
-
-    map->platformCoords = (Uint32*)gfc_allocate_array(sizeof(Uint32), platformArraySize);
-    //map->platformTEST = (Vector2D*)gfc_allocate_array(sizeof(Vector2D), platformArraySize);
+   
+    map->platformCoords = (Vector4D*)gfc_allocate_array(sizeof(Vector4D), map->platformCount);
 
     if (!map->platformCoords)
     {
@@ -59,44 +55,36 @@ VectorMap *vectormap_load(char *filename)
         return map;
     }
 
-    //loop inserts all plat coords into gross array
-    //formatted like: (x1, y1, x2, y2, 
-    for (i = 0, r = 0; r < map->platformCount; r++)
-    {
-        columns = sj_array_get_nth(platforms, r);
-        //if (!columns)continue;
-        for (c = 0; c < sj_array_get_count(columns); c++)
-        {
-            element = sj_array_get_nth(columns, c);
-            if (!element)continue;
-            sj_get_integer_value(element, &e);
-            map->platformCoords[i++] = e;
-
-        }
-
-    }
-
-    //this is the loop that will store properly in 2dvec
+    //this is the loop that will store properly in 4dvec
+    //map->platformCoords[0] = {x1, y1, x2, y2}
     for (int p=0; p < map->platformCount; p++)
     {
         columns = sj_array_get_nth(platforms, p);
-        for (int k = 0; k < sj_array_get_count(columns); k++)
-        {
-            element = sj_array_get_nth(columns, k);
-            sj_get_integer_value(element, &e);
+       
+        element1 = sj_array_get_nth(columns, 0);
+        sj_get_integer_value(element1, &e1);
 
-           // slog("possibly coords: %i", e);
-        }
+        element2 = sj_array_get_nth(columns, 1);
+        sj_get_integer_value(element2, &e2);
+
+        element3 = sj_array_get_nth(columns, 2);
+        sj_get_integer_value(element3, &e3);
+
+        element4 = sj_array_get_nth(columns, 3);
+        sj_get_integer_value(element4, &e4);
+
+
+        //making a temporary vector cause setting them individually wasnt working
+        Vector4D tempVec = { e1, e2, e3, e4 };
+
+        //setting the important stuff
+        map->platformCoords[p] = tempVec;
+
+        //test print
+        slog("Big test coords: [ %f, %f, %f, %f ]", map->platformCoords[p].x, map->platformCoords[p].y, map->platformCoords[p].z, map->platformCoords[p].w);
+       
     }
-
-    //working??!!
-    //need to change ^^ loop so that it adds into platformMaybe[i]
-    //also change da variable names u fool.
-    Vector2D TempVec = { 7,10 };
-    map->platformsMaybe[0] = &TempVec;
-    Vector2D printVec = *map->platformsMaybe[0];
-    slog("map coord x: %f  map coord y: %f", map->platformsMaybe[0]->x, map->platformsMaybe[0]->y);
-    slog("printVec.x: %f  printVec.y: %f", printVec.x, printVec.y);
+    
 
     map->topLeftBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
     map->topRightBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
@@ -108,6 +96,7 @@ VectorMap *vectormap_load(char *filename)
         sj_free(json);
         return map;
     }
+
     bbRow = sj_object_get_value(json, "bounding_box");
 
     bbColumn = sj_array_get_nth(bbRow, 0);
@@ -116,10 +105,8 @@ VectorMap *vectormap_load(char *filename)
     bbColumn = sj_array_get_nth(bbRow, 1);
     sj_get_integer_value(bbColumn, &bby);
 
-    slog("TEST %i %i", bbx, bby);
+    //slog("TEST %i %i", bbx, bby);
 
-
-    
     map->topLeftBound[0] = 0;
     map->topLeftBound[1] = 0;
     
@@ -131,11 +118,6 @@ VectorMap *vectormap_load(char *filename)
 
     map->bottomRightBound[0] = bbx;
     map->bottomRightBound[1] = bby;
-
-    
-
-    
-
 
     sj_free(json);
     return map;
@@ -166,10 +148,10 @@ void vectormap_draw(VectorMap* mapToDraw)
 
     for (int i = 0; i < mapToDraw->platformCount; i++)
     {
-        Vector2D p1 = { mapToDraw->platformCoords[x1],mapToDraw->platformCoords[y1] };
-        Vector2D p2 = { mapToDraw->platformCoords[x2],mapToDraw->platformCoords[y2] };
+       // Vector2D p1 = { mapToDraw->platformCoords[x1],mapToDraw->platformCoords[y1] };
+        //Vector2D p2 = { mapToDraw->platformCoords[x2],mapToDraw->platformCoords[y2] };
 
-        gf2d_draw_line(p1, p2, pinkColor);
+      //  gf2d_draw_line(p1, p2, pinkColor);
 
         x1 += 4;
         x2 += 4;

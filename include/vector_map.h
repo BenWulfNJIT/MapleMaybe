@@ -22,9 +22,9 @@ typedef struct VectorMap
 	int *platformCount;
 
 	//Need to update *platformCoords and use/rename *platformsMaybe[]
-	int *platformCoords;
+	//int *platformCoords;
 	Vector2D* platformTEST;
-	Vector2D* platformsMaybe[];
+	Vector4D* platformCoords;
 	
 
 }VectorMap;
