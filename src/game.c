@@ -7,6 +7,7 @@
 #include "entity.h"
 #include "bug.h"
 #include "vector_map.h"
+#include "collision.h"
 
 int main(int argc, char * argv[])
 {
@@ -84,7 +85,7 @@ int main(int argc, char * argv[])
                 (int)mf);
 
            
-
+            SimplePlatformCollision(bug);
             
 
            //gf2d_draw_line(p1, p2, pinkColor);
