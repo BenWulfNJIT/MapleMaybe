@@ -13,18 +13,8 @@ typedef struct VectorMap
 	TextLine filename;
 	Sprite *backgroundImage;
 	char *testTest;
-
-	//Can probably update these to be a Vector4D
-	int *topLeftBound;
-	int* topRightBound;
-	int* bottomLeftBound;
-	int* bottomRightBound;
-
-	int *platformCount;
-
-	//Need to update *platformCoords and use/rename *platformsMaybe[]
-	//int *platformCoords;
-	Vector2D* platformTEST;
+	SDL_Rect boundingBox;
+	int platformCount;
 	Vector4D* platformCoords;
 	
 

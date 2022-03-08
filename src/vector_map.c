@@ -27,12 +27,7 @@ VectorMap *vectormap_load(char *filename)
     const char* backgroundFile = NULL;
     SJson *json, *platforms, *columns, *element1, * element2, * element3, * element4, *bbRow, *bbColumn;
     VectorMap* map;
-    //int platformArraySize;
-    //int tempArray[12];
-    //int tempFirstNum;
     int i, r, c, e1, e2, e3, e4, bbx, bby;
-  //  int bbx, bby;
-
 
     if (!filename)return NULL;
     json = sj_load(filename);
@@ -43,7 +38,6 @@ VectorMap *vectormap_load(char *filename)
     map->testTest = sj_get_string_value(sj_object_get_value(json, "background"));
     platforms = sj_object_get_value(json, "platforms");
     map->platformCount = sj_array_get_count(platforms);
-    //platformArraySize = sj_array_get_count(platforms) * 4;
     
     columns = sj_array_get_nth(platforms, 0);
    
@@ -84,12 +78,6 @@ VectorMap *vectormap_load(char *filename)
         slog("Big test coords: [ %f, %f, %f, %f ]", map->platformCoords[p].x, map->platformCoords[p].y, map->platformCoords[p].z, map->platformCoords[p].w);
        
     }
-    
-
-    map->topLeftBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
-    map->topRightBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
-    map->bottomLeftBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
-    map->bottomRightBound = (Uint32*)gfc_allocate_array(sizeof(Uint32), 2);
 
     if (!map->platformCoords)
     {
@@ -105,19 +93,8 @@ VectorMap *vectormap_load(char *filename)
     bbColumn = sj_array_get_nth(bbRow, 1);
     sj_get_integer_value(bbColumn, &bby);
 
-    //slog("TEST %i %i", bbx, bby);
-
-    map->topLeftBound[0] = 0;
-    map->topLeftBound[1] = 0;
-    
-    map->topRightBound[0] = bbx ;
-    map->topRightBound[1] =  0;
-
-    map->bottomLeftBound[0] = 0;
-    map->bottomLeftBound[1] = bby;
-
-    map->bottomRightBound[0] = bbx;
-    map->bottomRightBound[1] = bby;
+    SDL_Rect tempRect = { 0, 0, bbx, bby };
+    map->boundingBox = tempRect;
 
     sj_free(json);
     return map;
@@ -144,16 +121,6 @@ void vectormap_draw(VectorMap* mapToDraw)
         gf2d_draw_line(p1, p2, pinkColor);
     }
 
-    Vector2D tl = { mapToDraw->topLeftBound[0], mapToDraw->topLeftBound[1] };
-    Vector2D  tr = {mapToDraw->topRightBound[0], mapToDraw->topRightBound[1]};
-    Vector2D  bl = {mapToDraw->bottomLeftBound[0], mapToDraw->bottomLeftBound[1]};
-    Vector2D   br = {mapToDraw->bottomRightBound[0], mapToDraw->bottomRightBound[1]};
-
-
-    gf2d_draw_line(tl, tr, greenColor);
-    gf2d_draw_line(tl, bl, greenColor);
-    gf2d_draw_line(tr, br, greenColor);
-    gf2d_draw_line(bl, br, greenColor);
-
+    gf2d_draw_rect(mapToDraw->boundingBox, greenColor);
 
 }

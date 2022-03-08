@@ -1,7 +1,7 @@
 {
 
   "background": "images/backgrounds/bg_flat.png",
-  "bounding_box": [1199, 719],
+  "bounding_box": [1200, 720],
   "platforms": 
   [
     [ 20, 670, 1180, 670 ],

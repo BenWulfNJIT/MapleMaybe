@@ -13,8 +13,6 @@ void bug_think(Entity* self)
    int intDistance = (int)distance;
    int speed = intDistance / 100;
    if (speed <= 2)speed = 2;
-   //slog("Distance is: %i\n", intDistance);
-    //vector2d_copy(self->position, vector2d(mx, my));
 
    self->velocity.x = (mx - self->position.x);
    self->velocity.y = (my - self->position.y);
@@ -28,10 +26,6 @@ void bug_think(Entity* self)
        entity_free(self);
    }
 
-   // self->velocity.x *= 3;
-    //self->velocity.y *= 3;
-
-    
 }
 
 
