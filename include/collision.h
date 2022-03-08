@@ -2,8 +2,15 @@
 #define __GF2D_COLLISION_H__
 
 #include "entity.h"
+#include "vector_map.h"
 
-void SimplePlatformCollision(Entity* ent);
+
+/**
+* @brief checks for a possible platform below the entity, and prevents them from falling through it
+* @param ent the entity you want to check
+* @param map the current map in use
+*/
+void SimplePlatformCollision(Entity* ent, VectorMap* map);
 
 
 

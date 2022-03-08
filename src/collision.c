@@ -1,8 +1,8 @@
 #include"simple_logger.h"
 #include "collision.h"
 #include "gf2d_draw.h"
-#include "entity.h"
-#include "vector_map.h"
+//#include "entity.h"
+//#include "vector_map.h"
 
 
 void SimplePlatformCollision(Entity* ent, VectorMap* currentMap)
@@ -40,7 +40,7 @@ gf2d_draw_rect(ent->hitBox, redColor);
 //check if entity is moving too fast and would go through platform
 if (ent->velocity.y > distanceToPlat)
 {
-	slog("i think this will cause an issue");
+	//slog("i think this will cause an issue");
 	ent->position.y = currentPlatBelow - ent->hitBox.h/2;
 }
 //toggle whether or not entity is standing on platform
