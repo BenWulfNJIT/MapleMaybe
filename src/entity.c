@@ -85,26 +85,7 @@ void entity_update(Entity* self)
     //comment
 
     vector2d_add(self->position, self->position, self->velocity);
-    //   if (level_bounds_test_circle(level_get_active(), self->position, self->radius, &normal))
-    //   {
-    //       if (normal.x > 0)
-    //       {
-    //           self->velocity.x = fabs(self->velocity.x);
-    //       }
-    //       if (normal.x < 0)
-    //       {
-    //           self->velocity.x = -fabs(self->velocity.x);
-    //       }
-    //       if (normal.y > 0)
-    //       {
-    //           self->velocity.y = fabs(self->velocity.y);
-    //       }
-    //       if (normal.y < 0)
-    //       {
-    //           self->velocity.y = -fabs(self->velocity.y);
-    //       }
-    //   }
-    //   entity_collide_check(self);
+  
 }
 
 void entity_update_all()
@@ -138,9 +119,11 @@ void entity_draw(Entity* self)
         NULL,
         NULL,
         (Uint32)self->frame);
-    //gf2d_draw_circle(self->position, self->radius, vector4d(255, 0, 255, 255));
+    
     gfc_rect_set(rect,self->position.x,self->position.y,self->size.x,self->size.y);
-    //gf2d_draw_rect(rect, vector4d(255, 0, 255, 255));
+
+   // gf2d_draw_rect(rect, vector4d(255, 0, 255, 255));
+
 }
 //
 //void entity_entity_collide(Entity* e1, Entity* e2)

@@ -71,7 +71,9 @@ int main(int argc, char * argv[])
 
             //entity_draw_all();
             
-             entity_draw(bug);
+            entity_draw(bug);
+            SimplePlatformCollision(bug, testMap);
+
             
             //UI elements last
             gf2d_sprite_draw(
@@ -85,7 +87,6 @@ int main(int argc, char * argv[])
                 (int)mf);
 
            
-            SimplePlatformCollision(bug);
             
 
            //gf2d_draw_line(p1, p2, pinkColor);
