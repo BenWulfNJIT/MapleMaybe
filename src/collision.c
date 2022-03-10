@@ -7,30 +7,63 @@
 
 void SimplePlatformCollision(Entity* ent, VectorMap* currentMap)
 {
-	int currentPlatBelow = 8000;
-	int distanceToPlat;
-	Vector2D bottomCenterOfHitBox = {ent->hitBox.x + ent->hitBox.w/2,ent->hitBox.y + ent->hitBox.h, };
-	
+	const int MAX_DISTANCE = 99999;
+	int currentPlatBelowLeft = MAX_DISTANCE;
+	int currentPlatBelowRight = MAX_DISTANCE;
+	int distanceToPlatLeft, distanceToPlatRight, distanceToNearestPlat, nearestPlatHeight;
+	Vector2D bottomLeftCenterOfHitBox = {ent->hitBox.x,ent->hitBox.y + ent->hitBox.h, };
+	Vector2D bottomRightCenterOfHitBox = { ent->hitBox.x + ent->hitBox.w,ent->hitBox.y + ent->hitBox.h, };
+
 	
 for (int i = 0; i < currentMap->platformCount; i++)
 {
 	if (ent->hitBox.y + ent->hitBox.h > currentMap->platformCoords[i].y) continue;
-	if (currentMap->platformCoords[i].y < currentPlatBelow &&
-		ent->position.x > currentMap->platformCoords[i].x &&
-		ent->position.x < currentMap->platformCoords[i].z)
+	if (currentMap->platformCoords[i].y < currentPlatBelowLeft &&
+		bottomLeftCenterOfHitBox.x > currentMap->platformCoords[i].x &&
+		bottomLeftCenterOfHitBox.x < currentMap->platformCoords[i].z)
 	{
-		currentPlatBelow = currentMap->platformCoords[i].y;
+		currentPlatBelowLeft = currentMap->platformCoords[i].y;
 		
 	}
-}
+	if (currentMap->platformCoords[i].y < currentPlatBelowRight &&
+		bottomRightCenterOfHitBox.x > currentMap->platformCoords[i].x &&
+		bottomRightCenterOfHitBox.x < currentMap->platformCoords[i].z)
+	{
+		currentPlatBelowRight = currentMap->platformCoords[i].y;
 
-if(currentPlatBelow != 8000 ) ent->knownPlatHeight = currentPlatBelow;
+	}
+}
+slog("RIGHT: %i", currentPlatBelowRight);
+
+ 
 
 //at this point we would have at least found a plat or errored
-distanceToPlat = currentPlatBelow - (ent->hitBox.y + ent->hitBox.h);
-Vector2D belowEnt = { ent->position.x, (ent->hitBox.y+ent->hitBox.h) + distanceToPlat };
+distanceToPlatLeft = currentPlatBelowLeft - (ent->hitBox.y + ent->hitBox.h);
+distanceToPlatRight = currentPlatBelowRight - (ent->hitBox.y + ent->hitBox.h);
+
+
+
+Vector2D belowLeftEnt = { bottomLeftCenterOfHitBox.x, (ent->hitBox.y+ent->hitBox.h) + distanceToPlatLeft };
+Vector2D belowRightEnt = { bottomRightCenterOfHitBox.x, (ent->hitBox.y + ent->hitBox.h) + distanceToPlatRight };
+
+if (distanceToPlatLeft <= distanceToPlatRight) 
+{
+	distanceToNearestPlat = distanceToPlatLeft;
+	nearestPlatHeight = currentPlatBelowLeft;
+	
+}
+else 
+{
+	distanceToNearestPlat = distanceToPlatRight;
+	nearestPlatHeight = currentPlatBelowRight;
+}
+
+if (nearestPlatHeight != MAX_DISTANCE) ent->knownPlatHeight = nearestPlatHeight;
+
 Vector4D redColor = { 255, 20, 20, 255 };
-gf2d_draw_line(bottomCenterOfHitBox, belowEnt, redColor);
+gf2d_draw_line(bottomLeftCenterOfHitBox, belowLeftEnt, redColor);
+gf2d_draw_line(bottomRightCenterOfHitBox, belowRightEnt, redColor);
+
 
 gf2d_draw_rect(ent->hitBox, redColor);
 //slog("distance: %i", distanceToPlat);
@@ -38,13 +71,13 @@ gf2d_draw_rect(ent->hitBox, redColor);
 //if (distanceToPlat < 0) slog("ERROR!! distanceToPlat: %i", distanceToPlat);
 
 //check if entity is moving too fast and would go through platform
-if (ent->velocity.y > distanceToPlat)
+if (ent->velocity.y > distanceToNearestPlat)
 {
 	//slog("i think this will cause an issue");
-	ent->position.y = currentPlatBelow - ent->hitBox.h/2;
+	ent->position.y = nearestPlatHeight - ent->hitBox.h/2;
 }
 //toggle whether or not entity is standing on platform
-if ( distanceToPlat < 2 || ent->velocity.y > distanceToPlat)
+if ( distanceToNearestPlat < 2 || ent->velocity.y > distanceToNearestPlat)
 {
 	ent->standingOnPlatform = 1;
 }
