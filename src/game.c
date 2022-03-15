@@ -73,6 +73,7 @@ int main(int argc, char * argv[])
             
             entity_draw(bug);
             SimplePlatformCollision(bug, testMap);
+            BoundingBoxCollision(bug, testMap);
 
             
             //UI elements last

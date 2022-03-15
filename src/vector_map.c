@@ -75,7 +75,7 @@ VectorMap *vectormap_load(char *filename)
         map->platformCoords[p] = tempVec;
 
         //test print
-        slog("Big test coords: [ %f, %f, %f, %f ]", map->platformCoords[p].x, map->platformCoords[p].y, map->platformCoords[p].z, map->platformCoords[p].w);
+        //slog("Big test coords: [ %f, %f, %f, %f ]", map->platformCoords[p].x, map->platformCoords[p].y, map->platformCoords[p].z, map->platformCoords[p].w);
        
     }
 

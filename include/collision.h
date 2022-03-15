@@ -11,6 +11,7 @@
 * @param map the current map in use
 */
 void SimplePlatformCollision(Entity* ent, VectorMap* map);
+void BoundingBoxCollision(Entity* ent, VectorMap* map);
 
 
 
