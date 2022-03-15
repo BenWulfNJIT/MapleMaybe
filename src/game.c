@@ -21,7 +21,7 @@ int main(int argc, char * argv[])
     Sprite *mouse;
     Vector4D mouseColor = {255,100,255,200};
     VectorMap *testMap;
-    Entity* bug;
+    Entity* bug, *test_player;
 
 
     /*program initializtion*/
@@ -52,7 +52,7 @@ int main(int argc, char * argv[])
 
     testMap = vectormap_load("maps/test.json");
   
-
+    test_player = player_new(vector2d(100, 100));
 
     while(!done)
     {
@@ -72,6 +72,7 @@ int main(int argc, char * argv[])
             //entity_draw_all();
             
             entity_draw(bug);
+            entity_draw(test_player);
             SimplePlatformCollision(bug, testMap);
             BoundingBoxCollision(bug, testMap);
 
