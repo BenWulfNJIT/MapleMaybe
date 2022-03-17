@@ -1,5 +1,6 @@
 #include "simple_logger.h"
 #include "gfc_input.h"
+
 #include "player.h"
 
 
@@ -7,7 +8,13 @@
 void player_think(Entity* self)
 {
     Entity* ent = self;
+  
+    //entity_new(skill);
+
+    
+
     ControlMovement(ent);
+
 
     self->hitBox.x = self->position.x - 32;
     self->hitBox.y = self->position.y - 32;
@@ -47,11 +54,24 @@ Entity* player_new(Vector2D position)
 void ControlMovement(Entity* self)
 {
     int speed;
+    Entity* skill;
+
+    skill = entity_new();
+    skill->sprite = gf2d_sprite_load_all(
+        "images/fireball.png",
+        64,
+        64,
+        1);
+    //skill->sprite = gf2d_sprite_load_image("images/fireball.png");
+    Vector2D skillPos;
 
     speed = self->walkSpeed;
 
 
     gfc_input_update();
+    
+
+    //Basic movement commands
 
     if (gfc_input_key_pressed(" ") && self->standingOnPlatform)
     {
@@ -80,6 +100,16 @@ void ControlMovement(Entity* self)
     else if (gfc_input_key_held("a") && gfc_input_key_held("d"))
     {
         self->velocity.x = 0;
+    }
+
+    //Basic Skill commands
+    if (gfc_input_key_held("1"))
+    {
+
+       // skillPos.x = self->position.x;
+        //skillPos.y = self->position.y;
+        gf2d_sprite_draw(skill, vector2d(300, 300), NULL, NULL, NULL, NULL, NULL, 0);
+        slog("should work");
     }
 
 }

@@ -24,6 +24,9 @@ typedef struct Entity_S
     int         standingOnPlatform; /**1 if true, 0 if false*/
     int         knownPlatHeight;
     int         walkSpeed;
+    int         health;
+    int         maxHealth;
+    int         facing; /**0 if left, 1 if right*/
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/
     void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<called when an entity touches another entity*/
 

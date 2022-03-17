@@ -15,7 +15,7 @@ int main(int argc, char * argv[])
     /*variable declarations*/
     int done = 0;
     const Uint8 * keys;
-    Sprite *sprite;
+    Sprite *sprite, *test;
     
     int mx,my;
     float mf = 0;
@@ -44,6 +44,7 @@ int main(int argc, char * argv[])
 
     /*demo setup*/
     sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
+    test = gf2d_sprite_load_all("images/fireball.png", 64, 64, 1);
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     /*main game loop*/
 
@@ -84,8 +85,10 @@ int main(int argc, char * argv[])
             entity_draw(test_player);
             SimplePlatformCollision(test_player, testMap);
             BoundingBoxCollision(test_player, testMap);
+            DoPlayerGravity(test_player);
 
             
+            gf2d_sprite_draw(test, test_player->position, NULL, NULL, NULL, NULL, NULL, 1);
             //UI elements last
             gf2d_sprite_draw(
                 mouse,
@@ -98,7 +101,6 @@ int main(int argc, char * argv[])
                 (int)mf);
 
            
-            DoPlayerGravity(test_player);
            // if (keys[SDL_SCANCODE_SPACE]) test_player->velocity.y = -5;
            //gf2d_draw_line(p1, p2, pinkColor);
            // gf2d_draw_line();
@@ -111,7 +113,7 @@ int main(int argc, char * argv[])
         entity_draw_all();
         //entity_update(bug);
     
-
+        
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
         //slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
