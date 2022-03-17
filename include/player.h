@@ -4,7 +4,7 @@
 #include "entity.h"
 
 Entity* player_new(Vector2D position);
-
+void ControlMovement(Entity* self);
 
 
 #endif

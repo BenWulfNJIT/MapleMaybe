@@ -23,6 +23,7 @@ typedef struct Entity_S
     SDL_Rect    hitBox;
     int         standingOnPlatform; /**<1 if true, 0 if false*/
     int         knownPlatHeight;
+    int         walkSpeed;
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/
     void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<called when an entity touches another entity*/
 

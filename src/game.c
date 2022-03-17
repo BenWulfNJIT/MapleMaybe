@@ -62,7 +62,7 @@ int main(int argc, char * argv[])
         keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
         /*update things here*/
 
-        gfc_input_update();
+       // gfc_input_update();
         SDL_GetMouseState(&mx,&my);
         mf+=0.1;
         if (mf >= 16.0)mf = 0;
@@ -77,9 +77,12 @@ int main(int argc, char * argv[])
             //entity_draw_all();
             
             entity_draw(bug);
-            entity_draw(test_player);
             SimplePlatformCollision(bug, testMap);
             BoundingBoxCollision(bug, testMap);
+
+            entity_draw(test_player);
+            SimplePlatformCollision(test_player, testMap);
+            BoundingBoxCollision(test_player, testMap);
 
             
             //UI elements last
@@ -106,15 +109,7 @@ int main(int argc, char * argv[])
         entity_update_all();
         entity_draw_all();
         //entity_update(bug);
-        if (keys[SDL_SCANCODE_K])
-        {
-            if(bug) entity_free(bug);
-        }
-        if (keys[SDL_SCANCODE_S])
-        {
-            bug_new(vector2d(100, 100), vector2d(gfc_crandom(), gfc_crandom()));
-            slog("Added a bug");
-        }
+    
 
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
         //slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
