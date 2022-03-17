@@ -53,6 +53,10 @@ void ControlMovement(Entity* self)
 
     gfc_input_update();
 
+    if (gfc_input_key_pressed(" ") && self->standingOnPlatform)
+    {
+        self->velocity.y = -7;
+    }
 
     if (gfc_input_key_held("a") && !gfc_input_key_held("d"))
     {

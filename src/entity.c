@@ -2,6 +2,7 @@
 #include "simple_logger.h"
 #include "gf2d_draw.h"
 #include "entity.h"
+#include "physics.h"
 //#include "level.h"
 //#include "collisions.h"
 

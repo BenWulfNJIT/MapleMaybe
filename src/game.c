@@ -8,6 +8,7 @@
 #include "bug.h"
 #include "vector_map.h"
 #include "collision.h"
+#include "physics.h"
 
 int main(int argc, char * argv[])
 {
@@ -97,8 +98,8 @@ int main(int argc, char * argv[])
                 (int)mf);
 
            
-            
-
+            DoPlayerGravity(test_player);
+           // if (keys[SDL_SCANCODE_SPACE]) test_player->velocity.y = -5;
            //gf2d_draw_line(p1, p2, pinkColor);
            // gf2d_draw_line();
 
