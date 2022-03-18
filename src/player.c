@@ -56,12 +56,6 @@ void ControlMovement(Entity* self)
     int speed;
     Entity* skill;
 
-    skill = entity_new();
-    skill->sprite = gf2d_sprite_load_all(
-        "images/fireball.png",
-        64,
-        64,
-        1);
     //skill->sprite = gf2d_sprite_load_image("images/fireball.png");
     Vector2D skillPos;
 
@@ -101,6 +95,10 @@ void ControlMovement(Entity* self)
     {
         self->velocity.x = 0;
     }
+    else
+    {
+        return;
+    }
 
     //Basic Skill commands
     if (gfc_input_key_held("1"))
@@ -108,8 +106,6 @@ void ControlMovement(Entity* self)
 
        // skillPos.x = self->position.x;
         //skillPos.y = self->position.y;
-        gf2d_sprite_draw(skill, vector2d(300, 300), NULL, NULL, NULL, NULL, NULL, 0);
-        slog("should work");
     }
 
 }
