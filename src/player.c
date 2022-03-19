@@ -49,6 +49,7 @@ Entity* player_new(Vector2D position)
     self->skillOneCD = 0;
     self->activeSkill = 0;
     self->team = 1;
+    self->movementLock = 0;
     self->think = player_think;
 
 
@@ -71,7 +72,16 @@ void ControlMovement(Entity* self)
 
     gfc_input_update();
     
-
+    if (self->movementLock == 1)
+    {
+        if (self->standingOnPlatform) 
+        {
+            self->velocity.x = 0;
+            return;
+        }
+        else return;
+       // return;
+    }
     //Basic movement commands
 
     if (gfc_input_key_pressed(" ") && self->standingOnPlatform)
@@ -129,6 +139,7 @@ void DoSkills(Entity* self)
         self->skillOneCD = 180;
         self->skillOneDurationCounter = 60;
         self->activeSkill = 1;
+        skillCollisionCheck(&self->skillHitBox);
         return;
         
     }

@@ -63,10 +63,13 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
         attacker->skillHitBox.w = 64;
         attacker->skillHitBox.h = 64;
 
+        
         gf2d_sprite_draw_image(attacker->skillOneSprite, attacker->skillOnePosition);
+
         //check for collision here
+        attacker->movementLock = 1;
         gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
-        skillCollisionCheck(&attacker->skillHitBox);
+        
         attacker->skillOneDurationCounter--;
         return;
     }
@@ -74,6 +77,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
     {
         //end skill and free ent
         slog("skill ended");
+        attacker->movementLock = 0;
         //attacker->skillOneCD = 60;
         attacker->activeSkill = 0;
         //entity_free(skill);

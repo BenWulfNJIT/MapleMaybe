@@ -38,6 +38,7 @@ typedef struct Entity_S
     int         activeSkill; /**<default 0, 1 for auto, 2 for 2, 3 for 3, 4 for 4>*/
     Sprite*     skillOneSprite;
     int         team;  /**<default 0, 1 for friendly player, 2 for monsters>*/
+    int         movementLock; /**<0 for default free to move, 1 to lock movement>*/
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/
     void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<called when an entity touches another entity*/
 
