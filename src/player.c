@@ -50,6 +50,7 @@ Entity* player_new(Vector2D position)
     self->activeSkill = 0;
     self->team = 1;
     self->movementLock = 0;
+    self->health = 1000;
     self->think = player_think;
 
 
