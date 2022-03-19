@@ -6,5 +6,6 @@
 Entity* player_new(Vector2D position);
 void ControlMovement(Entity* self);
 
+void DoSkills(Entity* attacker);
 
 #endif

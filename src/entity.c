@@ -103,6 +103,34 @@ void entity_update_all()
     }
 }
 
+void skillCollisionCheck(SDL_Rect* skillHitBox)
+{
+    
+    int i;
+    for (i = 0; i < entity_manager.maxEnts; i++)
+    {
+
+        if (!entity_manager.entityList[i]._inuse)continue;
+        if (entity_manager.entityList[i].think)
+        {
+           // slog("so %i", &entity_manager.entityList[i].hitBox.x);
+
+            entity_manager.entityList[i].think(&entity_manager.entityList[i]);
+            
+        }
+        //working
+        //if ( skillHitBox->x+skillHitBox->w >= entity_manager.entityList[i].hitBox.x && skillHitBox->x <= (entity_manager.entityList[i].hitBox.x + entity_manager.entityList[i].hitBox.w) && entity_manager.entityList[i].team == 2)
+        if(SDL_HasIntersection(skillHitBox, &entity_manager.entityList[i].hitBox))
+        {
+            slog("Colliding");
+        }
+        else
+        {
+            //slog("nerrr");
+        }
+    }
+}
+
 void entity_draw(Entity* self)
 {
     SDL_Rect rect;

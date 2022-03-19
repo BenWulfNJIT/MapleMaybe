@@ -66,6 +66,8 @@ gf2d_draw_line(bottomRightCenterOfHitBox, belowRightEnt, redColor);
 
 
 gf2d_draw_rect(ent->hitBox, redColor);
+//if(&ent->skillHitBox) gf2d_draw_rect(ent->skillHitBox, redColor);
+
 //slog("distance: %i", distanceToPlat);
 
 //if (distanceToPlat < 0) slog("ERROR!! distanceToPlat: %i", distanceToPlat);

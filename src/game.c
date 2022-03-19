@@ -9,6 +9,7 @@
 #include "vector_map.h"
 #include "collision.h"
 #include "physics.h"
+#include "skill.h"
 
 int main(int argc, char * argv[])
 {
@@ -22,7 +23,7 @@ int main(int argc, char * argv[])
     Sprite *mouse;
     Vector4D mouseColor = {255,100,255,200};
     VectorMap *testMap;
-    Entity* bug, *test_player;
+    Entity* bug, *test_player, *testSkill;
 
 
     /*program initializtion*/
@@ -55,7 +56,7 @@ int main(int argc, char * argv[])
     Vector4D pinkColor = { 255, 105, 190, 255 };
 
     testMap = vectormap_load("maps/test.json");
-  
+    testSkill = entity_new(vector2d(100, 100));
     test_player = player_new(vector2d(100, 100));
 
     while(!done)
@@ -79,15 +80,24 @@ int main(int argc, char * argv[])
             //entity_draw_all();
             
             entity_draw(bug);
-            SimplePlatformCollision(bug, testMap);
-            BoundingBoxCollision(bug, testMap);
+            bug->think;
+            //SimplePlatformCollision(bug, testMap);
+            //BoundingBoxCollision(bug, testMap);
 
             entity_draw(test_player);
             SimplePlatformCollision(test_player, testMap);
             BoundingBoxCollision(test_player, testMap);
             DoPlayerGravity(test_player);
+            DoSkills(test_player);
 
+          
+            SkillThink(test_player, test_player->activeSkill, test_player->skillOnePosition);
             
+               //SkillOneThink(test_player, testSkill,vector2d(100, 100));
+            
+
+           // if (test_player->skillOneCD > 0) test_player->skillOneCD--;
+
             gf2d_sprite_draw(test, test_player->position, NULL, NULL, NULL, NULL, NULL, 1);
             //UI elements last
             gf2d_sprite_draw(
@@ -113,7 +123,10 @@ int main(int argc, char * argv[])
         entity_draw_all();
         //entity_update(bug);
     
-        
+        if (keys[SDL_SCANCODE_LEFTBRACKET]) test_player->level -= 1;
+        if (keys[SDL_SCANCODE_RIGHTBRACKET]) test_player->level += 1;
+
+
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
         //slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }

@@ -2,7 +2,6 @@
 #define __ENTITY_H__
 
 #include "gf2d_sprite.h"
-
 typedef struct Entity_S
 {
     Uint8       _inuse;     /**<check if this entity in memory is active or not*/
@@ -21,12 +20,24 @@ typedef struct Entity_S
     Uint32      age;
 
     SDL_Rect    hitBox;
-    int         standingOnPlatform; /**1 if true, 0 if false*/
+    SDL_Rect    skillHitBox;
+    int         standingOnPlatform; /**<1 if true, 0 if false>*/
     int         knownPlatHeight;
     int         walkSpeed;
+    int         jumpHeight;
     int         health;
     int         maxHealth;
-    int         facing; /**0 if left, 1 if right*/
+    int         facing; /**<0 if left, 1 if right>*/
+    int         classNum; /**<0 for thor, 1 for loki, 2 for odin, 3 for hela, 4 for fenrir> */
+    int         experience;
+    int         level;
+    int         skillOneCD;
+    Vector2D    skillOnePosition;
+    int         skillOneDurationCounter;
+    int         skillOneInProgress; /**<0 if not, 1 if in progress> */
+    int         activeSkill; /**<default 0, 1 for auto, 2 for 2, 3 for 3, 4 for 4>*/
+    Sprite*     skillOneSprite;
+    int         team;  /**<default 0, 1 for friendly player, 2 for monsters>*/
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/
     void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<called when an entity touches another entity*/
 
@@ -55,6 +66,13 @@ void entity_free(Entity* self);
  * @brief update every active entity
  */
 void entity_update_all();
+
+/**
+ * @brief performs a collision check between a skill and all ents
+ */
+void skillCollisionCheck(SDL_Rect* skillHitBox);
+
+
 /**
  * @brief draww every active entity
  */
