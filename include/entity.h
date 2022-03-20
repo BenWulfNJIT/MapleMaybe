@@ -39,6 +39,13 @@ typedef struct Entity_S
     Sprite*     skillOneSprite;
     int         team;  /**<default 0, 1 for friendly player, 2 for monsters>*/
     int         movementLock; /**<0 for default free to move, 1 to lock movement>*/
+
+    //Spawner info
+    //Entity* entityToSpawn;
+    Vector2D positionToSpawn;
+    Vector2D spawnList;
+    int frequencyToSpawn;
+
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/
     void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<called when an entity touches another entity*/
 

@@ -10,12 +10,13 @@
 typedef struct VectorMap
 {
 
-	TextLine filename;
-	Sprite *backgroundImage;
-	char *testTest;
-	SDL_Rect boundingBox;
-	int platformCount;
-	Vector4D* platformCoords;
+	TextLine	filename;
+	Sprite*		backgroundImage;
+	char*		testTest;
+	SDL_Rect	boundingBox;
+	int			platformCount;
+	Vector4D*	platformCoords;
+	Vector2D*	spawnerCoords;
 	
 
 }VectorMap;

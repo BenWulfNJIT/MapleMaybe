@@ -25,9 +25,10 @@ VectorMap *vectormap_load(char *filename)
 {
 
     const char* backgroundFile = NULL;
-    SJson *json, *platforms, *columns, *element1, * element2, * element3, * element4, *bbRow, *bbColumn;
+    SJson *json, *platforms, *columns, *element1, * element2, * element3, * element4, *bbRow, *bbColumn, *spawnRow, *spawnColumn, *spawn1, *spawn2;
     VectorMap* map;
-    int i, r, c, e1, e2, e3, e4, bbx, bby;
+    Vector2D tempSpawnVec;
+    int i, r, c, e1, e2, e3, e4, bbx, bby, sx, sy;
 
     if (!filename)return NULL;
     json = sj_load(filename);
@@ -42,6 +43,7 @@ VectorMap *vectormap_load(char *filename)
     columns = sj_array_get_nth(platforms, 0);
    
     map->platformCoords = (Vector4D*)gfc_allocate_array(sizeof(Vector4D), map->platformCount);
+
 
     if (!map->platformCoords)
     {
@@ -95,6 +97,43 @@ VectorMap *vectormap_load(char *filename)
 
     SDL_Rect tempRect = { 0, 0, bbx, bby };
     map->boundingBox = tempRect;
+
+
+
+    //    map->spawnerCoords = (Vector2D*)gfc_allocate_array(sizeof(Vector2D), 7);
+
+    //some ugly stuff to get the spawnpoints into the vector map whatever its 2am
+    spawnRow = sj_object_get_value(json, "spawnPoints");
+    map->spawnerCoords = (Vector2D*)gfc_allocate_array(sizeof(Vector2D), sj_array_get_count(spawnRow));
+    for (i = 0; i < sj_array_get_count(spawnRow); i++)
+    {
+
+
+    
+        spawnColumn = sj_array_get_nth(spawnRow, i);
+        
+        spawn1 = sj_array_get_nth(spawnColumn, 0);
+        sj_get_integer_value(spawn1, &sx);
+
+        spawn2 = sj_array_get_nth(spawnColumn, 1);
+        sj_get_integer_value(spawn2, &sy);
+
+        //slog("TEST %i, %i", sx, sy);
+
+        tempSpawnVec.x = sx;
+        tempSpawnVec.y = sy;
+
+        map->spawnerCoords[i] = tempSpawnVec;
+
+
+
+
+    }
+
+    slog("TEST %f, %f", map->spawnerCoords[0].x, map->spawnerCoords[0].y);
+    slog("TEST %f, %f", map->spawnerCoords[1].x, map->spawnerCoords[1].y);
+
+
 
     sj_free(json);
     return map;
