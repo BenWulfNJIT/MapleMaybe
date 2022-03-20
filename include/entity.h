@@ -2,6 +2,7 @@
 #define __ENTITY_H__
 
 #include "gf2d_sprite.h"
+#include "vector_map.h"
 typedef struct Entity_S
 {
     Uint8       _inuse;     /**<check if this entity in memory is active or not*/
@@ -44,7 +45,11 @@ typedef struct Entity_S
     //Entity* entityToSpawn;
     Vector2D positionToSpawn;
     Vector2D spawnList;
-    int frequencyToSpawn;
+    int frequencyToSpawn; //?
+    int currentSpawnTime;
+    int spawnCount;
+    int spawnMax;
+    int spawnMobNumber; /**<each mob has a number to spawn by, 1 for bug >*/
 
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/
     void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<called when an entity touches another entity*/
@@ -74,6 +79,9 @@ void entity_free(Entity* self);
  * @brief update every active entity
  */
 void entity_update_all();
+
+void entity_update(Entity* self);
+
 
 /**
  * @brief performs a collision check between a skill and all ents

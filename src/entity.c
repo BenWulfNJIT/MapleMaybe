@@ -3,6 +3,7 @@
 #include "gf2d_draw.h"
 #include "entity.h"
 #include "physics.h"
+#include "vector_map.h"
 //#include "level.h"
 //#include "collisions.h"
 
@@ -86,6 +87,9 @@ void entity_update(Entity* self)
     //comment
 
     vector2d_add(self->position, self->position, self->velocity);
+    //SimplePlatformCollision(self, map);
+    //BoundingBoxCollision(self, map);
+    //DoPlayerGravity(self);
   
 }
 
@@ -100,6 +104,7 @@ void entity_update_all()
             entity_manager.entityList[i].think(&entity_manager.entityList[i]);
         }
         entity_update(&entity_manager.entityList[i]);
+        //slog("Entity count: %i", i);
     }
 }
 

@@ -17,6 +17,8 @@ typedef struct VectorMap
 	int			platformCount;
 	Vector4D*	platformCoords;
 	Vector2D*	spawnerCoords;
+	int			spawnerCount;
+
 	
 
 }VectorMap;

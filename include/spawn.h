@@ -5,10 +5,11 @@
 
 
 
-Entity* spawner_new(Entity* entityToSpawn, Vector2D position, int frequency);
+
+Entity* spawner_new(int entityToSpawn, Vector2D position, int maxSpawn, int frequency);
 
 void GetSpawnList(VectorMap* map, Entity* spawner);
 
-
+void SpawnerThink(Entity* spawner, Entity* spawnList);
 
 #endif

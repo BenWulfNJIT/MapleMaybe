@@ -124,14 +124,14 @@ VectorMap *vectormap_load(char *filename)
         tempSpawnVec.y = sy;
 
         map->spawnerCoords[i] = tempSpawnVec;
-
+        map->spawnerCount++;
 
 
 
     }
 
-    slog("TEST %f, %f", map->spawnerCoords[0].x, map->spawnerCoords[0].y);
-    slog("TEST %f, %f", map->spawnerCoords[1].x, map->spawnerCoords[1].y);
+    //slog("TEST %f, %f", map->spawnerCoords[0].x, map->spawnerCoords[0].y);
+    //slog("TEST %f, %f", map->spawnerCoords[1].x, map->spawnerCoords[1].y);
 
 
 

@@ -17,19 +17,24 @@ void bug_think(Entity* self)
     
     int mx, my;
     double distance;
-    SDL_GetMouseState(&mx, &my);
-    distance = sqrt(((mx - self->position.x) * (mx - self->position.x)) + ((my - self->position.y) * (my - self->position.y)));
-   int intDistance = (int)distance;
-   int speed = intDistance / 100;
-   if (speed <= 2)speed = 2;
+    //SDL_GetMouseState(&mx, &my);
+    //distance = sqrt(((mx - self->position.x) * (mx - self->position.x)) + ((my - self->position.y) * (my - self->position.y)));
+   //int intDistance = (int)distance;
+   //int speed = intDistance / 100;
+   //if (speed <= 2)speed = 2;
 
-   self->velocity.x = (mx - self->position.x);
-   self->velocity.y = (my - self->position.y);
+   //self->velocity.x = (mx - self->position.x);
+   //self->velocity.y = (my - self->position.y);
    
-   vector2d_normalize(&self->velocity);
+   //vector2d_normalize(&self->velocity);
 
-   vector2d_set_magnitude(&self->velocity, speed);
-  
+   //vector2d_set_magnitude(&self->velocity, speed);
+
+    self->velocity.x = gfc_random() * 2 - 1;
+
+    //if ((int)(gfc_random() * 10) % 2 == 0) self->velocity.x = gfc_random() * 10;
+    //else self->velocity.x = gfc_random() * -10;
+    
 
    self->hitBox.x = self->position.x - 32;
    self->hitBox.y = self->position.y - 32;

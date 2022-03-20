@@ -9,6 +9,7 @@
 #include "vector_map.h"
 #include "collision.h"
 #include "physics.h"
+#include "spawn.h"
 #include "skill.h"
 
 int main(int argc, char * argv[])
@@ -23,8 +24,8 @@ int main(int argc, char * argv[])
     Sprite *mouse;
     Vector4D mouseColor = {255,100,255,200};
     VectorMap *testMap;
-    Entity* bug, *test_player, *testSkill;
-
+    Entity* bug, *test_player, *testSkill, *testSpawner, *spawnList;
+    
 
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -59,6 +60,16 @@ int main(int argc, char * argv[])
     testSkill = entity_new(vector2d(100, 100));
     test_player = player_new(vector2d(100, 100));
 
+    spawnList = entity_new();
+    spawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
+
+    testSpawner = spawner_new(1, testMap->spawnerCoords[0], 5, 1000);
+
+    //for (int i = 0; i < 10; i++)
+    //{
+////    spawnList[i] = *bug_new(vector2d(gfc_random()*100, gfc_random()*100), vector2d(gfc_random(), gfc_random()));
+   // }
+    
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
@@ -79,8 +90,8 @@ int main(int argc, char * argv[])
 
             //entity_draw_all();
             
-            entity_draw(bug);
-            bug->think;
+            //entity_draw(bug);
+            //bug->think;
             //SimplePlatformCollision(bug, testMap);
             //BoundingBoxCollision(bug, testMap);
 
@@ -89,14 +100,12 @@ int main(int argc, char * argv[])
             BoundingBoxCollision(test_player, testMap);
             DoPlayerGravity(test_player);
             DoSkills(test_player);
-
-          
             SkillThink(test_player, test_player->activeSkill, test_player->skillOnePosition);
             
-               //SkillOneThink(test_player, testSkill,vector2d(100, 100));
-            
+            //entity_update(&spawnList[7]);
+            //entity_draw(&spawnList[7]);
+            SpawnerThink(testSpawner, spawnList);
 
-           // if (test_player->skillOneCD > 0) test_player->skillOneCD--;
 
             gf2d_sprite_draw(test, test_player->position, NULL, NULL, NULL, NULL, NULL, 1);
             //UI elements last
