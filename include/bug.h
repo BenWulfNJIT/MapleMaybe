@@ -5,5 +5,7 @@
 
 Entity* bug_new(Vector2D position, Vector2D velocity);
 
+void bug_think(Entity* self);
+
 
 #endif

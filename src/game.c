@@ -50,7 +50,7 @@ int main(int argc, char * argv[])
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     /*main game loop*/
 
-    bug = bug_new(vector2d(100, 100), vector2d(gfc_crandom(), gfc_crandom()));
+    //bug = bug_new(vector2d(100, 100), vector2d(gfc_crandom(), gfc_crandom()));
 
     Vector2D p1 = { 20, 670 };
     Vector2D p2 = { 1180, 670 };
@@ -63,7 +63,7 @@ int main(int argc, char * argv[])
     spawnList = entity_new();
     spawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
 
-    testSpawner = spawner_new(1, testMap->spawnerCoords[0], 5, 1000);
+    testSpawner = spawner_new(1, testMap->spawnerCoords[0], 5, 600);
 
     //for (int i = 0; i < 10; i++)
     //{
@@ -104,8 +104,12 @@ int main(int argc, char * argv[])
             
             //entity_update(&spawnList[7]);
             //entity_draw(&spawnList[7]);
-            SpawnerThink(testSpawner, spawnList);
+            testSpawner->spawnCount = test_player->spawnBugCount;
 
+            SpawnerThink(testSpawner, spawnList, testMap);
+            //test_player->spawnBugCount = testSpawner->spawnCount;
+
+            slog("Bugs: %i", test_player->spawnBugCount);
 
             gf2d_sprite_draw(test, test_player->position, NULL, NULL, NULL, NULL, NULL, 1);
             //UI elements last

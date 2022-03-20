@@ -5,6 +5,7 @@
 #include "vector_map.h"
 #include "spawn.h"
 #include "bug.h"
+#include "collision.h"
 
 
 
@@ -28,22 +29,29 @@ Entity* spawner_new(int entityToSpawn, Vector2D position, int maxSpawn, int freq
     return self;
 }
 
-void SpawnerThink(Entity* spawner, Entity* spawnList)
+void SpawnerThink(Entity* spawner, Entity* spawnList, VectorMap* map)
 {
     int numToSpawn, currentNum;
     Entity* tempEnt;
 
-    for (int i = 0; i < spawner->spawnCount; i++)
+    if (spawner->spawnCount != 0)
     {
-        //slog("GGG");
-        //spawnList[i].velocity.x = gfc_random()*2 -1;
-        //log("hm %f", spawnList->velocity.x);
-        //entity_update(&spawnList[i]);
-        //entity_update_all();
-        entity_draw_all();
-        
-    }
+        for (int i = 0; i < spawner->spawnCount; i++)
+        {
+           
+            //slog("%i", spawner->spawnCount);
+            //slog("test %i", spawnList[i].health);
+            bug_think(&spawnList[i]);
+            entity_draw_all();
 
+            gf2d_draw_rect(spawnList[i].hitBox, vector4d(78, 250, 29, 255));
+
+            SimplePlatformCollision(&spawnList[i], map);
+            BoundingBoxCollision(&spawnList[i], map);
+            DoPlayerGravity(&spawnList[i]);
+
+        }
+    }
     if (spawner->spawnCount >= spawner->spawnMax)
     {
         //slog("test %i", spawner->spawnCount);
@@ -63,6 +71,9 @@ void SpawnerThink(Entity* spawner, Entity* spawnList)
                 //bug spawner
                 //tempEnt = bug_new(spawner->positionToSpawn, vector2d(0, 0));
                 spawnList[spawner->spawnCount] = *bug_new(spawner->positionToSpawn, vector2d(20, 0));
+                
+                //slog("uh %i", spawner->spawnCount);
+                //slog("test %f", spawnList[spawner->spawnCount].position.x);
                 //spawner->spawnList[1] = tempEnt;
                 //temp->think;
                 spawner->spawnCount++;

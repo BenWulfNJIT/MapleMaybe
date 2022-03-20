@@ -17,23 +17,11 @@ void bug_think(Entity* self)
     
     int mx, my;
     double distance;
-    //SDL_GetMouseState(&mx, &my);
-    //distance = sqrt(((mx - self->position.x) * (mx - self->position.x)) + ((my - self->position.y) * (my - self->position.y)));
-   //int intDistance = (int)distance;
-   //int speed = intDistance / 100;
-   //if (speed <= 2)speed = 2;
-
-   //self->velocity.x = (mx - self->position.x);
-   //self->velocity.y = (my - self->position.y);
    
-   //vector2d_normalize(&self->velocity);
+    if (self->movementLock == 1) self->velocity.x = 0;
+    else self->velocity.x = gfc_random() * 2 - 1;
 
-   //vector2d_set_magnitude(&self->velocity, speed);
-
-    self->velocity.x = gfc_random() * 2 - 1;
-
-    //if ((int)(gfc_random() * 10) % 2 == 0) self->velocity.x = gfc_random() * 10;
-    //else self->velocity.x = gfc_random() * -10;
+  
     
 
    self->hitBox.x = self->position.x - 32;
@@ -73,6 +61,9 @@ Entity* bug_new(Vector2D position, Vector2D velocity)
     self->size.x = 32;
     self->size.y = 32;
     self->team = 2;
+    self->maxHealth = 100;
+    self->health = self->maxHealth;
+    self->spawnMobNumber = 1;
     self->think = bug_think;
   
 

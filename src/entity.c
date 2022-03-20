@@ -4,6 +4,7 @@
 #include "entity.h"
 #include "physics.h"
 #include "vector_map.h"
+#include "damage.h"
 //#include "level.h"
 //#include "collisions.h"
 
@@ -96,19 +97,29 @@ void entity_update(Entity* self)
 void entity_update_all()
 {
     int i;
+    int count = 0;
+    int playerPos = 0;
     for (i = 0; i < entity_manager.maxEnts; i++)
     {
         if (!entity_manager.entityList[i]._inuse)continue;
         if (entity_manager.entityList[i].think)
         {
+            if (entity_manager.entityList[i].team == 1)
+            {
+                playerPos = i;
+            }
+            if (entity_manager.entityList[i].spawnMobNumber == 1) count++;
+            entity_manager.entityList[playerPos].spawnBugCount = count;
+
             entity_manager.entityList[i].think(&entity_manager.entityList[i]);
         }
         entity_update(&entity_manager.entityList[i]);
+
         //slog("Entity count: %i", i);
     }
 }
 
-void skillCollisionCheck(SDL_Rect* skillHitBox)
+void SkillCollisionCheck(Entity* attacker, int skill, SDL_Rect* skillHitBox)
 {
     
     int i;
@@ -119,20 +130,34 @@ void skillCollisionCheck(SDL_Rect* skillHitBox)
         if (entity_manager.entityList[i].think)
         {
            // slog("so %i", &entity_manager.entityList[i].hitBox.x);
+            //slog("huh");
+           
+            if (SDL_HasIntersection(skillHitBox, &entity_manager.entityList[i].hitBox))
+            //slog("skill.x %i ent.x %i", skillHitBox->x, entity_manager.entityList[i].hitBox.x);
+           // if(skillHitBox->x + skillHitBox->w >= &entity_manager.entityList[i].hitBox.x &&
+             //   skillHitBox->x <= &entity_manager.entityList[i].hitBox.x + entity_manager.entityList[i].hitBox.w 
+                //skillHitBox->y + skillHitBox->h >= &entity_manager.entityList[i].hitBox.y &&
+                //skillHitBox->y <= &entity_manager.entityList[i].hitBox.y + entity_manager.entityList[i].hitBox.h)
+           //     )
+            {
+                //slog("after intersection");
+                //slog("damage: %i", GetDamage(skill));
+                //slog("should inflict");
+                InflictDamage(attacker, &entity_manager.entityList[i], GetDamage(skill));
+                //slog("Colliding");
+                
+            }
+            else
+            {
+                //slog("nerrr");
+                entity_manager.entityList[i].think(&entity_manager.entityList[i]);
 
-            entity_manager.entityList[i].think(&entity_manager.entityList[i]);
-            
+            }
+          
         }
         //working
         //if ( skillHitBox->x+skillHitBox->w >= entity_manager.entityList[i].hitBox.x && skillHitBox->x <= (entity_manager.entityList[i].hitBox.x + entity_manager.entityList[i].hitBox.w) && entity_manager.entityList[i].team == 2)
-        if(SDL_HasIntersection(skillHitBox, &entity_manager.entityList[i].hitBox))
-        {
-            slog("Colliding");
-        }
-        else
-        {
-            //slog("nerrr");
-        }
+      
     }
 }
 
