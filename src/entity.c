@@ -97,7 +97,12 @@ void entity_update(Entity* self)
 void entity_update_all()
 {
     int i;
-    int count = 0;
+    int bugCount = 0;
+    int manCount = 0;
+    int jumperCount = 0;
+    int rollerCount = 0;
+    int turretCount = 0;
+
     int playerPos = 0;
     for (i = 0; i < entity_manager.maxEnts; i++)
     {
@@ -108,8 +113,24 @@ void entity_update_all()
             {
                 playerPos = i;
             }
-            if (entity_manager.entityList[i].spawnMobNumber == 1) count++;
-            entity_manager.entityList[playerPos].spawnBugCount = count;
+            //slog("hmmm %i", entity_manager.entityList[i].spawnMobNumber);
+            if (entity_manager.entityList[i].spawnMobNumber == 1) bugCount++;
+            entity_manager.entityList[playerPos].spawnBugCount = bugCount;
+
+            if (entity_manager.entityList[i].spawnMobNumber == 2) manCount++;
+            entity_manager.entityList[playerPos].spawnManCount = manCount;
+
+            if (entity_manager.entityList[i].spawnMobNumber == 3) jumperCount++;
+            entity_manager.entityList[playerPos].spawnJumperCount = jumperCount;
+
+            if (entity_manager.entityList[i].spawnMobNumber == 4) rollerCount++;
+            entity_manager.entityList[playerPos].spawnRollerCount = rollerCount;
+
+            if (entity_manager.entityList[i].spawnMobNumber == 5) turretCount++;
+            entity_manager.entityList[playerPos].spawnTurretCount = turretCount;
+
+
+            
 
             entity_manager.entityList[i].think(&entity_manager.entityList[i]);
         }
@@ -215,6 +236,7 @@ void entity_draw_all()
     {
         if (!entity_manager.entityList[i]._inuse)continue;
         entity_draw(&entity_manager.entityList[i]);
+        gf2d_draw_rect(entity_manager.entityList[i].hitBox, vector4d(78, 250, 29, 255));
     }
 }
 

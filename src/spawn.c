@@ -6,6 +6,10 @@
 #include "spawn.h"
 #include "bug.h"
 #include "collision.h"
+#include "mob_man.h"
+#include "mob_jumper.h"
+#include "mob_roller.h"
+#include "mob_turret.h"
 
 
 
@@ -38,13 +42,31 @@ void SpawnerThink(Entity* spawner, Entity* spawnList, VectorMap* map)
     {
         for (int i = 0; i < spawner->spawnCount; i++)
         {
-           
+            
             //slog("%i", spawner->spawnCount);
             //slog("test %i", spawnList[i].health);
-            bug_think(&spawnList[i]);
+
+            switch (spawner->spawnMobNumber)
+            {
+            case 1 :
+                bug_think(&spawnList[i], map);
+                break;
+            case 2:
+                man_think(&spawnList[i], map);
+                break;
+            case 3:
+                jumper_think(&spawnList[i], map);
+                break;
+            case 4:
+                roller_think(&spawnList[i], map);
+                break;
+            case 5:
+                turret_think(&spawnList[i], map);
+                break;
+            }
             entity_draw_all();
 
-            gf2d_draw_rect(spawnList[i].hitBox, vector4d(78, 250, 29, 255));
+           
 
             SimplePlatformCollision(&spawnList[i], map);
             BoundingBoxCollision(&spawnList[i], map);
@@ -68,14 +90,24 @@ void SpawnerThink(Entity* spawner, Entity* spawnList, VectorMap* map)
             switch (spawner->spawnMobNumber)
             {
             case 1 :
-                //bug spawner
-                //tempEnt = bug_new(spawner->positionToSpawn, vector2d(0, 0));
                 spawnList[spawner->spawnCount] = *bug_new(spawner->positionToSpawn, vector2d(20, 0));
-                
-                //slog("uh %i", spawner->spawnCount);
-                //slog("test %f", spawnList[spawner->spawnCount].position.x);
-                //spawner->spawnList[1] = tempEnt;
-                //temp->think;
+                spawner->spawnCount++;
+                return;
+            case 2:
+                spawnList[spawner->spawnCount] = *man_new(spawner->positionToSpawn, vector2d(20, 0));
+                spawner->spawnCount++;
+                return;
+            case 3:
+                spawnList[spawner->spawnCount] = *jumper_new(spawner->positionToSpawn, vector2d(20, 0));
+                spawner->spawnCount++;
+                return;
+            case 4:
+                spawnList[spawner->spawnCount] = *roller_new(spawner->positionToSpawn, vector2d(20, 0));
+                spawner->spawnCount++;
+                return;
+            case 5:
+                spawnList[spawner->spawnCount] = *turret_new(spawner->positionToSpawn, vector2d(20, 0));
+                //slog("spawned");
                 spawner->spawnCount++;
                 return;
             default:

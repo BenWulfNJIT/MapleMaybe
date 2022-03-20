@@ -61,11 +61,11 @@ else
 if (nearestPlatHeight != MAX_DISTANCE) ent->knownPlatHeight = nearestPlatHeight;
 
 Vector4D redColor = { 255, 20, 20, 255 };
-gf2d_draw_line(bottomLeftCenterOfHitBox, belowLeftEnt, redColor);
-gf2d_draw_line(bottomRightCenterOfHitBox, belowRightEnt, redColor);
+//gf2d_draw_line(bottomLeftCenterOfHitBox, belowLeftEnt, redColor);
+//gf2d_draw_line(bottomRightCenterOfHitBox, belowRightEnt, redColor);
 
 
-gf2d_draw_rect(ent->hitBox, redColor);
+//gf2d_draw_rect(ent->hitBox, redColor);
 //if(&ent->skillHitBox) gf2d_draw_rect(ent->skillHitBox, redColor);
 
 //slog("distance: %i", distanceToPlat);

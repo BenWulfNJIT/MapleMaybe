@@ -76,7 +76,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
     else if (attacker->activeSkill != 0 && (attacker->skillOneDurationCounter <= 0))
     {
         //end skill and free ent
-        slog("skill ended");
+        //slog("skill ended");
         attacker->movementLock = 0;
         //attacker->skillOneCD = 60;
         attacker->activeSkill = 0;

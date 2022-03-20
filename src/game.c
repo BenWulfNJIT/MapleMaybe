@@ -24,7 +24,11 @@ int main(int argc, char * argv[])
     Sprite *mouse;
     Vector4D mouseColor = {255,100,255,200};
     VectorMap *testMap;
-    Entity* bug, *test_player, *testSkill, *testSpawner, *spawnList;
+    Entity* bug, *test_player, *testSkill, *testSpawner, *bugSpawnList, 
+        *manSpawner, *manSpawnList, 
+        *jumperSpawner, *jumperSpawnList,
+        *rollerSpawner, *rollerSpawnList,
+        *turretSpawner, *turretSpawnList;
     
 
     /*program initializtion*/
@@ -60,10 +64,26 @@ int main(int argc, char * argv[])
     testSkill = entity_new(vector2d(100, 100));
     test_player = player_new(vector2d(100, 100));
 
-    spawnList = entity_new();
-    spawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
+    bugSpawnList = entity_new();
+    bugSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
 
-    testSpawner = spawner_new(1, testMap->spawnerCoords[0], 5, 600);
+    manSpawnList = entity_new();
+    manSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
+
+    jumperSpawnList = entity_new();
+    jumperSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
+
+    rollerSpawnList = entity_new();
+    rollerSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
+
+    turretSpawnList = entity_new();
+    turretSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
+
+    testSpawner = spawner_new(1, testMap->spawnerCoords[3], 5, 600);
+    manSpawner = spawner_new(2, testMap->spawnerCoords[1], 5, 600);
+    jumperSpawner = spawner_new(3, testMap->spawnerCoords[2], 3, 1000);
+    rollerSpawner = spawner_new(4, testMap->spawnerCoords[0], 2, 800);
+    turretSpawner = spawner_new(5, testMap->spawnerCoords[4], 1, 5000);
 
     //for (int i = 0; i < 10; i++)
     //{
@@ -104,12 +124,27 @@ int main(int argc, char * argv[])
             
             //entity_update(&spawnList[7]);
             //entity_draw(&spawnList[7]);
-            testSpawner->spawnCount = test_player->spawnBugCount;
 
-            SpawnerThink(testSpawner, spawnList, testMap);
+
+            testSpawner->spawnCount = test_player->spawnBugCount;
+            SpawnerThink(testSpawner, bugSpawnList, testMap);
+
+            manSpawner->spawnCount = test_player->spawnManCount;
+            SpawnerThink(manSpawner, manSpawnList, testMap);
+
+            jumperSpawner->spawnCount = test_player->spawnJumperCount;
+            SpawnerThink(jumperSpawner, jumperSpawnList, testMap);
+
+            rollerSpawner->spawnCount = test_player->spawnRollerCount;
+            SpawnerThink(rollerSpawner, rollerSpawnList, testMap);
+
+            turretSpawner->spawnCount = test_player->spawnTurretCount;
+            SpawnerThink(turretSpawner, turretSpawnList, testMap);
             //test_player->spawnBugCount = testSpawner->spawnCount;
 
-            slog("Bugs: %i", test_player->spawnBugCount);
+            //slog("Bugs: %i", test_player->spawnBugCount);
+            //slog("Men: %i", test_player->spawnManCount);
+
 
             gf2d_sprite_draw(test, test_player->position, NULL, NULL, NULL, NULL, NULL, 1);
             //UI elements last

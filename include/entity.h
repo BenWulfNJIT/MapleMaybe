@@ -49,8 +49,14 @@ typedef struct Entity_S
     int currentSpawnTime;
     int spawnCount;
     int spawnMax;
-    int spawnMobNumber; /**<each mob has a number to spawn by, 1 for bug >*/
+    int spawnMobNumber; /**<each mob has a number to spawn by, 1 for bug, 2 for man, 3 for jumper, 4 for roller, 5 for boss */ 
+
     int spawnBugCount;
+    int spawnManCount;
+    int spawnJumperCount;
+    int spawnRollerCount;
+    int spawnTurretCount;
+
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/
     void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<called when an entity touches another entity*/
 

@@ -140,7 +140,7 @@ void DoSkills(Entity* self)
         self->skillOneCD = 180;
         self->skillOneDurationCounter = 60;
         self->activeSkill = 1;
-        slog("bop");
+        //log("bop");
         SkillThink(self, 1, vector2d(0, 0));
         SkillCollisionCheck(self, self->activeSkill, &self->skillHitBox);
         return;
