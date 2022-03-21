@@ -40,6 +40,9 @@ Entity* player_new(Vector2D position)
         114,
         1);
     self->skillOneSprite = gf2d_sprite_load_all("images/skills/thorSkill1.png", 128, 64, 1);
+    self->skillTwoSprite = gf2d_sprite_load_all("images/skills/thorSkill2.png", 256, 32, 1);
+    self->skillThreeSprite = gf2d_sprite_load_all("images/skills/thorSkill3.png", 64, 256, 1);
+    self->skillFourSprite = gf2d_sprite_load_all("images/skills/thorSkill4.png", 512, 1024, 1);
     self->radius = 24;
     self->size.x = 32;
     self->size.y = 32;
@@ -48,6 +51,9 @@ Entity* player_new(Vector2D position)
     self->level = 1;
     self->experience = 0;
     self->skillOneCD = 0;
+    self->skillTwoCD = 0;
+    self->skillThreeCD = 0;
+    self->skillFourCD = 0;
     self->activeSkill = 0;
     self->team = 1;
     self->movementLock = 0;
@@ -137,29 +143,48 @@ void DoSkills(Entity* self)
     //First check for inputs 1-4 for attacks
     //If it works set attack flag to true, set self->active to that num
 
-    if (gfc_input_key_pressed("1") && self->level >= 1 && self->skillOneCD <= 0)
+    if (gfc_input_key_pressed("1") && self->level >= 1 && self->skillOneCD <= 0 && self->activeSkill == 0)
     {
         //60 cd ~= 1s
-        self->skillOneCD = 180;
-        self->skillOneDurationCounter = 60;
+        self->skillOneCD = 60;
+        self->skillOneDurationCounter = 15;
         self->activeSkill = 1;
-        //log("bop");
         SkillThink(self, 1, vector2d(0, 0));
         SkillCollisionCheck(self, self->activeSkill, &self->skillHitBox);
         return;
         
     }
-    else if (gfc_input_key_pressed("2") && self->level >= 2)
+    else if (gfc_input_key_pressed("2") && self->level >= 2 && self->skillTwoCD <= 0 && self->activeSkill == 0)
     {
         slog("Skill'd 2");
+        //60 cd ~= 1s
+        self->skillTwoCD = 300;
+        self->skillTwoDurationCounter = 90;
+        self->activeSkill = 2;
+        SkillThink(self, 2, vector2d(0, 0));
+        SkillCollisionCheck(self, self->activeSkill, &self->skillHitBox);
+        return;
     }
-    else if (gfc_input_key_pressed("3") && self->level >= 3)
+    else if (gfc_input_key_pressed("3") && self->level >= 3 && self->skillThreeCD <= 0 && self->activeSkill == 0)
     {
         slog("Skill'd 3");
+        //60 cd ~= 1s
+        self->skillThreeCD = 600;
+        self->skillThreeDurationCounter = 120;
+        self->activeSkill = 3;
+        SkillThink(self, 3, vector2d(0, 0));
+        SkillCollisionCheck(self, self->activeSkill, &self->skillHitBox);
     }
-    else if (gfc_input_key_pressed("4") && self->level >= 4)
+    else if (gfc_input_key_pressed("4") && self->level >= 4 && self->skillFourCD <= 0 && self->activeSkill == 0)
     {
+
         slog("Skill'd 4");
+        //60 cd ~= 1s
+        self->skillFourCD = 6000;
+        self->skillFourDurationCounter = 300;
+        self->activeSkill = 4;
+        SkillThink(self, 4, vector2d(0, 0));
+        SkillCollisionCheck(self, self->activeSkill, &self->skillHitBox);
     }
     else
     {

@@ -124,7 +124,10 @@ int main(int argc, char * argv[])
             DoPlayerGravity(test_player);
             DoSkills(test_player);
             SkillThink(test_player, test_player->activeSkill, test_player->skillOnePosition);
-            
+            //slog("current skill: %i", test_player->activeSkill);
+           // slog("skill 1 cd %i", test_player->skillOneCD);
+           // slog("skill 1 duration %i", test_player->skillOneDurationCounter);
+
             //entity_update(&spawnList[7]);
             //entity_draw(&spawnList[7]);
 

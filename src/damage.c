@@ -42,7 +42,16 @@ int GetDamage(int skill)
 	switch (skill)
 	{
 		case 1:
-			damage = 50;
+			damage = 25;
+			break;
+		case 2:
+			damage = 100;
+			break;
+		case 3:
+			damage = 100;
+			break;
+		case 4:
+			damage = 300;
 			break;
 		default:
 			damage = 0;

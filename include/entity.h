@@ -32,12 +32,37 @@ typedef struct Entity_S
     int         classNum; /**<0 for thor, 1 for loki, 2 for odin, 3 for hela, 4 for fenrir> */
     int         experience;
     int         level;
+
+
+    int         activeSkill; /**<default 0, 1 for auto, 2 for 2, 3 for 3, 4 for 4>*/
+    //skill 1?
     int         skillOneCD;
     Vector2D    skillOnePosition;
     int         skillOneDurationCounter;
     int         skillOneInProgress; /**<0 if not, 1 if in progress> */
-    int         activeSkill; /**<default 0, 1 for auto, 2 for 2, 3 for 3, 4 for 4>*/
     Sprite*     skillOneSprite;
+
+    //skill 2?
+    int         skillTwoCD;
+    Vector2D    skillTwoPosition;
+    int         skillTwoDurationCounter;
+    int         skillTwoInProgress; /**<0 if not, 1 if in progress> */
+    Sprite*     skillTwoSprite;
+
+    //skill 3?
+    int         skillThreeCD;
+    Vector2D    skillThreePosition;
+    int         skillThreeDurationCounter;
+    int         skillThreeInProgress; /**<0 if not, 1 if in progress> */
+    Sprite*     skillThreeSprite;
+
+    //skill 4?
+    int         skillFourCD;
+    Vector2D    skillFourPosition;
+    int         skillFourDurationCounter;
+    int         skillFourInProgress; /**<0 if not, 1 if in progress> */
+    Sprite*     skillFourSprite;
+
     int         team;  /**<default 0, 1 for friendly player, 2 for monsters>*/
     int         movementLock; /**<0 for default free to move, 1 to lock movement>*/
 
