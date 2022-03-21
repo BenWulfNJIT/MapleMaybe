@@ -10,8 +10,12 @@ void InflictDamage(Entity* attacker, Entity* recipient, int damage)
 	{
 
 		//temp debug invinc
-		if (recipient->team == 1) damage = 0;
-
+		//if (recipient->team == 1) damage = 0;
+		if (recipient->team == 1 && recipient->isCharInSmoke == 1)
+		{
+			damage = 0;
+			slog("avoided");
+		}
 		recipient->health -= damage;
 		if(recipient->team == 1) recipient->damageBoostTime = 60;
 		

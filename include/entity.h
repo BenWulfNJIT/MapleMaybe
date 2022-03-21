@@ -66,6 +66,10 @@ typedef struct Entity_S
     int         team;  /**<default 0, 1 for friendly player, 2 for monsters>*/
     int         movementLock; /**<0 for default free to move, 1 to lock movement>*/
 
+    int         isSmokeActive;
+    SDL_Rect    smokeArea;
+    int         isCharInSmoke;
+    int         smokeTimer;
     int         damageBoostTime;
     //Spawner info
     //Entity* entityToSpawn;

@@ -64,7 +64,8 @@ int main(int argc, char * argv[])
     testSkill = entity_new(vector2d(100, 100));
     test_player = player_new(vector2d(100, 100));
     test_player->classNum = 0;
-    //test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/fireball.png", 128, 64, 1);
+    //test_player->skillOneSprite = gf2d_sprite_load_all("images/chars/loki.png", 64, 64, 1);
+
 
     bugSpawnList = entity_new();
     bugSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
@@ -186,6 +187,52 @@ int main(int argc, char * argv[])
     
         if (keys[SDL_SCANCODE_LEFTBRACKET]) test_player->level -= 1;
         if (keys[SDL_SCANCODE_RIGHTBRACKET]) test_player->level += 1;
+
+        if (keys[SDL_SCANCODE_Z])
+        {
+            test_player->sprite = gf2d_sprite_load_all("images/chars/thor.png", 64, 114, 1);
+
+            test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/thorSkill1.png", 128, 64, 1);
+            test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/thorSkill2.png", 256, 32, 1);
+            test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/thorSkill3.png", 64, 256, 1);
+            test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/thorSkill4.png", 512, 1024, 1);
+
+            test_player->classNum = 0;
+            test_player->level = 1;
+            test_player->experience = 0;
+        }
+        if (keys[SDL_SCANCODE_X])
+        {
+            test_player->sprite = gf2d_sprite_load_all("images/chars/loki.png", 64, 114, 1);
+            test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/lokiSkill1.png", 128, 64, 1);
+            test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/lokiSkill2.png", 256, 256, 1);
+            test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/lokiSkill3.png", 128, 128, 1);
+            test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/lokiSkill4.png", 32, 32, 1);
+            test_player->classNum = 1;
+            test_player->level = 1;
+            test_player->experience = 0;
+        }
+        if (keys[SDL_SCANCODE_C])
+        {
+            test_player->sprite = gf2d_sprite_load_all("images/chars/odin.png", 64, 114, 1);
+            test_player->classNum = 2;
+            test_player->level = 1;
+            test_player->experience = 0;
+        }
+        if (keys[SDL_SCANCODE_V])
+        {
+            test_player->sprite = gf2d_sprite_load_all("images/chars/hela.png", 64, 114, 1);
+            test_player->classNum = 3;
+            test_player->level = 1;
+            test_player->experience = 0;
+        }
+        if (keys[SDL_SCANCODE_B])
+        {
+            test_player->sprite = gf2d_sprite_load_all("images/chars/fenrir.png", 64, 114, 1);
+            test_player->classNum = 4;
+            test_player->level = 1;
+            test_player->experience = 0;
+        }
 
 
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
