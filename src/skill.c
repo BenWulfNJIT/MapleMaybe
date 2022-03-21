@@ -31,36 +31,35 @@ void DoSkill(Entity* attacker, Entity* skill, Vector2D position)
 
 void SkillThink(Entity* attacker, int skill, Vector2D position)
 {
+
     if (attacker->skillOneCD > 0) attacker->skillOneCD--;
-    //slog("skill cd: %i", attacker->skillOneCD);
     if (attacker->skillOneDurationCounter > 0)
     {
         //do skill stuff
-       // slog("hello");
         if (attacker->facing == 0)
         {
-            attacker->skillOnePosition.x = attacker->position.x - (70 + attacker->skillOneSprite->frame_w);
+            attacker->skillOnePosition.x = attacker->position.x - (50 + attacker->skillOneSprite->frame_w);
             attacker->skillOnePosition.y = attacker->position.y - 32;
-            attacker->skillHitBox.x = attacker->position.x - (70 + attacker->skillOneSprite->frame_w);
+            attacker->skillHitBox.x = attacker->position.x - (50 + attacker->skillOneSprite->frame_w);
             attacker->skillHitBox.y = attacker->position.y - 32;
         }
         else if (attacker->facing == 1)
         {
-            attacker->skillOnePosition.x = attacker->position.x + 70;
+            attacker->skillOnePosition.x = attacker->position.x + 50;
             attacker->skillOnePosition.y = attacker->position.y - 32;
-            attacker->skillHitBox.x = attacker->position.x + 70;
+            attacker->skillHitBox.x = attacker->position.x + 50;
             attacker->skillHitBox.y = attacker->position.y - 32;
         }
         else
         {
-            attacker->skillOnePosition.x = attacker->position.x + 70;
+            attacker->skillOnePosition.x = attacker->position.x + 50;
             attacker->skillOnePosition.y = attacker->position.y - 32;
-            attacker->skillHitBox.x = attacker->position.x + 70;
+            attacker->skillHitBox.x = attacker->position.x + 50;
             attacker->skillHitBox.y = attacker->position.y - 32;
         }
        //update hitbox before drawing
        
-        attacker->skillHitBox.w = 64;
+        attacker->skillHitBox.w = 128;
         attacker->skillHitBox.h = 64;
 
         
@@ -75,18 +74,12 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
     }
     else if (attacker->activeSkill != 0 && (attacker->skillOneDurationCounter <= 0))
     {
-        //end skill and free ent
-        //slog("skill ended");
         attacker->movementLock = 0;
-        //attacker->skillOneCD = 60;
         attacker->activeSkill = 0;
-        //entity_free(skill);
         return;
     }
     else
     {
-        //slog("Error?");
         return;
-        //error and return
     }
 }

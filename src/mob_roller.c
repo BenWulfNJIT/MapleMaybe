@@ -52,7 +52,11 @@ void roller_think(Entity* self, VectorMap* map)
 
 
 
-
+    Entity* player = GetPlayer();
+    if (SDL_HasIntersection(&self->hitBox, &player->hitBox))
+    {
+        InflictDamage(self, player, 10);
+    }
 
     //dont let it fall through platform
     if (self->standingOnPlatform == 1 && self->velocity.y > 0)
@@ -75,7 +79,7 @@ Entity* roller_new(Vector2D position, Vector2D velocity)
     self = entity_new();
     if (!self)return NULL;
     self->sprite = gf2d_sprite_load_all(
-        "images/roller.png",
+        "images/mobs/roller.png",
         64,
         64,
         1);

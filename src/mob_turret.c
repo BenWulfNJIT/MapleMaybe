@@ -99,7 +99,7 @@ Entity* turret_new(Vector2D position, Vector2D velocity)
     self = entity_new();
     if (!self)return NULL;
     self->sprite = gf2d_sprite_load_all(
-        "images/turret.png",
+        "images/mobs/turret.png",
         128,
         128,
         1);

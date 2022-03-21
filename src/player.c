@@ -17,7 +17,7 @@ void player_think(Entity* self)
 
     if (self->damageBoostTime > 0) self->damageBoostTime--;
 
-    self->hitBox.x = self->position.x - 32;
+    self->hitBox.x = self->position.x - 64;
     self->hitBox.y = self->position.y - 32;
     self->hitBox.w = 64;
     self->hitBox.h = 64;
@@ -35,11 +35,11 @@ Entity* player_new(Vector2D position)
     self = entity_new();
     if (!self)return NULL;
     self->sprite = gf2d_sprite_load_all(
-        "images/space_bug_top.png",
-        128,
-        128,
-        16);
-    self->skillOneSprite = gf2d_sprite_load_all("images/fireball.png", 64, 64, 1);
+        "images/chars/thor.png",
+        64,
+        114,
+        1);
+    self->skillOneSprite = gf2d_sprite_load_all("images/skills/thorSkill1.png", 128, 64, 1);
     self->radius = 24;
     self->size.x = 32;
     self->size.y = 32;

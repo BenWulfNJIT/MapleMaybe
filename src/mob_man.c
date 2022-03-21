@@ -45,7 +45,11 @@ void man_think(Entity* self, VectorMap* map)
     self->hitBox.w = 64;
     self->hitBox.h = 64;
    
-
+    Entity* player = GetPlayer();
+    if (SDL_HasIntersection(&self->hitBox, &player->hitBox))
+    {
+        InflictDamage(self, player, 10);
+    }
 
     if (self->standingOnPlatform == 1 && self->velocity.y > 0)
     {
@@ -63,7 +67,7 @@ Entity* man_new(Vector2D position, Vector2D velocity)
     self = entity_new();
     if (!self)return NULL;
     self->sprite = gf2d_sprite_load_all(
-        "images/man.png",
+        "images/mobs/man.png",
         64,
         64,
         1);

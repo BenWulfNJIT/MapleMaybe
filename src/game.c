@@ -63,6 +63,8 @@ int main(int argc, char * argv[])
     testMap = vectormap_load("maps/test.json");
     testSkill = entity_new(vector2d(100, 100));
     test_player = player_new(vector2d(100, 100));
+    test_player->classNum = 0;
+    //test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/fireball.png", 128, 64, 1);
 
     bugSpawnList = entity_new();
     bugSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
@@ -133,12 +135,12 @@ int main(int argc, char * argv[])
             manSpawner->spawnCount = test_player->spawnManCount;
             SpawnerThink(manSpawner, manSpawnList, testMap);
 
-            for (int i = 0; i < manSpawner->spawnBugCount; i++)
-            {
-                SimplePlatformCollision(&manSpawnList[i], testMap);
-                BoundingBoxCollision(&manSpawnList[i], testMap);
-                DoPlayerGravity(&manSpawnList[i]);
-            }
+            //for (int i = 0; i < manSpawner->spawnBugCount; i++)
+          //  {
+          //      SimplePlatformCollision(&manSpawnList[i], testMap);
+          ////      BoundingBoxCollision(&manSpawnList[i], testMap);
+           //     DoPlayerGravity(&manSpawnList[i]);
+         //   }
 
             jumperSpawner->spawnCount = test_player->spawnJumperCount;
             SpawnerThink(jumperSpawner, jumperSpawnList, testMap);

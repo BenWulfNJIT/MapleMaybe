@@ -65,6 +65,7 @@ typedef struct Entity_S
 
     Vector4D standingPlatform;
 
+    int dashing;
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/
     void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<called when an entity touches another entity*/
 

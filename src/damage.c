@@ -8,12 +8,20 @@ void InflictDamage(Entity* attacker, Entity* recipient, int damage)
 	if (recipient->damageBoostTime && recipient->damageBoostTime > 0) damage = 0;
 	else
 	{
+
+		//temp debug invinc
+		if (recipient->team == 1) damage = 0;
+
 		recipient->health -= damage;
 		if(recipient->team == 1) recipient->damageBoostTime = 60;
+		
+		
+
 		slog("Health Remaining: %i/%i", recipient->health, recipient->maxHealth);
 	}
 	//slog("health: %i", recipient->health);
 	//slog("damage: %i", damage);
+
 
 	if (recipient->health <= 0) 
 	{

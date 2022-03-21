@@ -88,7 +88,7 @@ void SpawnerThink(Entity* spawner, Entity* spawnList, VectorMap* map)
             switch (spawner->spawnMobNumber)
             {
             case 1 :
-                spawnList[spawner->spawnCount] = *bug_new(spawner->positionToSpawn, vector2d(20, 0));
+                spawnList[spawner->spawnCount] = *bug_new(spawner->positionToSpawn, vector2d(0, 0));
                 spawner->spawnCount++;
                 return;
             case 2:
@@ -96,11 +96,11 @@ void SpawnerThink(Entity* spawner, Entity* spawnList, VectorMap* map)
                 spawner->spawnCount++;
                 return;
             case 3:
-                spawnList[spawner->spawnCount] = *jumper_new(spawner->positionToSpawn, vector2d(20, 0));
+                spawnList[spawner->spawnCount] = *jumper_new(spawner->positionToSpawn, vector2d(0, 0));
                 spawner->spawnCount++;
                 return;
             case 4:
-                spawnList[spawner->spawnCount] = *roller_new(spawner->positionToSpawn, vector2d(20, 0));
+                spawnList[spawner->spawnCount] = *roller_new(spawner->positionToSpawn, vector2d(0, 0));
                 spawner->spawnCount++;
                 return;
             case 5:

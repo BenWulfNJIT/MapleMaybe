@@ -18,7 +18,7 @@ void bug_think(Entity* self)
     
     Entity* player = GetPlayer();
     //Vector2D* playerPosition = &player->position;
-    gf2d_draw_line(self->position, player->position, vector4d(20, 20, 255, 255));
+    //gf2d_draw_line(self->position, player->position, vector4d(20, 20, 255, 255));
     //self->velocity.x = (gfc_random() -0.5) * 5;
     //self->velocity.y = (gfc_random() - 0.5) * 5;
 
@@ -37,7 +37,6 @@ void bug_think(Entity* self)
 
     if (SDL_HasIntersection(&self->hitBox, &player->hitBox))
     {
-        //slog("bopped");
         InflictDamage(self, player, 10);
     }
         
@@ -45,8 +44,8 @@ void bug_think(Entity* self)
   
     
 
-   self->hitBox.x = self->position.x - 32;
-   self->hitBox.y = self->position.y - 32;
+   self->hitBox.x = self->position.x - 64;
+   self->hitBox.y = self->position.y - 72;
    self->hitBox.w = 64;
    self->hitBox.h = 64;
 
@@ -74,10 +73,10 @@ Entity* bug_new(Vector2D position, Vector2D velocity)
     self = entity_new();
     if (!self)return NULL;
     self->sprite = gf2d_sprite_load_all(
-        "images/space_bug_top.png",
-        128,
-        128,
-        16);
+        "images/mobs/bug.png",
+        64,
+        64,
+        1);
     self->radius = 24;
     self->size.x = 32;
     self->size.y = 32;
