@@ -41,6 +41,7 @@ typedef struct Entity_S
     int         team;  /**<default 0, 1 for friendly player, 2 for monsters>*/
     int         movementLock; /**<0 for default free to move, 1 to lock movement>*/
 
+    int         damageBoostTime;
     //Spawner info
     //Entity* entityToSpawn;
     Vector2D positionToSpawn;
@@ -56,6 +57,13 @@ typedef struct Entity_S
     int spawnJumperCount;
     int spawnRollerCount;
     int spawnTurretCount;
+    float mobSpeed;
+
+    int laserTimer;
+    Vector2D laserTarget;
+    SDL_Rect laserExplosion;
+
+    Vector4D standingPlatform;
 
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/
     void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<called when an entity touches another entity*/
@@ -100,4 +108,8 @@ void SkillCollisionCheck(Entity* attacker, int skill, SDL_Rect* skillHitBox);
  */
 void entity_draw_all();
 
+
+Entity* GetPlayer();
+
+void DamageBoost(Entity* ent, int time);
 #endif

@@ -4,7 +4,14 @@
 
 void InflictDamage(Entity* attacker, Entity* recipient, int damage)
 {
-	recipient->health -= damage;
+
+	if (recipient->damageBoostTime && recipient->damageBoostTime > 0) damage = 0;
+	else
+	{
+		recipient->health -= damage;
+		if(recipient->team == 1) recipient->damageBoostTime = 60;
+		slog("Health Remaining: %i/%i", recipient->health, recipient->maxHealth);
+	}
 	//slog("health: %i", recipient->health);
 	//slog("damage: %i", damage);
 
@@ -12,7 +19,8 @@ void InflictDamage(Entity* attacker, Entity* recipient, int damage)
 	{
 		recipient->health = 0;
 		recipient->movementLock = 1;
-		entity_free(recipient);
+		if (recipient->team == 1) return;
+		else entity_free(recipient);
 		//slog("should kill");
 	}
 

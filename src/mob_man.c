@@ -19,34 +19,40 @@ void man_think(Entity* self, VectorMap* map)
 
     int mx, my;
     double distance;
-
-    if (self->movementLock == 1) self->velocity.x = 0;
-    else self->velocity.x = gfc_random() * 2 - 1;
-
     
+    
+    int leftBound = 300;
+    int rightBound = 900;
+    
+    if (self->position.x > leftBound && self->position.x < rightBound)
+    {
+        self->velocity.x = self->mobSpeed;
+        if (gfc_random() < 0.005) self->mobSpeed *= -1;
+    }
+    else if (self->hitBox.x <= leftBound )
+    {
+        self->velocity.x = 0.5;
+       // slog("hello?");
+    }
+    else if (self->hitBox.x >= rightBound)
+    {
+        self->velocity.x = -0.5;
+    }
 
 
     self->hitBox.x = self->position.x - 64;
     self->hitBox.y = self->position.y - 80;
     self->hitBox.w = 64;
     self->hitBox.h = 64;
-
-    
-
-    
+   
 
 
-    //dont let it fall through platform
     if (self->standingOnPlatform == 1 && self->velocity.y > 0)
     {
         self->velocity.y = 0;
     }
 
-    // if (intDistance <= 10)
-     //{
-        // entity_free(self);
-     //}
-
+  
 }
 
 
@@ -68,6 +74,12 @@ Entity* man_new(Vector2D position, Vector2D velocity)
     self->maxHealth = 100;
     self->health = self->maxHealth;
     self->spawnMobNumber = 2;
+    self->standingOnPlatform = 0;
+    self->standingPlatform.x = 0;
+    self->standingPlatform.y = 0;
+    self->standingPlatform.z = 0;
+    self->standingPlatform.w = 0;
+    self->mobSpeed = 0.5;
     self->think = man_think;
 
 

@@ -68,9 +68,7 @@ void SpawnerThink(Entity* spawner, Entity* spawnList, VectorMap* map)
 
            
 
-            SimplePlatformCollision(&spawnList[i], map);
-            BoundingBoxCollision(&spawnList[i], map);
-            DoPlayerGravity(&spawnList[i]);
+            
 
         }
     }
@@ -94,7 +92,7 @@ void SpawnerThink(Entity* spawner, Entity* spawnList, VectorMap* map)
                 spawner->spawnCount++;
                 return;
             case 2:
-                spawnList[spawner->spawnCount] = *man_new(spawner->positionToSpawn, vector2d(20, 0));
+                spawnList[spawner->spawnCount] = *man_new(spawner->positionToSpawn, vector2d(0, 0));
                 spawner->spawnCount++;
                 return;
             case 3:
@@ -106,7 +104,7 @@ void SpawnerThink(Entity* spawner, Entity* spawnList, VectorMap* map)
                 spawner->spawnCount++;
                 return;
             case 5:
-                spawnList[spawner->spawnCount] = *turret_new(spawner->positionToSpawn, vector2d(20, 0));
+                spawnList[spawner->spawnCount] = *turret_new(spawner->positionToSpawn, vector2d(0, 0));
                 //slog("spawned");
                 spawner->spawnCount++;
                 return;

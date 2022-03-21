@@ -79,8 +79,9 @@ int main(int argc, char * argv[])
     turretSpawnList = entity_new();
     turretSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
 
-    testSpawner = spawner_new(1, testMap->spawnerCoords[3], 5, 600);
+    testSpawner = spawner_new(1, testMap->spawnerCoords[3], 3, 600);
     manSpawner = spawner_new(2, testMap->spawnerCoords[1], 5, 600);
+    manSpawner->standingPlatform = testMap->platformCoords[2];
     jumperSpawner = spawner_new(3, testMap->spawnerCoords[2], 3, 1000);
     rollerSpawner = spawner_new(4, testMap->spawnerCoords[0], 2, 800);
     turretSpawner = spawner_new(5, testMap->spawnerCoords[4], 1, 5000);
@@ -131,6 +132,13 @@ int main(int argc, char * argv[])
 
             manSpawner->spawnCount = test_player->spawnManCount;
             SpawnerThink(manSpawner, manSpawnList, testMap);
+
+            for (int i = 0; i < manSpawner->spawnBugCount; i++)
+            {
+                SimplePlatformCollision(&manSpawnList[i], testMap);
+                BoundingBoxCollision(&manSpawnList[i], testMap);
+                DoPlayerGravity(&manSpawnList[i]);
+            }
 
             jumperSpawner->spawnCount = test_player->spawnJumperCount;
             SpawnerThink(jumperSpawner, jumperSpawnList, testMap);

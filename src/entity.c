@@ -134,6 +134,7 @@ void entity_update_all()
 
             entity_manager.entityList[i].think(&entity_manager.entityList[i]);
         }
+        //DoPlayerGravity(&entity_manager.entityList[i]);
         entity_update(&entity_manager.entityList[i]);
 
         //slog("Entity count: %i", i);
@@ -229,6 +230,24 @@ void entity_draw(Entity* self)
 //    }
 //}
 
+Entity* GetPlayer()
+{
+    Entity* player = NULL;
+    for (int i = 0; i < entity_manager.maxEnts; i++)
+    {
+        if (!entity_manager.entityList[i]._inuse)continue;
+        if (entity_manager.entityList[i].think)
+        {
+            if (entity_manager.entityList[i].team == 1)
+            {
+                player = &entity_manager.entityList[i];
+            }
+        }
+    }
+    //if (player) return player;
+   // else return NULL;
+    return player;
+}
 void entity_draw_all()
 {
     int i;
@@ -240,6 +259,10 @@ void entity_draw_all()
     }
 }
 
+void DamageBoost(Entity* ent, int time)
+{
+    if (ent->damageBoostTime) ent->damageBoostTime = time;
+}
 
 
 /*eol@eof*/

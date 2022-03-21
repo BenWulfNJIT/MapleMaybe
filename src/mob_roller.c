@@ -20,8 +20,26 @@ void roller_think(Entity* self, VectorMap* map)
     int mx, my;
     double distance;
 
-    if (self->movementLock == 1) self->velocity.x = 0;
-    else self->velocity.x = gfc_random() * 2 - 1;
+
+    int leftBound = 300;
+    int rightBound = 900;
+
+    if (self->position.x > leftBound && self->position.x < rightBound)
+    {
+        self->velocity.x = self->mobSpeed;
+        if (gfc_random() < 0.01) self->mobSpeed *= -1;
+    }
+    else if (self->hitBox.x <= leftBound)
+    {
+        self->velocity.x = 2;
+        self->mobSpeed *= -1;
+        // slog("hello?");
+    }
+    else if (self->hitBox.x >= rightBound)
+    {
+        self->velocity.x = -2;
+        self->mobSpeed *= -1;
+    }
 
 
 
@@ -68,6 +86,7 @@ Entity* roller_new(Vector2D position, Vector2D velocity)
     self->maxHealth = 100;
     self->health = self->maxHealth;
     self->spawnMobNumber = 4;
+    self->mobSpeed = 2;
     self->think = roller_think;
 
 

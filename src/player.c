@@ -15,6 +15,7 @@ void player_think(Entity* self)
 
     ControlMovement(ent);
 
+    if (self->damageBoostTime > 0) self->damageBoostTime--;
 
     self->hitBox.x = self->position.x - 32;
     self->hitBox.y = self->position.y - 32;
@@ -50,7 +51,9 @@ Entity* player_new(Vector2D position)
     self->activeSkill = 0;
     self->team = 1;
     self->movementLock = 0;
-    self->health = 1000;
+    self->maxHealth = 1000;
+    self->health = self->maxHealth;
+    self->damageBoostTime = 0;
     self->think = player_think;
 
 

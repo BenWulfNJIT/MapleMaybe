@@ -1,25 +1,46 @@
 #include "simple_logger.h"
 #include "gf2d_draw.h"
 #include "bug.h"
+#include "damage.h"
 
 #define ES_DEAD 1
 
 void bug_think(Entity* self)
 {
 
-    if (self->hitBox.y && self->knownPlatHeight) 
-    {
-        if (self->hitBox.y + self->hitBox.h > self->knownPlatHeight)
-        {
+    //if (self->hitBox.y && self->knownPlatHeight) 
+   // {
+      //  if (self->hitBox.y + self->hitBox.h > self->knownPlatHeight)
+       // {
             //slog("ERROR BROSKI");
-        }
-    }
+       // }
+    //}
     
-    int mx, my;
-    double distance;
-   
-    if (self->movementLock == 1) self->velocity.x = 0;
-    else self->velocity.x = gfc_random() * 2 - 1;
+    Entity* player = GetPlayer();
+    //Vector2D* playerPosition = &player->position;
+    gf2d_draw_line(self->position, player->position, vector4d(20, 20, 255, 255));
+    //self->velocity.x = (gfc_random() -0.5) * 5;
+    //self->velocity.y = (gfc_random() - 0.5) * 5;
+
+    if (gfc_random() >= 0.8)
+    {
+        self->velocity.x = player->position.x - self->position.x;
+        self->velocity.y = player->position.y - self->position.y;
+        vector2d_normalize(&self->velocity);
+        vector2d_set_magnitude(&self->velocity, 3);
+    }
+    else
+    {
+        self->velocity.x = (gfc_random() -0.5) * 7;
+        self->velocity.y = (gfc_random() - 0.5) * 7;
+    }
+
+    if (SDL_HasIntersection(&self->hitBox, &player->hitBox))
+    {
+        //slog("bopped");
+        InflictDamage(self, player, 10);
+    }
+        
 
   
     
@@ -33,10 +54,10 @@ void bug_think(Entity* self)
 
   
    //dont let it fall through platform
-   if (self->standingOnPlatform == 1 && self->velocity.y > 0)
-   {
-       self->velocity.y = 0;
-   }
+  // if (self->standingOnPlatform == 1 && self->velocity.y > 0)
+   //{
+    //   self->velocity.y = 0;
+   //}
 
   // if (intDistance <= 10)
    //{
