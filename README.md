@@ -17,16 +17,6 @@ Lastly, theres an npc on the top level that can be spoken to. simply stand over 
 
 Thank you.
 
-# created from gameframework2d (GF2D)
-a collection of utlitity functions designed to facilitate creating 2D games with SDL2
-This project is specifically intended to function as an educational tool for my students taking 2D Game Programming.
-
-Currently the project is in a WIP state, however it is functional with sample projects showcasing rudimentary scrolling shooters,
-platformers, and adventure games.
-
-The master branch is kept deliberately minimal to allow students to build out systems as they are learning.
-Other branches have more complete system: Collisions, menus, input abstraction.
-
 # Build Process
 
 Before you can build the example code we are providing for you, you will need to obtain the libraries required
