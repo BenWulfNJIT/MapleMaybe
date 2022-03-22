@@ -221,6 +221,7 @@ int main(int argc, char * argv[])
                 Vector2D p1 = { (i + 344), 40 };
                 Vector2D p2 = { (i + 344), 60 };
 
+
                 gf2d_draw_line(p1, p2, vector4d(255, 255, 20, 255));
             }
             if (test_player->shopping)
