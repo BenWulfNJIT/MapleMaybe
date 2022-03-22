@@ -11,7 +11,6 @@ void player_think(Entity* self)
   
     //entity_new(skill);
 
-    
 
     ControlMovement(ent);
 
@@ -62,7 +61,8 @@ Entity* player_new(Vector2D position)
     self->smokeArea.y = -20;
     self->smokeArea.w = 256;
     self->smokeArea.h = 256;
-
+    self->odinLaserTarget.x = 0;
+    self->odinLaserTarget.y = 0;
     self->damageBoostTime = 0;
     self->think = player_think;
 
@@ -194,7 +194,7 @@ void DoSkills(Entity* self)
             self->skillTwoDurationCounter = 90;
             break;
         case 1: //---loki skill timer
-            slog("weird");
+           // slog("weird");
             self->skillTwoCD = 1500;
             self->skillTwoDurationCounter = 900;
             self->smokeArea.x = self->position.x - 150;
@@ -204,20 +204,25 @@ void DoSkills(Entity* self)
 
             break;
         case 2: //---odin skill timer
-            self->skillOneCD = 60;
-            self->skillOneDurationCounter = 15;
+            //slog("got into odin");
+            self->odinLaserTarget.x = GetNearestMob()->hitBox.x + GetNearestMob()->hitBox.w/2;
+            self->odinLaserTarget.y = GetNearestMob()->hitBox.y;
+            self->skillTwoCD = 180;
+            self->skillTwoDurationCounter = 1;
             break;
         case 3: //---hela skill timer
-            self->skillOneCD = 60;
-            self->skillOneDurationCounter = 15;
+            self->skillTwoCD = 60;
+            self->skillTwoDurationCounter = 15;
             break;
         case 4: //---fenrir skill timer
-            self->skillOneCD = 60;
-            self->skillOneDurationCounter = 15;
+            self->skillTwoCD = 60;
+            self->skillTwoDurationCounter = 15;
             break;
         }
 
+        //slog("got before think");
         self->activeSkill = 2;
+        //slog("uhhh %i", self->activeSkill);
         SkillThink(self, 2, vector2d(0, 0));
         SkillCollisionCheck(self, self->activeSkill, &self->skillHitBox);
         return;
@@ -239,8 +244,8 @@ void DoSkills(Entity* self)
             self->skillThreeDurationCounter = 1;
             break;
         case 2: //---odin skill timer
-            self->skillThreeCD = 60;
-            self->skillThreeDurationCounter = 15;
+            self->skillThreeCD = 180;
+            self->skillThreeDurationCounter = 60;
             break;
         case 3: //---hela skill timer
             self->skillThreeCD = 60;
@@ -275,8 +280,8 @@ void DoSkills(Entity* self)
             self->skillFourDurationCounter = 360;
             break;
         case 2: //---odin skill timer
-            self->skillFourCD = 60;
-            self->skillFourDurationCounter = 15;
+            self->skillFourCD = 3000;
+            self->skillFourDurationCounter = 300;
             break;
         case 3: //---hela skill timer
             self->skillFourCD = 60;

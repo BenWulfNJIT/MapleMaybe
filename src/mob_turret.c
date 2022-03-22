@@ -39,7 +39,7 @@ void turret_think(Entity* self, VectorMap* map)
         self->laserTarget.x = player->position.x;
         self->laserTarget.y = player->position.y;
 
-        self->laserExplosion.x = player->position.x;
+        self->laserExplosion.x = player->position.x - 32;
         self->laserExplosion.y = player->position.y;
 
 
@@ -115,8 +115,8 @@ Entity* turret_new(Vector2D position, Vector2D velocity)
     self->laserTarget.y = 0;
     self->laserExplosion.x = 0;
     self->laserExplosion.y = 0;
-    self->laserExplosion.w = 5;
-    self->laserExplosion.h = 5;
+    self->laserExplosion.w = 25;
+    self->laserExplosion.h = 25;
     self->think = turret_think;
 
 

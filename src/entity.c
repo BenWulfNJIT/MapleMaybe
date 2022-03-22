@@ -155,7 +155,7 @@ void SkillCollisionCheck(Entity* attacker, int skill, SDL_Rect* skillHitBox)
            // slog("so %i", &entity_manager.entityList[i].hitBox.x);
             //slog("huh");
            
-            if (SDL_HasIntersection(skillHitBox, &entity_manager.entityList[i].hitBox))
+            if (SDL_HasIntersection(skillHitBox, &entity_manager.entityList[i].hitBox) && entity_manager.entityList[i].team == 2)
             //slog("skill.x %i ent.x %i", skillHitBox->x, entity_manager.entityList[i].hitBox.x);
            // if(skillHitBox->x + skillHitBox->w >= &entity_manager.entityList[i].hitBox.x &&
              //   skillHitBox->x <= &entity_manager.entityList[i].hitBox.x + entity_manager.entityList[i].hitBox.w 

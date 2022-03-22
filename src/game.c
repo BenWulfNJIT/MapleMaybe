@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <SDL_ttf.h>
 #include "gf2d_draw.h"
 #include "gfc_input.h"
 #include "gf2d_graphics.h"
@@ -17,12 +18,15 @@ int main(int argc, char * argv[])
     /*variable declarations*/
     int done = 0;
     const Uint8 * keys;
-    Sprite *sprite, *test;
+    Sprite* sprite, * test;
     
-    int mx,my;
+    int mx,my, healthPercent;
     float mf = 0;
     Sprite *mouse;
+    Sprite* healthBar;
     Vector4D mouseColor = {255,100,255,200};
+    Vector4D healthColor = { 255,255,255,255 };
+
     VectorMap *testMap;
     Entity* bug, *test_player, *testSkill, *testSpawner, *bugSpawnList, 
         *manSpawner, *manSpawnList, 
@@ -49,8 +53,11 @@ int main(int argc, char * argv[])
     gfc_input_init("config/input.cfg");
 
     /*demo setup*/
-    sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
-    test = gf2d_sprite_load_all("images/fireball.png", 64, 64, 1);
+//    sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
+    sprite = gf2d_sprite_load_image("images/backgrounds/crayonBackground.png");
+
+   // test = gf2d_sprite_load_all("images//skills/fireball.png", 64, 64, 1);
+
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     /*main game loop*/
 
@@ -94,6 +101,9 @@ int main(int argc, char * argv[])
 ////    spawnList[i] = *bug_new(vector2d(gfc_random()*100, gfc_random()*100), vector2d(gfc_random(), gfc_random()));
    // }
     
+    int testBoy = 25;
+
+
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
@@ -132,39 +142,59 @@ int main(int argc, char * argv[])
             //entity_update(&spawnList[7]);
             //entity_draw(&spawnList[7]);
 
+          
+                testSpawner->spawnCount = test_player->spawnBugCount;
+                SpawnerThink(testSpawner, bugSpawnList, testMap);
 
-            testSpawner->spawnCount = test_player->spawnBugCount;
-            SpawnerThink(testSpawner, bugSpawnList, testMap);
+                manSpawner->spawnCount = test_player->spawnManCount;
+                SpawnerThink(manSpawner, manSpawnList, testMap);
 
-            manSpawner->spawnCount = test_player->spawnManCount;
-            SpawnerThink(manSpawner, manSpawnList, testMap);
+                //for (int i = 0; i < manSpawner->spawnBugCount; i++)
+              //  {
+              //      SimplePlatformCollision(&manSpawnList[i], testMap);
+              ////      BoundingBoxCollision(&manSpawnList[i], testMap);
+               //     DoPlayerGravity(&manSpawnList[i]);
+             //   }
 
-            //for (int i = 0; i < manSpawner->spawnBugCount; i++)
-          //  {
-          //      SimplePlatformCollision(&manSpawnList[i], testMap);
-          ////      BoundingBoxCollision(&manSpawnList[i], testMap);
-           //     DoPlayerGravity(&manSpawnList[i]);
-         //   }
+                jumperSpawner->spawnCount = test_player->spawnJumperCount;
+                SpawnerThink(jumperSpawner, jumperSpawnList, testMap);
 
-            jumperSpawner->spawnCount = test_player->spawnJumperCount;
-            SpawnerThink(jumperSpawner, jumperSpawnList, testMap);
+                rollerSpawner->spawnCount = test_player->spawnRollerCount;
+                SpawnerThink(rollerSpawner, rollerSpawnList, testMap);
 
-            rollerSpawner->spawnCount = test_player->spawnRollerCount;
-            SpawnerThink(rollerSpawner, rollerSpawnList, testMap);
-
-            turretSpawner->spawnCount = test_player->spawnTurretCount;
-            SpawnerThink(turretSpawner, turretSpawnList, testMap);
-            //test_player->spawnBugCount = testSpawner->spawnCount;
-
+                turretSpawner->spawnCount = test_player->spawnTurretCount;
+                SpawnerThink(turretSpawner, turretSpawnList, testMap);
+                //test_player->spawnBugCount = testSpawner->spawnCount;
+            
             //slog("Bugs: %i", test_player->spawnBugCount);
             //slog("Men: %i", test_player->spawnManCount);
 
-            gf2d_draw_line(test_player->position, GetNearestMob()->position, vector4d(20, 20, 250, 255));
+            //gf2d_draw_line(test_player->position, GetNearestMob()->position, vector4d(20, 20, 250, 255));
 
 
+            vectormap_draw(testMap);
 
-            gf2d_sprite_draw(test, test_player->position, NULL, NULL, NULL, NULL, NULL, 1);
+            //gf2d_sprite_draw(test, test_player->position, NULL, NULL, NULL, NULL, NULL, 1);
             //UI elements last
+            //health/maxHealth * 512
+            
+            healthPercent = (int)(((float)test_player->health / (float)test_player->maxHealth) * 512);
+            /*
+            //slog("healthPercent: %i", healthPercent);
+            //testBoy++;
+            healthBar = gf2d_sprite_load_all("images/hud/healthBar.png", healthPercent, 32, 0);
+            //slog("healthPercent: ")
+            gf2d_sprite_draw(healthBar, vector2d(344, 20), NULL, NULL, NULL, NULL, &healthColor, 0);
+            gf2d_sprite_free(healthBar);
+            */
+            
+            for (int i = 0; i < healthPercent; i++)
+            {
+                Vector2D p1 = { (i + 344), 10 };
+                Vector2D p2 = { (i + 344), 30 };
+
+                gf2d_draw_line(p1, p2, vector4d(255, 20, 20, 255));
+            }
             gf2d_sprite_draw(
                 mouse,
                 vector2d(mx,my),
@@ -174,16 +204,15 @@ int main(int argc, char * argv[])
                 NULL,
                 &mouseColor,
                 (int)mf);
-
-           
+                
            // if (keys[SDL_SCANCODE_SPACE]) test_player->velocity.y = -5;
            //gf2d_draw_line(p1, p2, pinkColor);
            // gf2d_draw_line();
 
-            vectormap_draw(testMap);
+            
 
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
-        
+
         entity_update_all();
         entity_draw_all();
         //entity_update(bug);
@@ -199,6 +228,12 @@ int main(int argc, char * argv[])
             test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/thorSkill2.png", 256, 32, 1);
             test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/thorSkill3.png", 64, 256, 1);
             test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/thorSkill4.png", 512, 1024, 1);
+            test_player->health = test_player->maxHealth;
+
+            test_player->skillOneCD = 0;
+            test_player->skillTwoCD = 0;
+            test_player->skillThreeCD = 0;
+            test_player->skillFourCD = 0;
 
             test_player->classNum = 0;
             test_player->level = 1;
@@ -211,6 +246,12 @@ int main(int argc, char * argv[])
             test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/lokiSkill2.png", 256, 256, 1);
             test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/lokiSkill3.png", 128, 128, 1);
             test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/lokiSkill4.png", 32, 32, 1);
+            test_player->health = test_player->maxHealth;
+
+            test_player->skillOneCD = 0;
+            test_player->skillTwoCD = 0;
+            test_player->skillThreeCD = 0;
+            test_player->skillFourCD = 0;
             test_player->classNum = 1;
             test_player->level = 1;
             test_player->experience = 0;
@@ -218,6 +259,16 @@ int main(int argc, char * argv[])
         if (keys[SDL_SCANCODE_C])
         {
             test_player->sprite = gf2d_sprite_load_all("images/chars/odin.png", 64, 114, 1);
+            test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/odinSkill1.png", 128, 64, 1);
+            test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/odinSkill2.png", 32, 32, 1);
+            test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/odinSkill3.png", 512, 32, 1);
+            test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/odinSkill4.png", 1024, 256, 1);
+            test_player->health = test_player->maxHealth;
+
+            test_player->skillOneCD = 0;
+            test_player->skillTwoCD = 0;
+            test_player->skillThreeCD = 0;
+            test_player->skillFourCD = 0;
             test_player->classNum = 2;
             test_player->level = 1;
             test_player->experience = 0;
@@ -225,6 +276,12 @@ int main(int argc, char * argv[])
         if (keys[SDL_SCANCODE_V])
         {
             test_player->sprite = gf2d_sprite_load_all("images/chars/hela.png", 64, 114, 1);
+            test_player->health = test_player->maxHealth;
+
+            test_player->skillOneCD = 0;
+            test_player->skillTwoCD = 0;
+            test_player->skillThreeCD = 0;
+            test_player->skillFourCD = 0;
             test_player->classNum = 3;
             test_player->level = 1;
             test_player->experience = 0;
@@ -232,11 +289,19 @@ int main(int argc, char * argv[])
         if (keys[SDL_SCANCODE_B])
         {
             test_player->sprite = gf2d_sprite_load_all("images/chars/fenrir.png", 64, 114, 1);
+            test_player->health = test_player->maxHealth;
+            test_player->skillOneCD = 0;
+            test_player->skillTwoCD = 0;
+            test_player->skillThreeCD = 0;
+            test_player->skillFourCD = 0;
             test_player->classNum = 4;
             test_player->level = 1;
             test_player->experience = 0;
         }
-
+        if (keys[SDL_SCANCODE_EQUALS])
+        {
+            test_player->health = test_player->maxHealth;
+        }
 
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
         //slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());

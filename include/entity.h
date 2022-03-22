@@ -7,6 +7,7 @@ typedef struct Entity_S
 {
     Uint8       _inuse;     /**<check if this entity in memory is active or not*/
     Sprite*     sprite;     /**<a pointer to the sprite that is used by this entity*/
+    Sprite* healthBar;
     int         state;
     float       frame;      /**<current frame for the sprite*/
 
@@ -93,6 +94,8 @@ typedef struct Entity_S
     SDL_Rect laserExplosion;
 
     Vector4D standingPlatform;
+
+    Vector2D odinLaserTarget;
 
     int dashing;
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/

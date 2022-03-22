@@ -36,7 +36,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
     if (attacker->skillTwoCD > 0) attacker->skillTwoCD--;
     if (attacker->skillThreeCD > 0) attacker->skillThreeCD--;
     if (attacker->skillFourCD > 0) attacker->skillFourCD--;
-
+    //slog("THINKING %i", skill);
     //slog("currentclass %i", attacker->classNum);
     switch (attacker->classNum)
     {
@@ -424,6 +424,193 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
         break;
     case 2: //------------------ odin skills ---------------------
+       // slog("real od %i", skill);
+        //slog("two %i", attacker->skillTwoDurationCounter);
+        switch (skill)
+        {
+            
+        case 1:
+
+            if (attacker->skillOneDurationCounter > 0)
+            {
+                //do skill stuff
+                if (attacker->facing == 0)
+                {
+                    attacker->skillOnePosition.x = attacker->position.x - 220;
+                    attacker->skillOnePosition.y = attacker->position.y - 32;
+                    attacker->skillHitBox.x = attacker->position.x - 220;
+                    attacker->skillHitBox.y = attacker->position.y - 32;
+                }
+                else if (attacker->facing == 1)
+                {
+                    attacker->skillOnePosition.x = attacker->position.x + 32;
+                    attacker->skillOnePosition.y = attacker->position.y - 32;
+                    attacker->skillHitBox.x = attacker->position.x + 32;
+                    attacker->skillHitBox.y = attacker->position.y - 32;
+                }
+
+                //update hitbox before drawing
+
+                attacker->skillHitBox.w = 128;
+                attacker->skillHitBox.h = 64;
+
+
+                gf2d_sprite_draw_image(attacker->skillOneSprite, attacker->skillOnePosition);
+
+                //check for collision here
+                attacker->movementLock = 1;
+                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+
+                attacker->skillOneDurationCounter--;
+                return;
+            }
+            else if (attacker->activeSkill == 1 && (attacker->skillOneDurationCounter <= 0))
+            {
+                attacker->movementLock = 0;
+                attacker->activeSkill = 0;
+                return;
+            }
+            else
+            {
+                return;
+            }
+            break;
+        case 2:
+            //slog("attempting throw");
+
+            if (attacker->skillTwoDurationCounter > 0)
+            {
+                //slog("hello");
+                //do skill stuff
+                Entity* target = GetNearestMob();
+
+                attacker->skillTwoPosition.x = 0;
+                attacker->skillTwoPosition.y = 0;
+
+                InflictDamage(attacker, target, 200);
+               
+                attacker->skillHitBox.w = 0;
+                attacker->skillHitBox.h = 0;
+                //check for collision here
+                attacker->movementLock = 1;
+                //gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+
+                attacker->skillTwoDurationCounter--;
+                return;
+            }
+            if (attacker->skillTwoCD > 140 && attacker->skillTwoCD < 180)
+            {
+                gf2d_sprite_draw_image(attacker->skillTwoSprite, attacker->odinLaserTarget);
+
+                gf2d_draw_line(attacker->position, attacker->odinLaserTarget, vector4d(250, 250, 5, 255));
+
+            }
+            else if (attacker->activeSkill == 2 && (attacker->skillTwoDurationCounter <= 0))
+            {
+               
+
+                attacker->movementLock = 0;
+                attacker->activeSkill = 0;
+                
+                return;
+            }
+            else
+            {
+                return;
+            }
+            break;
+        case 3:
+
+            if (attacker->skillThreeDurationCounter > 0)
+            {
+                //do skill stuff
+                if (attacker->facing == 0)
+                {
+                    attacker->skillThreePosition.x = attacker->position.x - 512;
+                    attacker->skillThreePosition.y = attacker->position.y - 32;
+                    attacker->skillHitBox.x = attacker->position.x - 512;
+                    attacker->skillHitBox.y = attacker->position.y - 32;
+                }
+                else if (attacker->facing == 1)
+                {
+                    attacker->skillThreePosition.x = attacker->position.x;
+                    attacker->skillThreePosition.y = attacker->position.y - 32;
+                    attacker->skillHitBox.x = attacker->position.x;
+                    attacker->skillHitBox.y = attacker->position.y - 32;
+                }
+
+                //update hitbox before drawing
+
+                attacker->skillHitBox.w = 512;
+                attacker->skillHitBox.h = 32;
+
+
+                gf2d_sprite_draw_image(attacker->skillThreeSprite, attacker->skillThreePosition);
+
+                //check for collision here
+                attacker->movementLock = 1;
+                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                attacker->skillThreeDurationCounter--;
+                return;
+            }
+            else if (attacker->activeSkill == 3 && (attacker->skillThreeDurationCounter <= 0))
+            {
+                attacker->movementLock = 0;
+                attacker->activeSkill = 0;
+                return;
+            }
+            else
+            {
+                return;
+            }
+            break;
+        case 4:
+            if (attacker->skillFourDurationCounter > 0)
+            {
+                //do skill stuff
+
+                if (attacker->facing == 0)
+                {
+                    attacker->skillFourPosition.x = attacker->position.x - 1024;
+                    attacker->skillFourPosition.y = attacker->position.y - 210;
+                    attacker->skillHitBox.x = attacker->position.x - 1024;
+                    attacker->skillHitBox.y = attacker->position.y - 210;
+                }
+                else if (attacker->facing == 1)
+                {
+                    attacker->skillFourPosition.x = attacker->position.x;
+                    attacker->skillFourPosition.y = attacker->position.y - 210;
+                    attacker->skillHitBox.x = attacker->position.x;
+                    attacker->skillHitBox.y = attacker->position.y - 210;
+                }
+
+                //update hitbox before drawing
+
+                attacker->skillHitBox.w = 1024;
+                attacker->skillHitBox.h = 256;
+
+
+                gf2d_sprite_draw_image(attacker->skillFourSprite, attacker->skillFourPosition);
+
+                //check for collision here
+                attacker->movementLock = 1;
+                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                attacker->skillFourDurationCounter--;
+                return;
+            }
+            else if (attacker->activeSkill == 4 && (attacker->skillFourDurationCounter <= 0))
+            {
+                attacker->movementLock = 0;
+                attacker->activeSkill = 0;
+                return;
+            }
+            else
+            {
+                return;
+            }
+            break;
+        }
+
         break;
     case 3: //------------------ hela skills ---------------------
         break;
