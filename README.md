@@ -1,4 +1,23 @@
-# gameframework2d (GF2D)
+
+# how to play
+Game is very early in development, but as of now there are 5 playable classes based on nordic mythology
+these characters include: thor, loki, odin, hela, and fenrir
+
+Once in game you can move with `a` and `d` for left and right respectively, as well as `space` to jump (hold for fenrir).
+Switching characters can be done with `z`,`x`,`c`,`v`,`b` for the characters mentioned earlier.
+Each character has special abilities that unlock per level, and can be used with `1`,`2`,`3`,`4`.
+Each character has unique movement, thor is faster, loki can teleport with `q`, odin can hover by holding `space`, hela has a double jump,
+and fenrir can charge his jump by holding `space` and releasing
+
+There are multiple monsters in the map that can be killed for money and exp (money currently is not shown)
+When walking over the shop in the bottom left, press `p` to open the menu, and `h` to purchase health potions,
+these health potions can be used with `e`
+Lastly, theres an npc on the top level that can be spoken to. simply stand over him and press `t`.
+-- note -- you will not take damage while shopping or speaking
+
+Thank you.
+
+# created from gameframework2d (GF2D)
 a collection of utlitity functions designed to facilitate creating 2D games with SDL2
 This project is specifically intended to function as an educational tool for my students taking 2D Game Programming.
 
