@@ -30,7 +30,7 @@ void spear_think(Entity* self)
    // self->position.x = 400;
     //self->position.y = 400;
 
-    gf2d_draw_rect(target->hitBox, vector4d(255, 255, 255, 255));
+    //gf2d_draw_rect(target->hitBox, vector4d(255, 255, 255, 255));
     self->hitBox.x = self->position.x - 64;
     self->hitBox.y = self->position.y - 72;
     self->hitBox.w = 64;

@@ -157,9 +157,9 @@ void vectormap_draw(VectorMap* mapToDraw)
         Vector2D p1 = { mapToDraw->platformCoords[i].x,mapToDraw->platformCoords[i].y };
         Vector2D p2 = { mapToDraw->platformCoords[i].z,mapToDraw->platformCoords[i].w };
 
-        gf2d_draw_line(p1, p2, pinkColor);
+        //gf2d_draw_line(p1, p2, pinkColor);
     }
 
-    gf2d_draw_rect(mapToDraw->boundingBox, greenColor);
+    ////gf2d_draw_rect(mapToDraw->boundingBox, greenColor);
 
 }

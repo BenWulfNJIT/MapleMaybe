@@ -37,7 +37,7 @@ Entity* player_new(Vector2D position)
     self->skillOneSprite = gf2d_sprite_load_all("images/skills/thorSkill1.png", 128, 64, 1);
     self->skillTwoSprite = gf2d_sprite_load_all("images/skills/thorSkill2.png", 256, 32, 1);
     self->skillThreeSprite = gf2d_sprite_load_all("images/skills/thorSkill3.png", 64, 256, 1);
-    self->skillFourSprite = gf2d_sprite_load_all("images/skills/thorSkill4.png", 192, 64, 1);
+    self->skillFourSprite = gf2d_sprite_load_all("images/skills/thorSkill4.png", 512, 1024, 1);
     self->healthShop = gf2d_sprite_load_all("images/hud/healthShop.png", 256, 256, 1);
     self->healthPotSprite = gf2d_sprite_load_all("images/hud/healthPot.png", 32, 32, 1);
     self->talkDiag = gf2d_sprite_load_all("images/hud/talkDiag.png", 256, 256, 1);

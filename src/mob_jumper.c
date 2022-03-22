@@ -62,7 +62,7 @@ void jumper_think(Entity* self)
     self->hitBox.w = 64;
     self->hitBox.h = 64;
 
-    //gf2d_draw_rect(self->hitBox, vector4d(78, 250, 29, 255));
+    ////gf2d_draw_rect(self->hitBox, vector4d(78, 250, 29, 255));
     if (SDL_HasIntersection(&self->hitBox, &player->hitBox))
     {
         InflictDamage(self, player, 10);

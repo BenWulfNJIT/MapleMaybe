@@ -56,7 +56,7 @@ void bug_think(Entity* self)
    self->hitBox.w = 64;
    self->hitBox.h = 64;
 
-   //gf2d_draw_rect(self->hitBox, vector4d(78, 250, 29, 255));
+   ////gf2d_draw_rect(self->hitBox, vector4d(78, 250, 29, 255));
 
   
    //dont let it fall through platform

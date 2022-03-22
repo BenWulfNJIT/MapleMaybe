@@ -65,8 +65,8 @@ Vector4D redColor = { 255, 20, 20, 255 };
 //gf2d_draw_line(bottomRightCenterOfHitBox, belowRightEnt, redColor);
 
 
-//gf2d_draw_rect(ent->hitBox, redColor);
-//if(&ent->skillHitBox) gf2d_draw_rect(ent->skillHitBox, redColor);
+////gf2d_draw_rect(ent->hitBox, redColor);
+//if(&ent->skillHitBox) //gf2d_draw_rect(ent->skillHitBox, redColor);
 
 //slog("distance: %i", distanceToPlat);
 

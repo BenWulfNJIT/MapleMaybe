@@ -75,7 +75,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 attacker->movementLock = 1;
-                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                ////gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
 
                 attacker->skillOneDurationCounter--;
                 return;
@@ -128,7 +128,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 attacker->movementLock = 1;
-                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                ////gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
 
                 attacker->skillTwoDurationCounter--;
                 return;
@@ -174,7 +174,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 attacker->movementLock = 1;
-                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+               // //gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
 
                 attacker->skillThreeDurationCounter--;
                 return;
@@ -212,7 +212,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 attacker->movementLock = 1;
-                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                ////gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
 
                 attacker->skillFourDurationCounter--;
                 return;
@@ -264,7 +264,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 attacker->movementLock = 1;
-                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                ////gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
 
                 attacker->skillOneDurationCounter--;
                 return;
@@ -304,9 +304,9 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 //attacker->movementLock = 1;
-               // gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+               // //gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
                 //slog("smoke active");
-                gf2d_draw_rect(attacker->smokeArea, vector4d(30, 250, 30, 255));
+                ////gf2d_draw_rect(attacker->smokeArea, vector4d(30, 250, 30, 255));
                 attacker->skillTwoPosition.x = attacker->smokeArea.x;
                 attacker->skillTwoPosition.y = attacker->smokeArea.y;
 
@@ -382,6 +382,8 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
         case 4:
             if (attacker->skillFourDurationCounter%40 == 0 && attacker->skillFourDurationCounter != 0)
             {
+                attacker->skillHitBox.w = 0;
+                attacker->skillHitBox.h = 0;
                 //do skill stuff
                 Entity* target;
                 //target = GetNearestMob();
@@ -409,6 +411,8 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
             }
             else if (attacker->skillFourDurationCounter % 40 != 0 && attacker->skillFourDurationCounter != 0)
             {
+                attacker->skillHitBox.w = 0;
+                attacker->skillHitBox.h = 0;
                 attacker->skillFourDurationCounter--;
 
             }
@@ -460,7 +464,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 attacker->movementLock = 1;
-                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                //gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
 
                 attacker->skillOneDurationCounter--;
                 return;
@@ -494,7 +498,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
                 attacker->skillHitBox.h = 0;
                 //check for collision here
                 attacker->movementLock = 1;
-                //gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                ////gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
 
                 attacker->skillTwoDurationCounter--;
                 return;
@@ -550,7 +554,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 attacker->movementLock = 1;
-                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                //gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
                 attacker->skillThreeDurationCounter--;
                 return;
             }
@@ -595,7 +599,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 attacker->movementLock = 1;
-                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                //gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
                 attacker->skillFourDurationCounter--;
                 return;
             }
@@ -648,7 +652,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 attacker->movementLock = 1;
-                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                //gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
 
                 attacker->skillOneDurationCounter--;
                 return;
@@ -671,6 +675,8 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
             {
                 //slog("hello");
                 //do skill stuff
+                attacker->skillHitBox.w = 0;
+                attacker->skillHitBox.h = 0;
                 attacker->thorns = 1;
                 Vector2D pos;
                 pos.x = attacker->hitBox.x + 50;
@@ -700,6 +706,8 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
             //slog("skill3cd %i", attacker->skillThreeDurationCounter);
             if (attacker->skillThreeDurationCounter == 400)
             {
+                attacker->skillHitBox.w = 0;
+                attacker->skillHitBox.h = 0;
                 spear = spear_new(attacker->position);
                 
                 attacker->skillThreeDurationCounter--;
@@ -707,6 +715,8 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
             }
             else if (attacker->skillThreeDurationCounter > 0 && attacker->skillThreeDurationCounter < 400)
             {
+                attacker->skillHitBox.w = 0;
+                attacker->skillHitBox.h = 0;
                 if (spear)
                 {
                     spear_think(spear);
@@ -751,7 +761,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 //attacker->movementLock = 1;
-                //gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                ////gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
                 attacker->skillFourDurationCounter--;
                 return;
             }
@@ -805,7 +815,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 attacker->movementLock = 1;
-                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                //gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
 
                 attacker->skillOneDurationCounter--;
                 return;
@@ -869,7 +879,7 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
 
                 //check for collision here
                 attacker->movementLock = 1;
-                gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
+                //gf2d_draw_rect(attacker->skillHitBox, vector4d(76, 250, 129, 255));
 
                 attacker->skillTwoDurationCounter--;
                 return;
@@ -890,7 +900,8 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
             if (attacker->skillThreeDurationCounter > 0)
             {
                 //do skill stuff
-               
+                attacker->skillHitBox.w = 0;
+                attacker->skillHitBox.h = 0;
                 attacker->movementLock = 1;
                 Vector2D draw = attacker->position;
                 draw.x -= 64;
@@ -917,6 +928,8 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
             if (attacker->skillFourDurationCounter > 0)
             {
                 //do skill stuff
+                attacker->skillHitBox.w = 0;
+                attacker->skillHitBox.h = 0;
                 SetCarried(attacker);
                 attacker->skillFourDurationCounter--;
                 return;

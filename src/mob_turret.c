@@ -62,7 +62,7 @@ void turret_think(Entity* self, VectorMap* map)
         eye.y += 5;
         gf2d_draw_line(self->laserTarget, eye, vector4d(255, 20, 20, 255));
 
-        gf2d_draw_rect(self->laserExplosion, vector4d(255, 20, 20, 255));
+        //gf2d_draw_rect(self->laserExplosion, vector4d(255, 20, 20, 255));
         //slog("TEST: %i, %i", self->laserExplosion.x, player->hitBox.x);
         if (SDL_HasIntersection(&player->hitBox, &self->laserExplosion))
         {

@@ -9,6 +9,8 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 	else
 	{
 
+		if (recipient->team == 1 && damage > 10) damage = 10;
+
 		//temp debug invinc
 		//if (recipient->team == 1) damage = 0;
 		

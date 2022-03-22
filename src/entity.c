@@ -204,7 +204,7 @@ void entity_draw(Entity* self)
     
     gfc_rect_set(rect,self->position.x,self->position.y,self->size.x,self->size.y);
 
-   // gf2d_draw_rect(rect, vector4d(255, 0, 255, 255));
+   // //gf2d_draw_rect(rect, vector4d(255, 0, 255, 255));
 
 }
 //
@@ -263,6 +263,8 @@ Entity* GetNearestMob(Entity* self)
     {
 
         if (!entity_manager.entityList[i]._inuse)continue;
+        if (entity_manager.entityList[i].team == -1)continue;
+
         if (entity_manager.entityList[i].think)
         {
             if (entity_manager.entityList[i].team == 2);
@@ -301,6 +303,8 @@ void DoVacuum(Vector2D location)
 
         if (!entity_manager.entityList[i]._inuse)continue;
         if (entity_manager.entityList[i].team == 1)continue;
+        if (entity_manager.entityList[i].team == -1)continue;
+
         if (entity_manager.entityList[i].think)
         {
             if (entity_manager.entityList[i].team == 2);
@@ -348,6 +352,8 @@ void ReleaseAllCarried()
 
         if (!entity_manager.entityList[i]._inuse)continue;
         if (entity_manager.entityList[i].team == 1)continue;
+        if (entity_manager.entityList[i].team == -1)continue;
+
         if (entity_manager.entityList[i].think)
         {
             if (entity_manager.entityList[i].team == 2);
@@ -376,6 +382,8 @@ Entity* GetRandomMob()
     {
 
         if (!entity_manager.entityList[i]._inuse)continue;
+        if (entity_manager.entityList[i].team == -1)continue;
+
         if (entity_manager.entityList[i].think)
         {
             if (entity_manager.entityList[i].team == 2);
@@ -413,7 +421,7 @@ void entity_draw_all()
     {
         if (!entity_manager.entityList[i]._inuse)continue;
         entity_draw(&entity_manager.entityList[i]);
-        gf2d_draw_rect(entity_manager.entityList[i].hitBox, vector4d(78, 250, 29, 255));
+        ////gf2d_draw_rect(entity_manager.entityList[i].hitBox, vector4d(78, 250, 29, 255));
     }
 }
 
