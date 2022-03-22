@@ -12,6 +12,8 @@
 #include "physics.h"
 #include "spawn.h"
 #include "skill.h"
+#include "shop.h"
+#include "npc.h"
 
 int main(int argc, char * argv[])
 {
@@ -79,6 +81,12 @@ int main(int argc, char * argv[])
     slog("test3");
 
 
+    Entity* shop;
+    shop = shop_new(vector2d(100, 700));
+
+    Entity* npc;
+    npc = npc_new(vector2d(400, 260));
+
     bugSpawnList = entity_new();
     bugSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
 
@@ -133,6 +141,11 @@ int main(int argc, char * argv[])
             //bug->think;
             //SimplePlatformCollision(bug, testMap);
             //BoundingBoxCollision(bug, testMap);
+            entity_draw(shop);
+            shop_think(shop);
+
+            entity_draw(npc);
+            npc_think(npc);
 
             entity_draw(test_player);
             SimplePlatformCollision(test_player, testMap);
@@ -202,7 +215,7 @@ int main(int argc, char * argv[])
 
                 gf2d_draw_line(p1, p2, vector4d(255, 20, 20, 255));
             }
-            slog("xp: %i",test_player->experience);
+            //slog("xp: %i",test_player->experience);
             for (int i = 0; i < experiencePercent; i++)
             {
                 Vector2D p1 = { (i + 344), 40 };
@@ -210,6 +223,59 @@ int main(int argc, char * argv[])
 
                 gf2d_draw_line(p1, p2, vector4d(255, 255, 20, 255));
             }
+            if (test_player->shopping)
+            {
+                gf2d_sprite_draw_image(test_player->healthShop, vector2d(600-128, 360-128));
+
+            }
+            if (test_player->talking)
+            {
+                gf2d_sprite_draw_image(test_player->talkDiag, vector2d(600 - 128, 360 - 128));
+
+            }
+            int j = 20;
+            for (int i = 0; i < test_player->healthPotCount; i++)
+            {
+                Vector2D spot;
+                spot.x = j;
+                    spot.y = 20;
+                    j += 20;
+                gf2d_sprite_draw_image(test_player->healthPotSprite, spot);
+
+            }
+
+
+            switch (test_player->level)
+            {
+            case 1:
+                gf2d_sprite_draw_image(test_player->level1, vector2d(250, 10));
+
+                break;
+            case 2:
+                gf2d_sprite_draw_image(test_player->level2, vector2d(250, 10));
+
+                break;
+            case 3:
+                gf2d_sprite_draw_image(test_player->level3, vector2d(250, 10));
+
+                break;
+            case 4:
+                gf2d_sprite_draw_image(test_player->level4, vector2d(250, 10));
+
+                break;
+            case 5:
+                gf2d_sprite_draw_image(test_player->level5, vector2d(250, 10));
+
+                break;
+            default:
+                gf2d_sprite_draw_image(test_player->level5, vector2d(250, 10));
+
+                break;
+            }
+            gf2d_sprite_draw_image(test_player->hp, vector2d(300, 6));
+            gf2d_sprite_draw_image(test_player->xp, vector2d(300, 40));
+
+
             gf2d_sprite_draw(
                 mouse,
                 vector2d(mx,my),

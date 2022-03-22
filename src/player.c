@@ -11,7 +11,7 @@ void player_think(Entity* self)
   
     //entity_new(skill);
 
-
+    
     ControlMovement(ent);
 
     if (self->damageBoostTime > 0) self->damageBoostTime--;
@@ -38,6 +38,21 @@ Entity* player_new(Vector2D position)
     self->skillTwoSprite = gf2d_sprite_load_all("images/skills/thorSkill2.png", 256, 32, 1);
     self->skillThreeSprite = gf2d_sprite_load_all("images/skills/thorSkill3.png", 64, 256, 1);
     self->skillFourSprite = gf2d_sprite_load_all("images/skills/thorSkill4.png", 192, 64, 1);
+    self->healthShop = gf2d_sprite_load_all("images/hud/healthShop.png", 256, 256, 1);
+    self->healthPotSprite = gf2d_sprite_load_all("images/hud/healthPot.png", 32, 32, 1);
+    self->talkDiag = gf2d_sprite_load_all("images/hud/talkDiag.png", 256, 256, 1);
+
+    self->level1 = gf2d_sprite_load_all("images/hud/level1.png", 32, 32, 1);
+    self->level2 = gf2d_sprite_load_all("images/hud/level2.png", 32, 32, 1);
+    self->level3 = gf2d_sprite_load_all("images/hud/level3.png", 32, 32, 1);
+    self->level4 = gf2d_sprite_load_all("images/hud/level4.png", 32, 32, 1);
+    self->level5 = gf2d_sprite_load_all("images/hud/level5.png", 32, 32, 1);
+
+    self->hp = gf2d_sprite_load_all("images/hud/hp.png", 32, 32, 1);
+    self->xp = gf2d_sprite_load_all("images/hud/xp.png", 32, 32, 1);
+
+
+
     self->radius = 24;
     self->size.x = 32;
     self->size.y = 32;
@@ -70,6 +85,12 @@ Entity* player_new(Vector2D position)
     self->doubleJump = 0;
     self->jumpPower = 0.8;
     self->floatTimer = 0;
+    self->currency = 0;
+    self->healthPotCount = 0;
+    self->canPurchase = 0;
+    self->shopping = 0;
+    self->canTalk = 0;
+    self->talking = 0;
     self->think = player_think;
 
 
@@ -105,6 +126,48 @@ void ControlMovement(Entity* self)
        // return;
     }
     
+    //slog("shopping = %i", self->shopping);
+   // slog("canPurchase = %i", self->canPurchase);
+
+
+  
+    if (self->canTalk && !self->talking && gfc_input_key_pressed("t"))
+    {
+        //slog("hello");
+        self->talking = 1;
+    }
+    else if (!self->canTalk || (self->canTalk && self->talking && gfc_input_key_pressed("t")))
+    {
+        // slog("hulbo");
+        self->talking = 0;
+
+    }
+
+    if (self->canPurchase && !self->shopping && gfc_input_key_pressed("p"))
+    {
+        //slog("hello");
+        self->shopping = 1;
+    }
+    else if (!self->canPurchase || (self->canPurchase && self->shopping && gfc_input_key_pressed("p")))
+    {
+       // slog("hulbo");
+        self->shopping = 0;
+
+    }
+   
+    if (self->shopping && gfc_input_key_pressed("h") && self->currency >= 50 && self->healthPotCount < 5)
+    {
+        self->healthPotCount++;
+        self->currency -= 50;
+    }
+
+    if (gfc_input_key_pressed("e") && self->healthPotCount >= 1)
+    {
+        self->healthPotCount--;
+        self->health += 100;
+        if (self->health > self->maxHealth) self->health = self->maxHealth;
+    }
+
     if (self->classNum == 2 && self->standingOnPlatform)
     {
         self->floatTimer = 0;

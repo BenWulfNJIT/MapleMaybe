@@ -32,9 +32,27 @@ typedef struct Entity_S
     int         facing; /**<0 if left, 1 if right>*/
     int         classNum; /**<0 for thor, 1 for loki, 2 for odin, 3 for hela, 4 for fenrir> */
     int         experience;
+    int         currency;
     int         level;
+    Sprite* healthShop;
+    Sprite* healthPotSprite;
+    Sprite* talkDiag;
+
+    Sprite* level1;
+    Sprite* level2;
+    Sprite* level3;
+    Sprite* level4;
+    Sprite* level5;
+    Sprite* hp;
+    Sprite* xp;
 
 
+    int         canPurchase;
+    int         shopping;
+    int         healthPotCount;
+
+    int         canTalk;
+    int         talking;
     int         activeSkill; /**<default 0, 1 for auto, 2 for 2, 3 for 3, 4 for 4>*/
     //skill 1?
     int         skillOneCD;

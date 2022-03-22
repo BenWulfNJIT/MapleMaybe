@@ -12,7 +12,7 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 		//temp debug invinc
 		//if (recipient->team == 1) damage = 0;
 		
-		if (recipient->team == 1 && recipient->isCharInSmoke == 1)
+		if (recipient->team == 1 && (recipient->isCharInSmoke == 1 || recipient->canPurchase || recipient->talking) )
 		{
 			damage = 0;
 			slog("avoided");
@@ -36,7 +36,8 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 	{
 		if (attacker->team == 1)
 		{
-			attacker->experience += 5;
+			attacker->experience += 12;
+			attacker->currency += 100;
 			if (attacker->experience >= 50)
 			{
 				attacker->level++;
