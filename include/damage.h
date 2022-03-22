@@ -10,7 +10,7 @@
  * @param recipient - who is taking the damage
  * @damage - raw int value of damage
  */
-void InflictDamage(Entity* attacker, Entity* recipient, int damage);
+void InflictDamage(Entity* attacker, Entity* recipient, float damage);
 
 int GetDamage(int skill);
 

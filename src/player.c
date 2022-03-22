@@ -37,7 +37,7 @@ Entity* player_new(Vector2D position)
     self->skillOneSprite = gf2d_sprite_load_all("images/skills/thorSkill1.png", 128, 64, 1);
     self->skillTwoSprite = gf2d_sprite_load_all("images/skills/thorSkill2.png", 256, 32, 1);
     self->skillThreeSprite = gf2d_sprite_load_all("images/skills/thorSkill3.png", 64, 256, 1);
-    self->skillFourSprite = gf2d_sprite_load_all("images/skills/thorSkill4.png", 512, 1024, 1);
+    self->skillFourSprite = gf2d_sprite_load_all("images/skills/thorSkill4.png", 192, 64, 1);
     self->radius = 24;
     self->size.x = 32;
     self->size.y = 32;
@@ -64,6 +64,9 @@ Entity* player_new(Vector2D position)
     self->odinLaserTarget.x = 0;
     self->odinLaserTarget.y = 0;
     self->damageBoostTime = 0;
+    self->thorns = 0;
+    self->isBlackHoleActive = 0;
+    self->slowed = 0;
     self->think = player_think;
 
 
@@ -96,6 +99,7 @@ void ControlMovement(Entity* self)
         else return;
        // return;
     }
+    
     //Basic movement commands
 
     if (gfc_input_key_pressed(" ") && self->standingOnPlatform)
@@ -132,7 +136,10 @@ void ControlMovement(Entity* self)
         return;
     }
 
-  
+    if (self->slowed == 1)
+    {
+        self->velocity.x *= 0.5;
+    }
 
 }
 
@@ -184,7 +191,6 @@ void DoSkills(Entity* self)
     //else if (gfc_input_key_pressed("2") && self->level >= 2 && self->skillTwoCD <= 0 && self->activeSkill == 0)
     else if (gfc_input_key_pressed("2") && self->level >= 2 && self->skillTwoCD <= 0 && self->activeSkill == 0)
     {
-        slog("Skill'd 2");
         //60 cd ~= 1s
         
         switch (self->classNum)
@@ -205,17 +211,17 @@ void DoSkills(Entity* self)
             break;
         case 2: //---odin skill timer
             //slog("got into odin");
-            self->odinLaserTarget.x = GetNearestMob()->hitBox.x + GetNearestMob()->hitBox.w/2;
-            self->odinLaserTarget.y = GetNearestMob()->hitBox.y;
+            self->odinLaserTarget.x = GetNearestMob(self)->hitBox.x + GetNearestMob(self)->hitBox.w/2;
+            self->odinLaserTarget.y = GetNearestMob(self)->hitBox.y;
             self->skillTwoCD = 180;
             self->skillTwoDurationCounter = 1;
             break;
         case 3: //---hela skill timer
-            self->skillTwoCD = 60;
-            self->skillTwoDurationCounter = 15;
+            self->skillTwoCD = 600;
+            self->skillTwoDurationCounter = 300;
             break;
         case 4: //---fenrir skill timer
-            self->skillTwoCD = 60;
+            self->skillTwoCD = 120;
             self->skillTwoDurationCounter = 15;
             break;
         }
@@ -229,7 +235,6 @@ void DoSkills(Entity* self)
     }
     else if (gfc_input_key_pressed("3") && self->level >= 3 && self->skillThreeCD <= 0 && self->activeSkill == 0)
     {
-        slog("Skill'd 3");
         //60 cd ~= 1s
         
 
@@ -248,12 +253,12 @@ void DoSkills(Entity* self)
             self->skillThreeDurationCounter = 60;
             break;
         case 3: //---hela skill timer
-            self->skillThreeCD = 60;
-            self->skillThreeDurationCounter = 15;
+            self->skillThreeCD = 600;
+            self->skillThreeDurationCounter = 400;
             break;
         case 4: //---fenrir skill timer
-            self->skillThreeCD = 60;
-            self->skillThreeDurationCounter = 15;
+            self->skillThreeCD = 360;
+            self->skillThreeDurationCounter = 180;
             break;
         }
 
@@ -264,7 +269,6 @@ void DoSkills(Entity* self)
     else if (gfc_input_key_pressed("4") && self->level >= 4 && self->skillFourCD <= 0 && self->activeSkill == 0)
     {
 
-        slog("Skill'd 4");
         //60 cd ~= 1s
         
 
@@ -272,24 +276,24 @@ void DoSkills(Entity* self)
         switch (self->classNum)
         {
         case 0: //---thor skill timer
-            self->skillFourCD = 3000;
+            self->skillFourCD = 600;
             self->skillFourDurationCounter = 300;
             break;
         case 1: //---loki skill timer
-            self->skillFourCD = 3000;
+            self->skillFourCD = 600;
             self->skillFourDurationCounter = 360;
             break;
         case 2: //---odin skill timer
-            self->skillFourCD = 3000;
+            self->skillFourCD = 600;
             self->skillFourDurationCounter = 300;
             break;
         case 3: //---hela skill timer
-            self->skillFourCD = 60;
-            self->skillFourDurationCounter = 15;
+            self->skillFourCD = 600;
+            self->skillFourDurationCounter = 300;
             break;
         case 4: //---fenrir skill timer
-            self->skillFourCD = 60;
-            self->skillFourDurationCounter = 15;
+            self->skillFourCD = 600;
+            self->skillFourDurationCounter = 400;
             break;
         }
 

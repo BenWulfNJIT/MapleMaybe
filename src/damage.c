@@ -2,9 +2,9 @@
 #include "simple_logger.h"
 #include "entity.h"
 
-void InflictDamage(Entity* attacker, Entity* recipient, int damage)
+void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 {
-
+	if (recipient->team == -1) return;
 	if (recipient->damageBoostTime && recipient->damageBoostTime > 0) damage = 0;
 	else
 	{
@@ -16,12 +16,16 @@ void InflictDamage(Entity* attacker, Entity* recipient, int damage)
 			damage = 0;
 			slog("avoided");
 		}
+		if (recipient->team == 1 && recipient->thorns == 1)
+		{
+			InflictDamage(recipient, attacker, damage * 10);
+		}
 		recipient->health -= damage;
 		if(recipient->team == 1) recipient->damageBoostTime = 60;
 		
 		
 
-		slog("Health Remaining: %i/%i", recipient->health, recipient->maxHealth);
+		//slog("Health Remaining: %i/%i", recipient->health, recipient->maxHealth);
 	}
 	//slog("health: %i", recipient->health);
 	//slog("damage: %i", damage);

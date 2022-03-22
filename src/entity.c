@@ -250,14 +250,14 @@ Entity* GetPlayer()
     return player;
 }
 
-Entity* GetNearestMob() 
+Entity* GetNearestMob(Entity* self) 
 {
-    Entity* player = NULL;
+    ///Entity* player = NULL;
     Entity* nearest = NULL;
     Vector2D tempCoords = { 0,0 };
     float tempDistance, smallestDistance;
     smallestDistance = 999999999;
-    player = GetPlayer();
+    //player = GetPlayer();
 
     for (int i = 0; i < entity_manager.maxEnts; i++)
     {
@@ -272,9 +272,9 @@ Entity* GetNearestMob()
 
                 //slog("x: %f, y: %f", tempCoords.x, tempCoords.y);
                 //slog("woah %f", player->position.x);
-                tempDistance = (((tempCoords.x - player->position.x) * (tempCoords.x - player->position.x)) + ((tempCoords.y - player->position.y) * (tempCoords.y - player->position.y)));
+                tempDistance = (((tempCoords.x - self->position.x) * (tempCoords.x - self->position.x)) + ((tempCoords.y - self->position.y) * (tempCoords.y - self->position.y)));
                 //slog("temp %f", tempDistance);
-                if (tempDistance < smallestDistance && tempDistance != 0)
+                if (tempDistance < smallestDistance && tempDistance != 0 && &entity_manager.entityList[i].team != 1)
                 {
                     smallestDistance = tempDistance;
                     nearest = &entity_manager.entityList[i];
@@ -290,6 +290,82 @@ Entity* GetNearestMob()
     return nearest;
 
 }
+
+void DoVacuum(Vector2D location)
+{
+    Vector2D direction;
+    Entity* player = GetPlayer();
+
+    for (int i = 0; i < entity_manager.maxEnts; i++)
+    {
+
+        if (!entity_manager.entityList[i]._inuse)continue;
+        if (entity_manager.entityList[i].team == 1)continue;
+        if (entity_manager.entityList[i].think)
+        {
+            if (entity_manager.entityList[i].team == 2);
+            {
+                
+                vector2d_sub(direction, location, entity_manager.entityList[i].position);
+                vector2d_normalize(&direction);
+                vector2d_set_magnitude(&direction, 20);
+
+                entity_manager.entityList[i].velocity = direction;
+
+                InflictDamage(player, &entity_manager.entityList[i], 1);
+                
+            }
+        }
+    }
+}
+
+void SetCarried(Entity* carrier)
+{
+    for (int i = 0; i < entity_manager.maxEnts; i++)
+    {
+
+        if (!entity_manager.entityList[i]._inuse)continue;
+        if (entity_manager.entityList[i].team == 1)continue;
+        if (entity_manager.entityList[i].think)
+        {
+            if (entity_manager.entityList[i].team == 2);
+            {
+
+                if (SDL_HasIntersection(&carrier->hitBox, &entity_manager.entityList[i].hitBox))
+                {
+                    entity_manager.entityList[i].carried = 1;
+                    carrier->damageBoostTime = 60;
+                }
+
+            }
+        }
+    }
+}
+void ReleaseAllCarried()
+{
+    for (int i = 0; i < entity_manager.maxEnts; i++)
+    {
+
+        if (!entity_manager.entityList[i]._inuse)continue;
+        if (entity_manager.entityList[i].team == 1)continue;
+        if (entity_manager.entityList[i].think)
+        {
+            if (entity_manager.entityList[i].team == 2);
+            {
+
+                if (entity_manager.entityList[i].carried == 1) 
+                {
+                       
+                    InflictDamage(GetPlayer(), &entity_manager.entityList[i], 500);
+                }
+                  
+
+
+            }
+        }
+    }
+}
+
 Entity* GetRandomMob()
 {
     int flag = 0;
@@ -304,6 +380,10 @@ Entity* GetRandomMob()
         {
             if (entity_manager.entityList[i].team == 2);
             {
+                //temporary
+                //entity_manager.entityList[i].position.x = 400;
+                //entity_manager.entityList[i].position.y = 400;
+
                 monsterCounter++;
             }
         }

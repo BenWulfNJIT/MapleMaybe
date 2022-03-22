@@ -50,12 +50,14 @@ int main(int argc, char * argv[])
     gf2d_sprite_init(1024);
     SDL_ShowCursor(SDL_DISABLE);
     entity_manager_init(1024);
+    slog("test1");
+
     gfc_input_init("config/input.cfg");
+    slog("test2");
 
     /*demo setup*/
 //    sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
     sprite = gf2d_sprite_load_image("images/backgrounds/crayonBackground.png");
-
    // test = gf2d_sprite_load_all("images//skills/fireball.png", 64, 64, 1);
 
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
@@ -68,10 +70,13 @@ int main(int argc, char * argv[])
     Vector4D pinkColor = { 255, 105, 190, 255 };
 
     testMap = vectormap_load("maps/test.json");
+   
+
     testSkill = entity_new(vector2d(100, 100));
     test_player = player_new(vector2d(100, 100));
     test_player->classNum = 0;
     //test_player->skillOneSprite = gf2d_sprite_load_all("images/chars/loki.png", 64, 64, 1);
+    slog("test3");
 
 
     bugSpawnList = entity_new();
@@ -102,8 +107,8 @@ int main(int argc, char * argv[])
    // }
     
     int testBoy = 25;
-
-
+    for (int i = 0; i < 20; i++)
+        slog("");
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
@@ -276,6 +281,10 @@ int main(int argc, char * argv[])
         if (keys[SDL_SCANCODE_V])
         {
             test_player->sprite = gf2d_sprite_load_all("images/chars/hela.png", 64, 114, 1);
+            test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/helaSkill1.png", 128, 64, 1);
+            test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/helaSkill2.png", 64, 64, 1);
+            test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/helaSkill3.png", 64, 64, 1);
+            test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/helaSkill4.png", 128, 128, 1);
             test_player->health = test_player->maxHealth;
 
             test_player->skillOneCD = 0;
@@ -289,6 +298,10 @@ int main(int argc, char * argv[])
         if (keys[SDL_SCANCODE_B])
         {
             test_player->sprite = gf2d_sprite_load_all("images/chars/fenrir.png", 64, 114, 1);
+            test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/fenrirSkill1.png", 128, 64, 1);
+            test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/fenrirSkill2.png", 256, 64, 1);
+            test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/fenrirSkill3.png", 64, 16, 1);
+            test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/fenrirSkill4.png", 128, 128, 1);
             test_player->health = test_player->maxHealth;
             test_player->skillOneCD = 0;
             test_player->skillTwoCD = 0;

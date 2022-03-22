@@ -6,7 +6,15 @@
 
 void jumper_think(Entity* self)
 {
+    Entity* player = GetPlayer();
 
+    if (player->isBlackHoleActive)return;
+    if (self->carried == 1)
+    {
+        self->position.x = player->position.x;
+        self->position.y = player->position.y;
+        return;
+    }
     if (self->hitBox.y && self->knownPlatHeight)
     {
         if (self->hitBox.y + self->hitBox.h > self->knownPlatHeight)
@@ -55,7 +63,6 @@ void jumper_think(Entity* self)
     self->hitBox.h = 64;
 
     //gf2d_draw_rect(self->hitBox, vector4d(78, 250, 29, 255));
-    Entity* player = GetPlayer();
     if (SDL_HasIntersection(&self->hitBox, &player->hitBox))
     {
         InflictDamage(self, player, 10);
@@ -94,6 +101,8 @@ Entity* jumper_new(Vector2D position, Vector2D velocity)
     self->spawnMobNumber = 3;
     self->dashing = 0;
     self->mobSpeed = 0.3;
+    self->carried = 0;
+
     self->think = jumper_think;
 
 

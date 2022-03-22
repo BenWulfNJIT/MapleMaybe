@@ -8,7 +8,15 @@
 
 void roller_think(Entity* self, VectorMap* map)
 {
+    Entity* player = GetPlayer();
 
+    if (player->isBlackHoleActive)return;
+    if (self->carried == 1)
+    {
+        self->position.x = player->position.x;
+        self->position.y = player->position.y;
+        return;
+    }
     if (self->hitBox.y && self->knownPlatHeight)
     {
         if (self->hitBox.y + self->hitBox.h > self->knownPlatHeight)
@@ -52,10 +60,17 @@ void roller_think(Entity* self, VectorMap* map)
 
 
 
-    Entity* player = GetPlayer();
     if (SDL_HasIntersection(&self->hitBox, &player->hitBox))
     {
+        player->slowed = 1;
+
         InflictDamage(self, player, 10);
+
+    }
+    else
+    {
+        player->slowed = 0;
+
     }
 
     //dont let it fall through platform
@@ -91,6 +106,8 @@ Entity* roller_new(Vector2D position, Vector2D velocity)
     self->health = self->maxHealth;
     self->spawnMobNumber = 4;
     self->mobSpeed = 2;
+    self->carried = 0;
+
     self->think = roller_think;
 
 

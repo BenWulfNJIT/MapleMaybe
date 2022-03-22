@@ -8,6 +8,15 @@
 
 void man_think(Entity* self, VectorMap* map)
 {
+    Entity* player = GetPlayer();
+
+    if (player->isBlackHoleActive)return;
+    if (self->carried == 1)
+    {
+        self->position.x = player->position.x;
+        self->position.y = player->position.y;
+        return;
+    }
 
     if (self->hitBox.y && self->knownPlatHeight)
     {
@@ -45,7 +54,6 @@ void man_think(Entity* self, VectorMap* map)
     self->hitBox.w = 64;
     self->hitBox.h = 64;
    
-    Entity* player = GetPlayer();
     if (SDL_HasIntersection(&self->hitBox, &player->hitBox))
     {
         InflictDamage(self, player, 10);
@@ -75,7 +83,7 @@ Entity* man_new(Vector2D position, Vector2D velocity)
     self->size.x = 64;
     self->size.y = 64;
     self->team = 2;
-    self->maxHealth = 100;
+    self->maxHealth = 200;
     self->health = self->maxHealth;
     self->spawnMobNumber = 2;
     self->standingOnPlatform = 0;
@@ -84,6 +92,8 @@ Entity* man_new(Vector2D position, Vector2D velocity)
     self->standingPlatform.z = 0;
     self->standingPlatform.w = 0;
     self->mobSpeed = 0.5;
+    self->carried = 0;
+
     self->think = man_think;
 
 

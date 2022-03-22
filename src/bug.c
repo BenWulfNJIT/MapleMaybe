@@ -17,6 +17,13 @@ void bug_think(Entity* self)
     //}
     
     Entity* player = GetPlayer();
+    if (player->isBlackHoleActive)return;
+    if (self->carried == 1)
+    {
+        self->position.x = player->position.x;
+        self->position.y = player->position.y;
+        return;
+    }
     //Vector2D* playerPosition = &player->position;
     //gf2d_draw_line(self->position, player->position, vector4d(20, 20, 255, 255));
     //self->velocity.x = (gfc_random() -0.5) * 5;
@@ -84,6 +91,7 @@ Entity* bug_new(Vector2D position, Vector2D velocity)
     self->maxHealth = 100;
     self->health = self->maxHealth;
     self->spawnMobNumber = 1;
+    self->carried = 0;
     self->think = bug_think;
   
 

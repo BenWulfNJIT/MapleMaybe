@@ -96,12 +96,22 @@ typedef struct Entity_S
     Vector4D standingPlatform;
 
     Vector2D odinLaserTarget;
+    int thorns; /**<0 for false, 1 for true*/
 
     int dashing;
+
+    float flySpeed;
+
+    int isBlackHoleActive;
+    int slowed;
+    int carried;
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/
     void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<called when an entity touches another entity*/
 
 }Entity;
+
+void SetCarried(Entity* carrier);
+void ReleaseAllCarried();
 
 /**
  * @brief get a pointer to a new entity
@@ -141,14 +151,15 @@ void SkillCollisionCheck(Entity* attacker, int skill, SDL_Rect* skillHitBox);
  */
 void entity_draw_all();
 
+void entity_draw(Entity* self);
 
 Entity* GetPlayer();
 
-Entity* GetNearestMob();
+Entity* GetNearestMob(Entity* self);
 
 Entity* GetRandomMob();
 
-
+void DoVacuum(Vector2D location);
 
 void DamageBoost(Entity* ent, int time);
 #endif

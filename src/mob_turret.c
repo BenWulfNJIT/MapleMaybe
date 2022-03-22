@@ -10,7 +10,16 @@
 void turret_think(Entity* self, VectorMap* map)
 {
     Entity* player;
+    player = GetPlayer();
+
     Vector2D eye,target;
+    if (self->carried == 1)
+    {
+        self->position.x = player->position.x;
+        self->position.y = player->position.y;
+        
+        return;
+    }
     if (self->hitBox.y && self->knownPlatHeight)
     {
         if (self->hitBox.y + self->hitBox.h > self->knownPlatHeight)
@@ -28,7 +37,6 @@ void turret_think(Entity* self, VectorMap* map)
 
             eye.x = self->position.x;
             eye.y = self->position.y - 60;
-            player = GetPlayer();
 
             
            
@@ -107,7 +115,7 @@ Entity* turret_new(Vector2D position, Vector2D velocity)
     self->size.x = 128;
     self->size.y = 128;
     self->team = 2;
-    self->maxHealth = 100;
+    self->maxHealth = 300;
     self->health = self->maxHealth;
     self->spawnMobNumber = 5;
     self->laserTimer = 0;
@@ -117,6 +125,8 @@ Entity* turret_new(Vector2D position, Vector2D velocity)
     self->laserExplosion.y = 0;
     self->laserExplosion.w = 25;
     self->laserExplosion.h = 25;
+    self->carried = 0;
+
     self->think = turret_think;
 
 
