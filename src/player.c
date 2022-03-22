@@ -67,6 +67,9 @@ Entity* player_new(Vector2D position)
     self->thorns = 0;
     self->isBlackHoleActive = 0;
     self->slowed = 0;
+    self->doubleJump = 0;
+    self->jumpPower = 0.8;
+    self->floatTimer = 0;
     self->think = player_think;
 
 
@@ -78,13 +81,15 @@ Entity* player_new(Vector2D position)
 
 void ControlMovement(Entity* self)
 {
-    int speed, jump;
+    float speed, jump;
     Entity* skill;
 
     //skill->sprite = gf2d_sprite_load_image("images/fireball.png");
     Vector2D skillPos;
 
-    speed = self->walkSpeed;
+    if (self->classNum == 0) speed = self->walkSpeed * 1.5;
+    else speed = self->walkSpeed;
+
     jump = self->jumpHeight;
 
     gfc_input_update();
@@ -100,11 +105,44 @@ void ControlMovement(Entity* self)
        // return;
     }
     
+    if (self->classNum == 2 && self->standingOnPlatform)
+    {
+        self->floatTimer = 0;
+    }
+    if (self->classNum == 2 && !self->standingOnPlatform)
+    {
+        self->floatTimer++;
+    }
+    if (self->classNum == 3 && self->standingOnPlatform == 1) self->doubleJump = 1;
+    //slog()
     //Basic movement commands
+    if (self->classNum == 1 && gfc_input_key_pressed("q") && self->facing == 1) self->position.x += 200;
+    if (self->classNum == 1 && gfc_input_key_pressed("q") && self->facing == 0) self->position.x -= 200;
 
-    if (gfc_input_key_pressed(" ") && self->standingOnPlatform)
+    
+
+    if (gfc_input_key_held(" ") && self->classNum == 2 && self->floatTimer < 250)
+    {
+        self->velocity.y = -1.5;
+    }
+    if (gfc_input_key_held(" ") && self->classNum == 4 && self->jumpPower < 1.5)
+    {
+        self->jumpPower += 0.01;
+    }
+    if (gfc_input_key_released(" ") && self->classNum == 4 && self->standingOnPlatform) 
+    {
+        self->velocity.y = jump*self->jumpPower;
+        self->jumpPower = 0.8;
+    }
+
+    if (gfc_input_key_pressed(" ") && self->standingOnPlatform && self->classNum != 4 && self->classNum != 2)
     {
         self->velocity.y = jump;
+    }
+    else if (gfc_input_key_pressed(" ") && self->classNum == 3  && !self->standingOnPlatform && self->doubleJump == 1)
+    {
+        self->velocity.y = jump;
+        self->doubleJump = 0;
     }
 
     if (gfc_input_key_held("a") && !gfc_input_key_held("d"))

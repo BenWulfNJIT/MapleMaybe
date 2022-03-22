@@ -11,6 +11,7 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 
 		//temp debug invinc
 		//if (recipient->team == 1) damage = 0;
+		
 		if (recipient->team == 1 && recipient->isCharInSmoke == 1)
 		{
 			damage = 0;
@@ -33,6 +34,15 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 
 	if (recipient->health <= 0) 
 	{
+		if (attacker->team == 1)
+		{
+			attacker->experience += 5;
+			if (attacker->experience >= 50)
+			{
+				attacker->level++;
+				attacker->experience -= 50;
+			}
+		}
 		recipient->health = 0;
 		recipient->movementLock = 1;
 		if (recipient->team == 1) return;

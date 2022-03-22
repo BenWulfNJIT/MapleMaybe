@@ -105,7 +105,7 @@ int main(int argc, char * argv[])
     //{
 ////    spawnList[i] = *bug_new(vector2d(gfc_random()*100, gfc_random()*100), vector2d(gfc_random(), gfc_random()));
    // }
-    
+    int experiencePercent;
     int testBoy = 25;
     for (int i = 0; i < 20; i++)
         slog("");
@@ -184,6 +184,8 @@ int main(int argc, char * argv[])
             //health/maxHealth * 512
             
             healthPercent = (int)(((float)test_player->health / (float)test_player->maxHealth) * 512);
+            experiencePercent = (int)(((float)test_player->experience / (float)50) * 512);
+
             /*
             //slog("healthPercent: %i", healthPercent);
             //testBoy++;
@@ -199,6 +201,14 @@ int main(int argc, char * argv[])
                 Vector2D p2 = { (i + 344), 30 };
 
                 gf2d_draw_line(p1, p2, vector4d(255, 20, 20, 255));
+            }
+            slog("xp: %i",test_player->experience);
+            for (int i = 0; i < experiencePercent; i++)
+            {
+                Vector2D p1 = { (i + 344), 40 };
+                Vector2D p2 = { (i + 344), 60 };
+
+                gf2d_draw_line(p1, p2, vector4d(255, 255, 20, 255));
             }
             gf2d_sprite_draw(
                 mouse,

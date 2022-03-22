@@ -105,6 +105,9 @@ typedef struct Entity_S
     int isBlackHoleActive;
     int slowed;
     int carried;
+    int doubleJump; /**<0 for not available, 1 for available*/
+    float jumpPower;
+    int floatTimer;
     void (*think)(struct Entity_S* self);   /**<called when an entity draws*/
     void (*touch)(struct Entity_S* self, struct Entity_S* other);   /**<called when an entity touches another entity*/
 
