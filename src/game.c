@@ -290,8 +290,7 @@ int main(int argc, char * argv[])
            // if (keys[SDL_SCANCODE_SPACE]) test_player->velocity.y = -5;
            //gf2d_draw_line(p1, p2, pinkColor);
            // gf2d_draw_line();
-
-            
+   
 
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 
