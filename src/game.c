@@ -294,6 +294,7 @@ int main(int argc, char * argv[])
             
 
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
+         
 
         entity_update_all();
         entity_draw_all();
