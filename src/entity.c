@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 #include "simple_logger.h"
 #include "gf2d_draw.h"
 #include "entity.h"
@@ -289,6 +290,41 @@ Entity* GetNearestMob()
     return nearest;
 
 }
+Entity* GetRandomMob()
+{
+    int flag = 0;
+    int monsterCounter = 0;
+    srand(time(0));
+
+    for (int i = 0; i < entity_manager.maxEnts; i++)
+    {
+
+        if (!entity_manager.entityList[i]._inuse)continue;
+        if (entity_manager.entityList[i].think)
+        {
+            if (entity_manager.entityList[i].team == 2);
+            {
+                monsterCounter++;
+            }
+        }
+    }
+
+    if (monsterCounter > 2)
+    {
+        while (flag == 0)
+        {
+            int num = (rand() % ((entity_manager.maxEnts) - 0 + 1)) + 0;
+            if (entity_manager.entityList[num].team == 2)
+            {
+                flag == 1;
+                return &entity_manager.entityList[num];
+            }
+        }
+    }
+
+    return NULL;
+}
+
 
 void entity_draw_all()
 {

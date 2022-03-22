@@ -236,7 +236,7 @@ void DoSkills(Entity* self)
             break;
         case 1: //---loki skill timer
             self->skillThreeCD = 60;
-            self->skillThreeDurationCounter = 15;
+            self->skillThreeDurationCounter = 1;
             break;
         case 2: //---odin skill timer
             self->skillThreeCD = 60;
@@ -267,12 +267,12 @@ void DoSkills(Entity* self)
         switch (self->classNum)
         {
         case 0: //---thor skill timer
-            self->skillFourCD = 6000;
+            self->skillFourCD = 3000;
             self->skillFourDurationCounter = 300;
             break;
         case 1: //---loki skill timer
-            self->skillFourCD = 60;
-            self->skillFourDurationCounter = 15;
+            self->skillFourCD = 3000;
+            self->skillFourDurationCounter = 360;
             break;
         case 2: //---odin skill timer
             self->skillFourCD = 60;

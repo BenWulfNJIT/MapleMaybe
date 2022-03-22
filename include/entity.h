@@ -143,6 +143,9 @@ Entity* GetPlayer();
 
 Entity* GetNearestMob();
 
+Entity* GetRandomMob();
+
+
 
 void DamageBoost(Entity* ent, int time);
 #endif

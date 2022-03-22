@@ -103,13 +103,13 @@ void BoundingBoxCollision(Entity* ent, VectorMap* currentMap)
 	if (ent->hitBox.x + ent->hitBox.w > currentMap->boundingBox.w)
 	{
 		//slog("too far right");
-		ent->position.x = currentMap->boundingBox.w - ent->hitBox.w /2;
+		ent->position.x = 32+ currentMap->boundingBox.w - ent->hitBox.w /2;
 	}
 
 	if (ent->hitBox.x  < currentMap->boundingBox.x)
 	{
 		//slog("too far left");
-		ent->position.x = currentMap->boundingBox.x + ent->hitBox.w / 2;
+		ent->position.x = 32 + currentMap->boundingBox.x + ent->hitBox.w / 2;
 	}
 
 	if (ent->hitBox.y < currentMap->boundingBox.y)
