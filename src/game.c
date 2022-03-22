@@ -159,6 +159,9 @@ int main(int argc, char * argv[])
             //slog("Bugs: %i", test_player->spawnBugCount);
             //slog("Men: %i", test_player->spawnManCount);
 
+            gf2d_draw_line(test_player->position, GetNearestMob()->position, vector4d(20, 20, 250, 255));
+
+
 
             gf2d_sprite_draw(test, test_player->position, NULL, NULL, NULL, NULL, NULL, 1);
             //UI elements last

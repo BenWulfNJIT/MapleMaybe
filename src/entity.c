@@ -248,6 +248,48 @@ Entity* GetPlayer()
    // else return NULL;
     return player;
 }
+
+Entity* GetNearestMob() 
+{
+    Entity* player = NULL;
+    Entity* nearest = NULL;
+    Vector2D tempCoords = { 0,0 };
+    float tempDistance, smallestDistance;
+    smallestDistance = 999999999;
+    player = GetPlayer();
+
+    for (int i = 0; i < entity_manager.maxEnts; i++)
+    {
+
+        if (!entity_manager.entityList[i]._inuse)continue;
+        if (entity_manager.entityList[i].think)
+        {
+            if (entity_manager.entityList[i].team == 2);
+            {
+                tempCoords.x = entity_manager.entityList[i].position.x;
+                tempCoords.y = entity_manager.entityList[i].position.y;
+
+                //slog("x: %f, y: %f", tempCoords.x, tempCoords.y);
+                //slog("woah %f", player->position.x);
+                tempDistance = (((tempCoords.x - player->position.x) * (tempCoords.x - player->position.x)) + ((tempCoords.y - player->position.y) * (tempCoords.y - player->position.y)));
+                //slog("temp %f", tempDistance);
+                if (tempDistance < smallestDistance && tempDistance != 0)
+                {
+                    smallestDistance = tempDistance;
+                    nearest = &entity_manager.entityList[i];
+                    //slog("maybe? %f", smallestDistance);
+                }
+
+
+            }
+        }
+    }
+
+    //nearest = GetPlayer();
+    return nearest;
+
+}
+
 void entity_draw_all()
 {
     int i;

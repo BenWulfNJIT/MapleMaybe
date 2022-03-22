@@ -141,5 +141,8 @@ void entity_draw_all();
 
 Entity* GetPlayer();
 
+Entity* GetNearestMob();
+
+
 void DamageBoost(Entity* ent, int time);
 #endif
