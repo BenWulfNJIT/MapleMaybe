@@ -58,14 +58,11 @@ int main(int argc, char * argv[])
     slog("test2");
 
     /*demo setup*/
-//    sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
     sprite = gf2d_sprite_load_image("images/backgrounds/crayonBackground.png");
-   // test = gf2d_sprite_load_all("images//skills/fireball.png", 64, 64, 1);
 
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     /*main game loop*/
 
-    //bug = bug_new(vector2d(100, 100), vector2d(gfc_crandom(), gfc_crandom()));
 
     Vector2D p1 = { 20, 670 };
     Vector2D p2 = { 1180, 670 };
@@ -86,6 +83,10 @@ int main(int argc, char * argv[])
 
     Entity* npc;
     npc = npc_new(vector2d(400, 260));
+
+
+    //TODO
+    //clean up spawning code for entities \/\/ is ugly
 
     bugSpawnList = entity_new();
     bugSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
@@ -109,10 +110,7 @@ int main(int argc, char * argv[])
     rollerSpawner = spawner_new(4, testMap->spawnerCoords[0], 2, 800);
     turretSpawner = spawner_new(5, testMap->spawnerCoords[4], 1, 5000);
 
-    //for (int i = 0; i < 10; i++)
-    //{
-////    spawnList[i] = *bug_new(vector2d(gfc_random()*100, gfc_random()*100), vector2d(gfc_random(), gfc_random()));
-   // }
+ 
     int experiencePercent;
     int testBoy = 25;
     for (int i = 0; i < 20; i++)
@@ -135,17 +133,22 @@ int main(int argc, char * argv[])
             //backgrounds drawn first
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
 
-            //entity_draw_all();
-            
-            //entity_draw(bug);
-            //bug->think;
-            //SimplePlatformCollision(bug, testMap);
-            //BoundingBoxCollision(bug, testMap);
+
+            //TODO
+            //npc/entity drawing should not be done individually
+
             entity_draw(shop);
             shop_think(shop);
 
             entity_draw(npc);
             npc_think(npc);
+
+
+            //TODO
+            //allow for passive skills to be combined with active skills
+
+            //TODO
+            //change controls from wasd to arrow keys
 
             entity_draw(test_player);
             SimplePlatformCollision(test_player, testMap);
@@ -153,26 +156,16 @@ int main(int argc, char * argv[])
             DoPlayerGravity(test_player);
             DoSkills(test_player);
             SkillThink(test_player, test_player->activeSkill, test_player->skillOnePosition);
-            //slog("current skill: %i", test_player->activeSkill);
-           // slog("skill 1 cd %i", test_player->skillOneCD);
-           // slog("skill 1 duration %i", test_player->skillOneDurationCounter);
-
-            //entity_update(&spawnList[7]);
-            //entity_draw(&spawnList[7]);
-
+       
           
+
+            //TODO 
+            //Spawner/Npc/mob thinking should not be called individually
                 testSpawner->spawnCount = test_player->spawnBugCount;
                 SpawnerThink(testSpawner, bugSpawnList, testMap);
 
                 manSpawner->spawnCount = test_player->spawnManCount;
                 SpawnerThink(manSpawner, manSpawnList, testMap);
-
-                //for (int i = 0; i < manSpawner->spawnBugCount; i++)
-              //  {
-              //      SimplePlatformCollision(&manSpawnList[i], testMap);
-              ////      BoundingBoxCollision(&manSpawnList[i], testMap);
-               //     DoPlayerGravity(&manSpawnList[i]);
-             //   }
 
                 jumperSpawner->spawnCount = test_player->spawnJumperCount;
                 SpawnerThink(jumperSpawner, jumperSpawnList, testMap);
@@ -182,32 +175,14 @@ int main(int argc, char * argv[])
 
                 turretSpawner->spawnCount = test_player->spawnTurretCount;
                 SpawnerThink(turretSpawner, turretSpawnList, testMap);
-                //test_player->spawnBugCount = testSpawner->spawnCount;
-            
-            //slog("Bugs: %i", test_player->spawnBugCount);
-            //slog("Men: %i", test_player->spawnManCount);
-
-            //gf2d_draw_line(test_player->position, GetNearestMob()->position, vector4d(20, 20, 250, 255));
-
-
+          
             vectormap_draw(testMap);
 
-            //gf2d_sprite_draw(test, test_player->position, NULL, NULL, NULL, NULL, NULL, 1);
-            //UI elements last
-            //health/maxHealth * 512
-            
+            //TODO
+            //add actual window system because this is garbage
             healthPercent = (int)(((float)test_player->health / (float)test_player->maxHealth) * 512);
             experiencePercent = (int)(((float)test_player->experience / (float)50) * 512);
 
-            /*
-            //slog("healthPercent: %i", healthPercent);
-            //testBoy++;
-            healthBar = gf2d_sprite_load_all("images/hud/healthBar.png", healthPercent, 32, 0);
-            //slog("healthPercent: ")
-            gf2d_sprite_draw(healthBar, vector2d(344, 20), NULL, NULL, NULL, NULL, &healthColor, 0);
-            gf2d_sprite_free(healthBar);
-            */
-            
             for (int i = 0; i < healthPercent; i++)
             {
                 Vector2D p1 = { (i + 344), 10 };
@@ -215,7 +190,6 @@ int main(int argc, char * argv[])
 
                 gf2d_draw_line(p1, p2, vector4d(255, 20, 20, 255));
             }
-            //slog("xp: %i",test_player->experience);
             for (int i = 0; i < experiencePercent; i++)
             {
                 Vector2D p1 = { (i + 344), 40 };
@@ -245,6 +219,8 @@ int main(int argc, char * argv[])
 
             }
 
+            //TODO
+            //again, garbage need menu system
 
             switch (test_player->level)
             {
@@ -287,10 +263,7 @@ int main(int argc, char * argv[])
                 &mouseColor,
                 (int)mf);
                 
-           // if (keys[SDL_SCANCODE_SPACE]) test_player->velocity.y = -5;
-           //gf2d_draw_line(p1, p2, pinkColor);
-           // gf2d_draw_line();
-
+         
             
 
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
@@ -298,8 +271,10 @@ int main(int argc, char * argv[])
 
         entity_update_all();
         entity_draw_all();
-        //entity_update(bug);
     
+
+        //TODO
+        //add in command.c that will handle command inputs to hide this uglyness
         if (keys[SDL_SCANCODE_LEFTBRACKET]) test_player->level -= 1;
         if (keys[SDL_SCANCODE_RIGHTBRACKET]) test_player->level += 1;
 
@@ -395,7 +370,6 @@ int main(int argc, char * argv[])
         }
 
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
-        //slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
     slog("---==== END ====---");
     return 0;

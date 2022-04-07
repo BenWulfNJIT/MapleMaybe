@@ -25,6 +25,9 @@ Entity* skill_new(Entity* attacker, Vector2D position)
     return self;
 }
 
+
+//TODO
+//get rid of this function i guess im not usin it
 void DoSkill(Entity* attacker, Entity* skill, Vector2D position)
 {
    // gf2d_sprite_draw_image(skill->sprite, position);
@@ -40,6 +43,10 @@ void SkillThink(Entity* attacker, int skill, Vector2D position)
     if (attacker->skillFourCD > 0) attacker->skillFourCD--;
     //slog("THINKING %i", skill);
     //slog("currentclass %i", attacker->classNum);
+
+    //TODO
+    //wow this is hideous idk what even needs to happen here
+
     switch (attacker->classNum)
     {
     case 0: //------------------ thor skills ---------------------
