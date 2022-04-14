@@ -293,6 +293,32 @@ Entity* GetNearestMob(Entity* self)
 
 }
 
+
+void FreeCurrentMobs()
+{
+   
+
+    for (int i = 0; i < entity_manager.maxEnts; i++)
+    {
+
+        if (!entity_manager.entityList[i]._inuse)continue;
+        if (entity_manager.entityList[i].team == -1)continue;
+
+        if (entity_manager.entityList[i].think)
+        {
+            if (entity_manager.entityList[i].team == 2);
+            {
+               
+               // entity_manager.entityList[i].health = 0;
+                InflictDamage(&entity_manager.entityList[i], &entity_manager.entityList[i], 999999);
+
+            }
+        }
+    }
+
+
+}
+
 void DoVacuum(Vector2D location)
 {
     Vector2D direction;

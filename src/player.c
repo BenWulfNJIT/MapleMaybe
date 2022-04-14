@@ -3,7 +3,7 @@
 
 #include "player.h"
 #include "skill.h"
-
+#include "portal.h"
 
 void player_think(Entity* self)
 {
@@ -91,6 +91,7 @@ Entity* player_new(Vector2D position)
     self->shopping = 0;
     self->canTalk = 0;
     self->talking = 0;
+    self->teleporting = 0;
     self->think = player_think;
 
 
@@ -131,6 +132,15 @@ void ControlMovement(Entity* self)
 
 
   
+    if (self->playerCanTeleportToMapID != -1 && gfc_input_key_pressed("w"))
+    {
+        self->teleporting = 1;
+    }
+    else
+    {
+        self->teleporting = 0;
+    }
+
     if (self->canTalk && !self->talking && gfc_input_key_pressed("t"))
     {
         //slog("hello");

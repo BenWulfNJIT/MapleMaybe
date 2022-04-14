@@ -23,20 +23,31 @@ VectorMap *vectormap_new()
 
 VectorMap *vectormap_load(char *filename)
 {
-
     const char* backgroundFile = NULL;
-    SJson *json, *platforms, *columns, *element1, * element2, * element3, * element4, *bbRow, *bbColumn, *spawnRow, *spawnColumn, *spawn1, *spawn2;
+    SJson *json, *platforms, *columns, *element1, * element2, * element3, * element4, *bbRow, *bbColumn, *spawnRow, *spawnColumn, 
+        *spawn1, *spawn2, *spawn3, *spawn4, *spawn5;
     VectorMap* map;
     Vector2D tempSpawnVec;
-    int i, r, c, e1, e2, e3, e4, bbx, bby, sx, sy;
+    int i, r, c, e1, e2, e3, e4, bbx, bby, sx, sy, mobID, spawnMax, spawnRate, mapID;
 
     if (!filename)return NULL;
+
     json = sj_load(filename);
+
     if (!json)return NULL;
 
     map = vectormap_new();
 
     map->testTest = sj_get_string_value(sj_object_get_value(json, "background"));
+
+    slog("=========================");
+    slog("MAP NAME %s", map->testTest);
+    slog("=========================");
+
+    sj_get_integer_value(sj_object_get_value(json, "mapID"), &mapID);
+    map->mapID = mapID;
+
+    //slog("mapID: %i", map->mapID);
     platforms = sj_object_get_value(json, "platforms");
     map->platformCount = sj_array_get_count(platforms);
     
@@ -55,6 +66,7 @@ VectorMap *vectormap_load(char *filename)
     //map->platformCoords[0] = {x1, y1, x2, y2}
     for (int p=0; p < map->platformCount; p++)
     {
+
         columns = sj_array_get_nth(platforms, p);
        
         element1 = sj_array_get_nth(columns, 0);
@@ -103,13 +115,14 @@ VectorMap *vectormap_load(char *filename)
     //    map->spawnerCoords = (Vector2D*)gfc_allocate_array(sizeof(Vector2D), 7);
 
     //some ugly stuff to get the spawnpoints into the vector map whatever its 2am
-    spawnRow = sj_object_get_value(json, "spawnPoints");
+    spawnRow = sj_object_get_value(json, "spawnInfo");
     map->spawnerCoords = (Vector2D*)gfc_allocate_array(sizeof(Vector2D), sj_array_get_count(spawnRow));
+    map->spawnerInfo = (Vector3D*)gfc_allocate_array(sizeof(Vector3D), sj_array_get_count(spawnRow));
+
     for (i = 0; i < sj_array_get_count(spawnRow); i++)
     {
 
 
-    
         spawnColumn = sj_array_get_nth(spawnRow, i);
         
         spawn1 = sj_array_get_nth(spawnColumn, 0);
@@ -117,7 +130,16 @@ VectorMap *vectormap_load(char *filename)
 
         spawn2 = sj_array_get_nth(spawnColumn, 1);
         sj_get_integer_value(spawn2, &sy);
+        
+        spawn3 = sj_array_get_nth(spawnColumn, 2);
+        sj_get_integer_value(spawn3, &mobID);
 
+        spawn4 = sj_array_get_nth(spawnColumn, 3);
+        sj_get_integer_value(spawn4, &spawnMax);
+
+        spawn5 = sj_array_get_nth(spawnColumn, 4);
+        sj_get_integer_value(spawn5, &spawnRate);
+        
         //slog("TEST %i, %i", sx, sy);
 
         tempSpawnVec.x = sx;
@@ -125,6 +147,11 @@ VectorMap *vectormap_load(char *filename)
 
         map->spawnerCoords[i] = tempSpawnVec;
         map->spawnerCount++;
+        
+        map->spawnerInfo[i].x = mobID;
+        map->spawnerInfo[i].y = spawnMax;
+        map->spawnerInfo[i].z = spawnRate;
+        
 
 
 

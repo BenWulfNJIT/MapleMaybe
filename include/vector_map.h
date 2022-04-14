@@ -5,7 +5,7 @@
 #include "gfc_text.h"
 
 #include "gf2d_sprite.h"
-
+#include "entity.h"
 
 typedef struct VectorMap
 {
@@ -17,7 +17,11 @@ typedef struct VectorMap
 	int			platformCount;
 	Vector4D*	platformCoords;
 	Vector2D*	spawnerCoords;
+	Vector3D*	spawnerInfo;
 	int			spawnerCount;
+	int			mapID;
+
+	struct Entity*		spawners;
 
 	
 

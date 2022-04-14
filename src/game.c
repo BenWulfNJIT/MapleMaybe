@@ -14,6 +14,9 @@
 #include "skill.h"
 #include "shop.h"
 #include "npc.h"
+#include "portal.h"
+
+#define NK_IMPLEMENTATION
 
 int main(int argc, char * argv[])
 {
@@ -34,9 +37,9 @@ int main(int argc, char * argv[])
         *manSpawner, *manSpawnList, 
         *jumperSpawner, *jumperSpawnList,
         *rollerSpawner, *rollerSpawnList,
-        *turretSpawner, *turretSpawnList;
+        *turretSpawner, *turretSpawnList, *portalLeft, *portalRight;
     
-
+    Entity* spawnerList;
     /*program initializtion*/
     init_logger("gf2d.log");
     slog("---==== BEGIN ====---");
@@ -52,13 +55,12 @@ int main(int argc, char * argv[])
     gf2d_sprite_init(1024);
     SDL_ShowCursor(SDL_DISABLE);
     entity_manager_init(1024);
-    slog("test1");
+    //slog("test1");
 
     gfc_input_init("config/input.cfg");
-    slog("test2");
+    //slog("test2");
 
     /*demo setup*/
-    sprite = gf2d_sprite_load_image("images/backgrounds/crayonBackground.png");
 
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     /*main game loop*/
@@ -68,48 +70,87 @@ int main(int argc, char * argv[])
     Vector2D p2 = { 1180, 670 };
     Vector4D pinkColor = { 255, 105, 190, 255 };
 
-    testMap = vectormap_load("maps/test.json");
+    testMap = vectormap_load("maps/testTown.json");
    
+    sprite = gf2d_sprite_load_image(testMap->testTest);
+
+    portalLeft = portal_new(vector2d(-100, -100), 0, 0);
+    portalRight = portal_new(vector2d(1100, 700), 0, 1);
 
     testSkill = entity_new(vector2d(100, 100));
     test_player = player_new(vector2d(100, 100));
     test_player->classNum = 0;
     //test_player->skillOneSprite = gf2d_sprite_load_all("images/chars/loki.png", 64, 64, 1);
     slog("test3");
-
-
     Entity* shop;
-    shop = shop_new(vector2d(100, 700));
-
     Entity* npc;
-    npc = npc_new(vector2d(400, 260));
+
+    
 
 
-    //TODO
-    //clean up spawning code for entities \/\/ is ugly
+        //TODO
+        //clean up spawning code for entities \/\/ is ugly
 
-    bugSpawnList = entity_new();
-    bugSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
 
-    manSpawnList = entity_new();
-    manSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
 
-    jumperSpawnList = entity_new();
-    jumperSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
+        bugSpawnList = entity_new();
+        bugSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
 
-    rollerSpawnList = entity_new();
-    rollerSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
+        manSpawnList = entity_new();
+        manSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
 
-    turretSpawnList = entity_new();
-    turretSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
+        jumperSpawnList = entity_new();
+        jumperSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
 
-    testSpawner = spawner_new(1, testMap->spawnerCoords[3], 3, 600);
-    manSpawner = spawner_new(2, testMap->spawnerCoords[1], 5, 600);
-    manSpawner->standingPlatform = testMap->platformCoords[2];
-    jumperSpawner = spawner_new(3, testMap->spawnerCoords[2], 3, 1000);
-    rollerSpawner = spawner_new(4, testMap->spawnerCoords[0], 2, 800);
-    turretSpawner = spawner_new(5, testMap->spawnerCoords[4], 1, 5000);
+        rollerSpawnList = entity_new();
+        rollerSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
 
+        turretSpawnList = entity_new();
+        turretSpawnList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
+
+        spawnerList = entity_new();
+        spawnerList = (Entity*)gfc_allocate_array(sizeof(Entity), 100);
+
+        /*
+        for (int i = 0; i < testMap->spawnerCount; i++)
+        {
+            spawnerList = spawner_new(testMap->spawnerInfo[i].x, testMap->spawnerCoords[i], testMap->spawnerInfo[i].y, testMap->spawnerInfo[i].z);
+            //testMap->spawners = spawner_new(testMap->spawnerInfo[i].x, testMap->spawnerCoords[i], testMap->spawnerInfo[i].y, testMap->spawnerInfo[i].z);
+            //testMap->spawners++;
+            spawnerList++;
+        }
+        */
+
+        slog("testaaaa");
+        slog("mapID: %i", testMap->mapID);
+        slog("testooooo");
+        if (testMap->mapID == 1)
+        {
+
+            shop = shop_new(vector2d(-100, -700));
+
+            npc = npc_new(vector2d(-400, -260));
+
+        testSpawner = spawner_new(testMap->spawnerInfo[3].x, testMap->spawnerCoords[3], testMap->spawnerInfo[3].y, testMap->spawnerInfo[3].z);
+        manSpawner = spawner_new(testMap->spawnerInfo[1].x, testMap->spawnerCoords[1], testMap->spawnerInfo[1].y, testMap->spawnerInfo[1].z);
+        jumperSpawner = spawner_new(testMap->spawnerInfo[2].x, testMap->spawnerCoords[2], testMap->spawnerInfo[2].y, testMap->spawnerInfo[2].z);
+        rollerSpawner = spawner_new(testMap->spawnerInfo[0].x, testMap->spawnerCoords[0], testMap->spawnerInfo[0].y, testMap->spawnerInfo[0].z);
+        turretSpawner = spawner_new(testMap->spawnerInfo[4].x, testMap->spawnerCoords[4], testMap->spawnerInfo[4].y, testMap->spawnerInfo[4].z);
+        }
+        else 
+        {
+
+            shop = shop_new(vector2d(275, 700));
+
+            npc = npc_new(vector2d(800, 700));
+            
+
+            testSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            manSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            jumperSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            rollerSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            turretSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+        }
  
     int experiencePercent;
     int testBoy = 25;
@@ -133,6 +174,140 @@ int main(int argc, char * argv[])
             //backgrounds drawn first
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
 
+            slog("================= %i", test_player->playerCanTeleportToMapID);
+
+
+           
+            if (test_player->teleporting == 1)
+            {
+                for (int i = 255; i > 0; i -= 2)
+                {
+                    gf2d_graphics_clear_screen();
+                    //vector2d(test_player->hitBox.x, test_player->hitBox.y-100)
+                    //gf2d_sprite_draw_image(test_player->sprite, test_player->position);
+                    entity_draw(test_player);
+
+                    gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+
+                    SDL_SetTextureColorMod(
+                        sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        sprite->texture,
+                        i);
+                    SDL_SetTextureColorMod(
+                        test_player->sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        test_player->sprite->texture,
+                        i);
+                    gf2d_grahics_next_frame();
+
+                }
+                vectormap_free(testMap);
+                entity_free(testSpawner);
+                entity_free(manSpawner);
+                entity_free(jumperSpawner);
+                entity_free(rollerSpawner);
+                entity_free(turretSpawner);
+                entity_free(shop);
+                entity_free(npc);
+                entity_free(portalLeft);
+                entity_free(portalRight);
+                FreeCurrentMobs();
+                
+              
+
+
+
+                
+
+
+
+                switch (test_player->playerCanTeleportToMapID && test_player->teleporting == 1)
+                {
+                case 0:
+                    testMap = vectormap_load("maps/testTown.json");
+                    sprite = gf2d_sprite_load_image(testMap->testTest);
+                    shop = shop_new(vector2d(275, 700));
+
+                    npc = npc_new(vector2d(800, 700));
+
+                    portalRight = portal_new(vector2d(1100, 675), 0, 1);
+
+                    testSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                    manSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                    jumperSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                    rollerSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                    turretSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+
+                    test_player->position = vector2d(1100, 650);
+
+                    test_player->teleporting = 0;
+
+                    break;
+                case 1:
+                    testMap = vectormap_load("maps/test.json");
+
+                    sprite = gf2d_sprite_load_image(testMap->testTest);
+
+                    shop = shop_new(vector2d(-100, -700));
+
+                    npc = npc_new(vector2d(-400, -260));
+
+                    portalLeft = portalRight = portal_new(vector2d(100, 675), 1, 0);
+
+                    testSpawner = spawner_new(testMap->spawnerInfo[3].x, testMap->spawnerCoords[3], testMap->spawnerInfo[3].y, testMap->spawnerInfo[3].z);
+                    manSpawner = spawner_new(testMap->spawnerInfo[1].x, testMap->spawnerCoords[1], testMap->spawnerInfo[1].y, testMap->spawnerInfo[1].z);
+                    jumperSpawner = spawner_new(testMap->spawnerInfo[2].x, testMap->spawnerCoords[2], testMap->spawnerInfo[2].y, testMap->spawnerInfo[2].z);
+                    rollerSpawner = spawner_new(testMap->spawnerInfo[0].x, testMap->spawnerCoords[0], testMap->spawnerInfo[0].y, testMap->spawnerInfo[0].z);
+                    turretSpawner = spawner_new(testMap->spawnerInfo[4].x, testMap->spawnerCoords[4], testMap->spawnerInfo[4].y, testMap->spawnerInfo[4].z);
+
+                    test_player->position = vector2d(100, 650);
+
+                    test_player->teleporting = 0;
+                    break;
+                case 2:
+                    break;
+                }
+                
+                for (int i = 0; i < 255; i += 2)
+                {
+                    gf2d_graphics_clear_screen();
+
+                    gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+                    entity_draw(test_player);
+
+                    //gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+                    SDL_SetTextureColorMod(
+                        sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        sprite->texture,
+                        i);
+
+
+                    SDL_SetTextureColorMod(
+                        test_player->sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        test_player->sprite->texture,
+                        i);
+                    gf2d_grahics_next_frame();
+
+                }
+            }
 
             //TODO
             //npc/entity drawing should not be done individually
@@ -149,7 +324,8 @@ int main(int argc, char * argv[])
 
             //TODO
             //change controls from wasd to arrow keys
-
+            entity_draw(portalRight);
+            entity_draw(portalLeft);
             entity_draw(test_player);
             SimplePlatformCollision(test_player, testMap);
             BoundingBoxCollision(test_player, testMap);
@@ -161,6 +337,10 @@ int main(int argc, char * argv[])
 
             //TODO 
             //Spawner/Npc/mob thinking should not be called individually
+
+            
+
+          
                 testSpawner->spawnCount = test_player->spawnBugCount;
                 SpawnerThink(testSpawner, bugSpawnList, testMap);
 
@@ -175,7 +355,7 @@ int main(int argc, char * argv[])
 
                 turretSpawner->spawnCount = test_player->spawnTurretCount;
                 SpawnerThink(turretSpawner, turretSpawnList, testMap);
-          
+            
             vectormap_draw(testMap);
 
             //TODO
@@ -278,6 +458,46 @@ int main(int argc, char * argv[])
         if (keys[SDL_SCANCODE_LEFTBRACKET]) test_player->level -= 1;
         if (keys[SDL_SCANCODE_RIGHTBRACKET]) test_player->level += 1;
 
+        if (keys[SDL_SCANCODE_0])
+        {
+            //slog("000000000000000000000000000");
+
+            vectormap_free(testMap);
+            entity_free(testSpawner);
+            entity_free(manSpawner);
+            entity_free(jumperSpawner);
+            entity_free(rollerSpawner);
+            entity_free(turretSpawner);
+            entity_free(shop);
+            entity_free(npc);
+
+            FreeCurrentMobs();
+
+            
+
+
+        }
+        if (keys[SDL_SCANCODE_9])
+        {
+            //slog("99999999999999999999999999999999999");
+            vectormap_free(testMap);
+            entity_free(testSpawner);
+            entity_free(manSpawner);
+            entity_free(jumperSpawner);
+            entity_free(rollerSpawner);
+            entity_free(turretSpawner);
+
+            entity_free(bugSpawnList);
+            entity_free(manSpawnList);
+            entity_free(rollerSpawnList);
+            entity_free(jumperSpawnList);
+            entity_free(turretSpawnList);
+
+            FreeCurrentMobs();
+
+            
+
+        }
         if (keys[SDL_SCANCODE_Z])
         {
             test_player->sprite = gf2d_sprite_load_all("images/chars/thor.png", 64, 114, 1);
@@ -370,6 +590,8 @@ int main(int argc, char * argv[])
         }
 
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
+
+       //slog("Rendering at %f FPS", gf2d_graphics_get_frames_per_second());
     }
     slog("---==== END ====---");
     return 0;

@@ -17,7 +17,7 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 		if (recipient->team == 1 && (recipient->isCharInSmoke == 1 || recipient->canPurchase || recipient->talking) )
 		{
 			damage = 0;
-			slog("avoided");
+			//slog("avoided");
 		}
 		if (recipient->team == 1 && recipient->thorns == 1)
 		{

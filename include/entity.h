@@ -82,7 +82,12 @@ typedef struct Entity_S
     int         skillFourInProgress; /**<0 if not, 1 if in progress> */
     Sprite*     skillFourSprite;
 
-    int         team;  /**<default 0, 1 for friendly player, 2 for monsters>*/
+    int         portalInMapID;
+    int         portalTeleportMapID;
+    int         playerCanTeleportToMapID;
+    int         teleporting;
+
+    int         team;  /**<default 0, 1 for friendly player, 2 for monsters, 3 for a portal>*/
     int         movementLock; /**<0 for default free to move, 1 to lock movement>*/
 
     int         isSmokeActive;
@@ -159,6 +164,9 @@ void entity_free(Entity* self);
 void entity_update_all();
 
 void entity_update(Entity* self);
+
+
+void FreeCurrentMobs();
 
 
 /**
