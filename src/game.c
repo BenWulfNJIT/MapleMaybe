@@ -174,7 +174,7 @@ int main(int argc, char * argv[])
             //backgrounds drawn first
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
 
-            slog("================= %i", test_player->playerCanTeleportToMapID);
+           // slog("================= %i", test_player->playerCanTeleportToMapID);
 
 
            
