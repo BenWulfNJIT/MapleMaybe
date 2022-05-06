@@ -86,6 +86,9 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 			//if (tempItemID != 3) NewItem(recipient->position, tempItemID);
 			//slog("%i",tempItemID);
 		}
+		if (recipient->spawnMobNumber == 6) attacker->canWin = 1;
+
+
 		if (recipient->team == 1) return;
 		else entity_free(recipient);
 		//slog("should kill");

@@ -4,7 +4,7 @@
   "background": "images/backgrounds/town.png",
   "bounding_box": [ 1200, 720 ],
   "platforms": [
-   
+
     [ 0, 700, 1200, 700 ]
     
    

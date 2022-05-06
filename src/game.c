@@ -17,6 +17,7 @@
 #include "portal.h"
 #include "menu.h"
 #include "items.h"
+#include "interactables.h"
 
 int main(int argc, char * argv[])
 {
@@ -87,7 +88,7 @@ int main(int argc, char * argv[])
 
     
     //portalLeft = portal_new(vector2d(-100, -100), 0, 0);
-    portalLeft = portal_new(vector2d(100, 675), 0, 2);
+    portalLeft = portal_new(vector2d(100, 700), 0, 2);
 
     portalRight = portal_new(vector2d(1100, 700), 0, 1);
 
@@ -342,6 +343,31 @@ int main(int argc, char * argv[])
 
     int regenTimer = 0;
     int reflectTimer = 0;
+
+
+    // =============== object shenanigans ====================
+
+    Sprite* grassSprite = gf2d_sprite_load_image("images/grass.png");
+    Sprite* explosiveBarrelSprite = gf2d_sprite_load_image("images/explosiveBarrel.png");
+    Sprite* healingPotSprite = gf2d_sprite_load_image("images/healthBarrel.png");
+    Sprite* treasureChestSprite = gf2d_sprite_load_image("images/treasureChest.png");
+    Sprite* mimicHiddenSprite = gf2d_sprite_load_image("images/mimicHidden.png");
+    Sprite* explosion = gf2d_sprite_load_image("images/explosion.png");
+    Sprite* healthExplosion = gf2d_sprite_load_image("images/healingExplosion.png");
+
+
+
+    Entity* grass = NewGrass(vector2d(-300, - 300));
+    Entity* explode = NewExplosiveBarrel(vector2d(-300, -300));
+    Entity* healthBarrel = NewExplosiveBarrel(vector2d(-300, -300));
+    Entity* treasureChest = NewTreasureChest(vector2d(-300, -300));
+    Entity* mimicChest = NewMimicChest(vector2d(-300, -300));
+
+
+    int explosionTimer = 120;
+    int healingTimer = 120;
+
+
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
@@ -408,6 +434,12 @@ int main(int argc, char * argv[])
                 entity_free(npc);
                 entity_free(portalLeft);
                 entity_free(portalRight);
+                entity_free(grass);
+                entity_free(explode);
+                entity_free(healthBarrel);
+                entity_free(treasureChest);
+                entity_free(mimicChest);
+
                 FreeCurrentMobs();
                 
               
@@ -486,7 +518,7 @@ int main(int argc, char * argv[])
                         shop = shop_new(vector2d(-100, -700));
 
                         npc = npc_new(vector2d(-400, -260));
-
+                        grass = NewGrass(vector2d(1000, 675));
                         portalRight = portal_new(vector2d(1100, 675), 2, 0);
 
                         testSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
@@ -508,8 +540,14 @@ int main(int argc, char * argv[])
                         shop = shop_new(vector2d(-100, -700));
 
                         npc = npc_new(vector2d(-400, -260));
+                        grass = NewGrass(vector2d(850, 640));
+                        explode = NewExplosiveBarrel(vector2d(650, 640));
+                        healthBarrel = NewHealthBarrel(vector2d(450, 640));
+                        treasureChest = NewTreasureChest(vector2d(250, 640));
+                        mimicChest = NewMimicChest(vector2d(50, 640));
 
-                        portalRight = portal_new(vector2d(1100, 675), 2, 0);
+
+                        portalRight = portal_new(vector2d(1100, 700), 2, 0);
 
                         testSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
                         manSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
@@ -577,6 +615,23 @@ int main(int argc, char * argv[])
             portal_think(portalRight, testMap);
             portal_think(portalLeft, testMap);
             entity_draw(test_player);
+
+            if (grass) entity_draw(grass);
+            if (grass) GrassThink(grass);
+
+            if (explode) entity_draw(explode);
+            if (explode) ExplosiveBarrelThink(explode);
+
+            if (healthBarrel) entity_draw(healthBarrel);
+            if (healthBarrel) HealthBarrelThink(healthBarrel);
+
+            if (treasureChest) entity_draw(treasureChest);
+            if (treasureChest) TreasureChestThink(treasureChest);
+
+            if (mimicChest) entity_draw(mimicChest);
+            if (mimicChest) MimicChestThink(mimicChest);
+
+
             SimplePlatformCollision(test_player, testMap);
             BoundingBoxCollision(test_player, testMap);
             DoPlayerGravity(test_player);
@@ -623,6 +678,17 @@ int main(int argc, char * argv[])
             //Spawner/Npc/mob thinking should not be called individually
 
             
+            if (test_player->showExplosion == 1 && explosionTimer > 0)
+            {
+                gf2d_sprite_draw_image(explosion, vector2d(600, 600));
+                explosionTimer--;
+            }
+            if (test_player->showHealing == 1 && healingTimer > 0)
+            {
+                gf2d_sprite_draw_image(healthExplosion, vector2d(450, 600));
+                healingTimer--;
+
+            }
 
           
                 testSpawner->spawnCount = test_player->spawnBugCount;

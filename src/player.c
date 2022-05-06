@@ -101,6 +101,10 @@ Entity* player_new(Vector2D position)
     self->hasFireCape = 0;
     self->isMapOpen = 0;
     self->isReflecting = 0;
+    self->isSlowed = 0;
+    self->showExplosion = 0;
+    self->showHealing = 0;
+    self->canWin = 0;
     self->think = player_think;
 
 

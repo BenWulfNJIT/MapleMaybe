@@ -7,6 +7,8 @@
 #include "vector_map.h"
 #include "damage.h"
 #include "items.h"
+#include "mimic.h"
+
 //#include "level.h"
 //#include "collisions.h"
 
@@ -240,7 +242,47 @@ void SkillCollisionCheck(Entity* attacker, int skill, SDL_Rect* skillHitBox)
                 entity_manager.entityList[i].think(&entity_manager.entityList[i]);
 
             }
-          
+
+            SDL_Rect temp;
+            
+            if (entity_manager.entityList[i].team == 5) //SDL_HasIntersection(skillHitBox, &entity_manager.entityList[i].objectRect))
+            {
+                temp.x = entity_manager.entityList[i].position.x;
+                temp.y = entity_manager.entityList[i].position.y;
+                temp.w = 10;
+                temp.h = 10;
+
+                if (SDL_HasIntersection(skillHitBox, &temp))
+                {
+
+                    switch (entity_manager.entityList[i].objectID)
+                    {
+                    case 1:
+                        
+                        break;
+                    case 2:
+                        //InflictDamage(&entity_manager.entityList[i], attacker, 500);
+                        attacker->health -= 500;
+                        if (attacker->health <= 0)attacker->health = 100;
+                        attacker->showExplosion = 1;
+                        break;
+                    case 3:
+                        attacker->health += 500;
+                        if (attacker->health > attacker->maxHealth)attacker->health = attacker->maxHealth;
+                        attacker->showHealing = 1;
+                        break;
+                    case 4:
+                        NewItem(entity_manager.entityList[i].position, 2);
+                        break;
+                    case 5:
+                        SpawnMimic(vector2d(150, 500));
+                        break;
+                    }
+                    entity_free(&entity_manager.entityList[i]);
+                }
+
+
+            }
         }
         //working
         //if ( skillHitBox->x+skillHitBox->w >= entity_manager.entityList[i].hitBox.x && skillHitBox->x <= (entity_manager.entityList[i].hitBox.x + entity_manager.entityList[i].hitBox.w) && entity_manager.entityList[i].team == 2)

@@ -87,7 +87,7 @@ typedef struct Entity_S
     int         playerCanTeleportToMapID;
     int         teleporting;
 
-    int         team;  /**<default 0, 1 for friendly player, 2 for monsters, 3 for a portal, 4 for item>*/
+    int         team;  /**<default 0, 1 for friendly player, 2 for monsters, 3 for a portal, 4 for item, 5 for interactable objects>*/
     int         movementLock; /**<0 for default free to move, 1 to lock movement>*/
 
     int         isSmokeActive;
@@ -112,6 +112,15 @@ typedef struct Entity_S
 
 
     SDL_Rect    itemRect;
+
+    //interactables info
+    SDL_Rect    objectRect;
+    int         isSlowed;
+    int         objectID; /**1 for grass, 2 for explosive, 3 for healthpot, 4 for chest, 5 for mimic*/
+    int         showExplosion;
+    int         showHealing;
+    int         dashTimer;
+    int         canWin;
 
     //Spawner info
     //Entity* entityToSpawn;
