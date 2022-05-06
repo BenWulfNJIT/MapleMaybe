@@ -6,6 +6,7 @@
 #include "physics.h"
 #include "vector_map.h"
 #include "damage.h"
+#include "items.h"
 //#include "level.h"
 //#include "collisions.h"
 
@@ -85,6 +86,33 @@ void entity_update(Entity* self)
 {
     Vector2D normal = { 0,0 };
     if (!self)return;
+    Entity* player = GetPlayer();
+    if (self->team == 4)
+    {
+        switch (self->itemID)
+        {
+        case 1:
+            if (player->hasMirrorShield == 0) ItemThink(self);
+            else entity_free(self);
+            break;
+        case 2:
+            if (player->hasBFS == 0) ItemThink(self);
+            else entity_free(self);
+            break;
+        case 3:
+            if (player->hasSneakers == 0) ItemThink(self);
+            else entity_free(self);
+            break;
+        case 4:
+            if (player->hasRegenBracelet == 0) ItemThink(self);
+            else entity_free(self);
+            break;
+        case 5:
+            if (player->hasFireCape == 0) ItemThink(self);
+            else entity_free(self);
+            break;
+        }
+    }
 
     //comment
 
@@ -93,6 +121,42 @@ void entity_update(Entity* self)
     //BoundingBoxCollision(self, map);
     //DoPlayerGravity(self);
   
+}
+
+void BurnNearby()
+{
+    Sprite* fireSprite = gf2d_sprite_load_image("images/fire.png");
+
+    Entity* player = GetPlayer();
+    Vector2D tempCoords;
+    float tempDistance;
+    if (player->hasFireCape == 0) return;
+    for (int i = 0; i < entity_manager.maxEnts; i++)
+    {
+        if (!entity_manager.entityList[i]._inuse)continue;
+        if (entity_manager.entityList[i].think)
+        {
+            if (entity_manager.entityList[i].team == 2)
+            {
+                
+                //player = &entity_manager.entityList[i];
+                tempCoords.x = entity_manager.entityList[i].position.x;
+                tempCoords.y = entity_manager.entityList[i].position.y;
+
+                //slog("x: %f, y: %f", tempCoords.x, tempCoords.y);
+                //slog("woah %f", player->position.x);
+                tempDistance = (((tempCoords.x - player->position.x) * (tempCoords.x - player->position.x)) + ((tempCoords.y - player->position.y) * (tempCoords.y - player->position.y)));
+                if (tempDistance < 40000)
+                {
+                    InflictDamage(player, &entity_manager.entityList[i], 1);
+                    gf2d_sprite_draw_image(fireSprite, vector2d(entity_manager.entityList[i].position.x-64, entity_manager.entityList[i].position.y-114));
+                   // slog("burned");
+                }
+                //slog("temp %f", tempDistance);
+            }
+        }
+    }
+ 
 }
 
 void entity_update_all()

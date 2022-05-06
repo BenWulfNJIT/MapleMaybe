@@ -269,6 +269,19 @@ void gf2d_graphics_blit_surface_to_screen(SDL_Surface *surface,const SDL_Rect * 
                     dstRect);
 }
 
+SDL_Window* gf2d_graphics_get_window()
+{
+    if (!gf2d_graphics.main_window)
+    {
+        return NULL;
+    }
+    else
+    {
+        return gf2d_graphics.main_window;
+    }
+       
+}
+
 SDL_Surface *gf2d_graphics_screen_convert(SDL_Surface **surface)
 {
     SDL_Surface *convert;

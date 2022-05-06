@@ -37,18 +37,31 @@ Entity* portal_new(Vector2D position, int selfMapID, int mapIDToTeleport)
 void portal_think(Entity* self, VectorMap* map)
 {
 
+    if (self->position.x < 0)return;
     Entity* player = GetPlayer();
     
     if (abs(self->position.x - player->position.x) < 64 && abs(self->position.y - player->position.y))
     {
+      // slog("TEST1: %i", player->playerCanTeleportToMapID);
+       //slog("TEST2: %i", self->portalTeleportMapID);
+
         player->playerCanTeleportToMapID = self->portalTeleportMapID;
+
+       // slog("TEST3: %i", player->playerCanTeleportToMapID);
+
     }
     else
     {
         player->playerCanTeleportToMapID = -1;
     }
        
-    
+    /*
+    slog("Portal Location: [%f, %f]", self->position.x, self->position.y);
+    slog("In MapID: %i", self->portalInMapID);
+    slog("Trying to teleport to: %i", self->portalTeleportMapID);
+    slog("Player teleport ID: %i", player->playerCanTeleportToMapID);
+    slog("\n\n");
+    */
 }
 
 

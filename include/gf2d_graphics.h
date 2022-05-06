@@ -79,4 +79,14 @@ void gf2d_graphics_blit_surface_to_screen(SDL_Surface *surface,const SDL_Rect * 
  */
 SDL_Surface *gf2d_graphics_screen_convert(SDL_Surface **surface);
 
+/**
+ * @brief returns a pointer to the main game window
+ * @returns NULL on error, or the current main game window
+ */
+SDL_Window* gf2d_graphics_get_window();
+
+
+SDL_Texture* gf2d_graphics_get_screen_texture();
+
+
 #endif

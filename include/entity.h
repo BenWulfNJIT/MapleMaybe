@@ -87,7 +87,7 @@ typedef struct Entity_S
     int         playerCanTeleportToMapID;
     int         teleporting;
 
-    int         team;  /**<default 0, 1 for friendly player, 2 for monsters, 3 for a portal>*/
+    int         team;  /**<default 0, 1 for friendly player, 2 for monsters, 3 for a portal, 4 for item>*/
     int         movementLock; /**<0 for default free to move, 1 to lock movement>*/
 
     int         isSmokeActive;
@@ -95,6 +95,24 @@ typedef struct Entity_S
     int         isCharInSmoke;
     int         smokeTimer;
     int         damageBoostTime;
+
+
+
+    //item info
+    int         hasMirrorShield; /**0 for false 1 for true*/
+    int         hasBFS; /**0 for false 1 for true*/
+    int         hasSneakers; /**0 for false 1 for true*/
+    int         hasRegenBracelet; /**0 for false 1 for true*/
+    int         hasFireCape; /**0 for false 1 for true*/
+    int         itemID;
+    int         isMapOpen; /**0 for false 1 for true*/
+    //Sprite*     map;
+    //Sprite*     mapMarker;
+    int         isReflecting; /**0 for false 1 for true*/
+
+
+    SDL_Rect    itemRect;
+
     //Spawner info
     //Entity* entityToSpawn;
     Vector2D positionToSpawn;
@@ -124,6 +142,9 @@ typedef struct Entity_S
     int dashing;
 
     float flySpeed;
+
+
+    int gameState; /**<0 for main menu, 1 for normal game, 2 for level editor*/
 
     int isBlackHoleActive;
     int slowed;
@@ -174,6 +195,7 @@ void FreeCurrentMobs();
  */
 void SkillCollisionCheck(Entity* attacker, int skill, SDL_Rect* skillHitBox);
 
+void BurnNearby();
 
 /**
  * @brief draww every active entity

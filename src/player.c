@@ -92,6 +92,15 @@ Entity* player_new(Vector2D position)
     self->canTalk = 0;
     self->talking = 0;
     self->teleporting = 0;
+    self->gameState = 0;
+    //item info
+    self->hasMirrorShield = 0; 
+    self->hasBFS = 0; 
+    self->hasSneakers = 0;
+    self->hasRegenBracelet = 0; 
+    self->hasFireCape = 0;
+    self->isMapOpen = 0;
+    self->isReflecting = 0;
     self->think = player_think;
 
 
@@ -130,10 +139,24 @@ void ControlMovement(Entity* self)
     //slog("shopping = %i", self->shopping);
    // slog("canPurchase = %i", self->canPurchase);
 
+   
 
-  
+    if (self->isMapOpen == 0 && gfc_input_key_pressed("m"))
+    {
+        slog("open map");
+        self->isMapOpen = 1;
+    }
+    else if (self->isMapOpen == 1 && gfc_input_key_pressed("m"))
+    {
+        slog("close map");
+        self->isMapOpen = 0;
+
+    }
+
+
     if (self->playerCanTeleportToMapID != -1 && gfc_input_key_pressed("w"))
     {
+        slog("Test");
         self->teleporting = 1;
     }
     else
@@ -251,7 +274,10 @@ void ControlMovement(Entity* self)
     {
         self->velocity.x *= 0.5;
     }
-
+    if (self->hasSneakers == 1)
+    {
+        self->velocity.x *= 2;
+    }
 }
 
 void DoSkills(Entity* self)

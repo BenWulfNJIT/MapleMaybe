@@ -1,10 +1,21 @@
 #include "damage.h"
 #include "simple_logger.h"
 #include "entity.h"
+#include "items.h"
 
 void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 {
 	if (recipient->team == -1) return;
+	if (attacker->team == 1 && attacker->hasBFS == 1)
+	{
+		damage *= 10;
+	}
+	if (attacker->spawnMobNumber == 5 && recipient->team == 1 && recipient->hasMirrorShield)
+	{
+		damage = 0;
+		recipient->isReflecting = 1;
+
+	}
 	if (recipient->damageBoostTime && recipient->damageBoostTime > 0) damage = 0;
 	else
 	{
@@ -48,6 +59,33 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 		}
 		recipient->health = 0;
 		recipient->movementLock = 1;
+		if (attacker->team == 1)
+		{
+			int tempItemID = (int)(gfc_random() * 5 + 1);
+			switch (tempItemID)
+			{
+			case 1:
+				if (attacker->hasMirrorShield == 0) NewItem(recipient->position, tempItemID);
+					break;
+			case 2:
+
+				break;
+			case 3:
+				if (attacker->hasSneakers == 0) NewItem(recipient->position, tempItemID);
+
+				break;
+			case 4:
+				if (attacker->hasRegenBracelet == 0) NewItem(recipient->position, tempItemID);
+
+				break;
+			case 5:
+				if (attacker->hasFireCape == 0) NewItem(recipient->position, tempItemID);
+
+				break;
+			}
+			//if (tempItemID != 3) NewItem(recipient->position, tempItemID);
+			//slog("%i",tempItemID);
+		}
 		if (recipient->team == 1) return;
 		else entity_free(recipient);
 		//slog("should kill");

@@ -15,66 +15,15 @@
 #include "shop.h"
 #include "npc.h"
 #include "portal.h"
+#include "menu.h"
+#include "items.h"
 
-#define NK_INCLUDE_FIXED_TYPES
-#define NK_INCLUDE_STANDARD_IO
-#define NK_INCLUDE_STANDARD_VARARGS
-#define NK_INCLUDE_DEFAULT_ALLOCATOR
-#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
-#define NK_INCLUDE_FONT_BAKING
-#define NK_INCLUDE_DEFAULT_FONT
-#define NK_IMPLEMENTATION
-#define NK_SDL_RENDERER_IMPLEMENTATION
-#include "../Nuklear/nuklear.h"
-#include "../Nuklear/nuklear_sdl_renderer.h"
-
-
-#define WINDOW_WIDTH 1200
-#define WINDOW_HEIGHT 800
-
-
-/* ===============================================================
- *
- *                          EXAMPLE
- *
- * ===============================================================*/
- /* This are some code examples to provide a small overview of what can be
-  * done with this library. To try out an example uncomment the defines */
-  /*#define INCLUDE_ALL */
-  /*#define INCLUDE_STYLE */
-  /*#define INCLUDE_CALCULATOR */
-  /*#define INCLUDE_OVERVIEW */
-  /*#define INCLUDE_NODE_EDITOR */
-
-#ifdef INCLUDE_ALL
-#define INCLUDE_STYLE
-#define INCLUDE_CALCULATOR
-#define INCLUDE_CANVAS
-#define INCLUDE_OVERVIEW
-#define INCLUDE_NODE_EDITOR
-#endif
-
-#ifdef INCLUDE_STYLE
-#include "../../demo/common/style.c"
-#endif
-#ifdef INCLUDE_CALCULATOR
-#include "../../demo/common/calculator.c"
-#endif
-#ifdef INCLUDE_CANVAS
-#include "../../demo/common/canvas.c"
-#endif
-#ifdef INCLUDE_OVERVIEW
-#include "../../demo/common/overview.c"
-#endif
-#ifdef INCLUDE_NODE_EDITOR
-#include "../../demo/common/node_editor.c"
-#endif
 int main(int argc, char * argv[])
 {
     /*variable declarations*/
     int done = 0;
     const Uint8 * keys;
-    Sprite* sprite, * test;
+    Sprite* sprite, * test, *mainMenu;
     
     int mx,my, healthPercent;
     float mf = 0;
@@ -119,6 +68,8 @@ int main(int argc, char * argv[])
     /*demo setup*/
 
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
+    //mouse = gf2d_sprite_load_all("images/atest.png",32,32,2);
+
     /*main game loop*/
 
 
@@ -128,13 +79,20 @@ int main(int argc, char * argv[])
 
     testMap = vectormap_load("maps/testTown.json");
    
-    sprite = gf2d_sprite_load_image(testMap->testTest);
+    mainMenu = gf2d_sprite_load_image("images/backgrounds/mainMenu.png");
+    sprite = gf2d_sprite_load_image("images/backgrounds/town.png");
 
-    portalLeft = portal_new(vector2d(-100, -100), 0, 0);
+    Sprite* map = gf2d_sprite_load_image("images/map.png");
+    Sprite* mapMarker = gf2d_sprite_load_image("images/mapMarker.png");
+
+    
+    //portalLeft = portal_new(vector2d(-100, -100), 0, 0);
+    portalLeft = portal_new(vector2d(100, 675), 0, 2);
+
     portalRight = portal_new(vector2d(1100, 700), 0, 1);
 
     testSkill = entity_new(vector2d(100, 100));
-    test_player = player_new(vector2d(100, 100));
+    test_player = player_new(vector2d(100, 600));
     test_player->classNum = 0;
     //test_player->skillOneSprite = gf2d_sprite_load_all("images/chars/loki.png", 64, 64, 1);
     slog("test3");
@@ -193,19 +151,45 @@ int main(int argc, char * argv[])
         rollerSpawner = spawner_new(testMap->spawnerInfo[0].x, testMap->spawnerCoords[0], testMap->spawnerInfo[0].y, testMap->spawnerInfo[0].z);
         turretSpawner = spawner_new(testMap->spawnerInfo[4].x, testMap->spawnerCoords[4], testMap->spawnerInfo[4].y, testMap->spawnerInfo[4].z);
         }
-        else 
+        else if (testMap->mapID == 0)
         {
 
             shop = shop_new(vector2d(275, 700));
 
             npc = npc_new(vector2d(800, 700));
-            
+
 
             testSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
             manSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
             jumperSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
             rollerSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
             turretSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+        }
+        else if(testMap->mapID == 2)
+        {
+            testSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            manSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            jumperSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            rollerSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            turretSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+
+
+            shop = shop_new(vector2d(-100, -700));
+
+            npc = npc_new(vector2d(-400, -260));
+        }
+        else
+        {
+            testSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            manSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            jumperSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            rollerSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+            turretSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+
+
+            shop = shop_new(vector2d(-100, -700));
+
+            npc = npc_new(vector2d(-400, -260));
         }
  
     int experiencePercent;
@@ -215,182 +199,149 @@ int main(int argc, char * argv[])
    
 
 
-    //=====================NUKLEAR TESTING=======================
 
-    /* Platform */
-    SDL_Window* win;
-    SDL_Renderer* renderer;
-    int running = 1;
-    int flags = 0;
-    float font_scale = 1;
 
-    /* GUI */
-    struct nk_context* ctx;
-    struct nk_colorf bg;
+    // ============================ MENU INIT TESTING ============================================
 
-    /* SDL setup */
-    SDL_SetHint(SDL_HINT_VIDEO_HIGHDPI_DISABLED, "0");
-    SDL_Init(SDL_INIT_VIDEO);
 
-    win = SDL_CreateWindow("Demo",
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
 
-    if (win == NULL) {
-        SDL_Log("Error SDL_CreateWindow %s", SDL_GetError());
-        exit(-1);
-    }
 
-    flags |= SDL_RENDERER_ACCELERATED;
-    flags |= SDL_RENDERER_PRESENTVSYNC;
+    // ============================ MENU INIT TESTING ============================================
 
-#if 0
-    SDL_SetHint(SDL_HINT_RENDER_BATCHING, "1");
-    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "software");
-    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "software");
-    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengles2");
-#endif
 
-    renderer = SDL_CreateRenderer(win, -1, flags);
+    SDL_Rect play = { 400, 390, 465, 135 };
+    SDL_Rect levelEditor = { 415, 565, 485, 130 };
 
-    if (renderer == NULL) {
-        SDL_Log("Error SDL_CreateRenderer %s", SDL_GetError());
-        exit(-1);
-    }
+    Vector4D debugColor = { 240, 30, 30, 255 };
 
-    /* scale the renderer output for High-DPI displays */
+
+    while (test_player->gameState == 0)
     {
-        int render_w, render_h;
-        int window_w, window_h;
-        float scale_x, scale_y;
-        SDL_GetRendererOutputSize(renderer, &render_w, &render_h);
-        SDL_GetWindowSize(win, &window_w, &window_h);
-        scale_x = (float)(render_w) / (float)(window_w);
-        scale_y = (float)(render_h) / (float)(window_h);
-        SDL_RenderSetScale(renderer, scale_x, scale_y);
-        font_scale = scale_y;
-    }
 
-    /* GUI */
-    ctx = nk_sdl_init(win, renderer);
-    /* Load Fonts: if none of these are loaded a default font will be used  */
-    /* Load Cursor: if you uncomment cursor loading please hide the cursor */
-    {
-        struct nk_font_atlas* atlas;
-        struct nk_font_config config = nk_font_config(0);
-        struct nk_font* font;
+        SDL_PumpEvents();   // update SDL's internal event structures
+        keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
+        /*update things here*/
 
-        /* set up the font atlas and add desired font; note that font sizes are
-         * multiplied by font_scale to produce better results at higher DPIs */
-        nk_sdl_font_stash_begin(&atlas);
-        font = nk_font_atlas_add_default(atlas, 13 * font_scale, &config);
-        /*font = nk_font_atlas_add_from_file(atlas, "../../../extra_font/DroidSans.ttf", 14 * font_scale, &config);*/
-        /*font = nk_font_atlas_add_from_file(atlas, "../../../extra_font/Roboto-Regular.ttf", 16 * font_scale, &config);*/
-        /*font = nk_font_atlas_add_from_file(atlas, "../../../extra_font/kenvector_future_thin.ttf", 13 * font_scale, &config);*/
-        /*font = nk_font_atlas_add_from_file(atlas, "../../../extra_font/ProggyClean.ttf", 12 * font_scale, &config);*/
-        /*font = nk_font_atlas_add_from_file(atlas, "../../../extra_font/ProggyTiny.ttf", 10 * font_scale, &config);*/
-        /*font = nk_font_atlas_add_from_file(atlas, "../../../extra_font/Cousine-Regular.ttf", 13 * font_scale, &config);*/
-        nk_sdl_font_stash_end();
+       // gfc_input_update();
+        SDL_GetMouseState(&mx, &my);
+        mf += 0.1;
+        if (mf >= 16.0)mf = 0;
 
-        /* this hack makes the font appear to be scaled down to the desired
-         * size and is only necessary when font_scale > 1 */
-        font->handle.height /= font_scale;
-        /*nk_style_load_all_cursors(ctx, atlas->cursors);*/
-        nk_style_set_font(ctx, &font->handle);
-    }
+        SDL_Rect mouseRect = { mx, my, 2, 2 };
 
-#ifdef INCLUDE_STYLE
-    /*set_style(ctx, THEME_WHITE);*/
-    /*set_style(ctx, THEME_RED);*/
-    /*set_style(ctx, THEME_BLUE);*/
-    /*set_style(ctx, THEME_DARK);*/
-#endif
 
-    bg.r = 0.10f, bg.g = 0.18f, bg.b = 0.24f, bg.a = 1.0f;
-    while (running)
-    {
-        /* Input */
-        SDL_Event evt;
-        nk_input_begin(ctx);
-        while (SDL_PollEvent(&evt)) {
-            if (evt.type == SDL_QUIT) goto cleanup;
-            nk_sdl_handle_event(&evt);
-        }
-        nk_input_end(ctx);
+        gf2d_graphics_clear_screen();// clears drawing buffers
+        // all drawing should happen betweem clear_screen and next_frame
+            //backgrounds drawn first
 
-        /* GUI */
-        if (nk_begin(ctx, "Demo", nk_rect(50, 50, 230, 250),
-            NK_WINDOW_BORDER | NK_WINDOW_MOVABLE | NK_WINDOW_SCALABLE |
-            NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE))
+
+
+        gf2d_sprite_draw_image(mainMenu, vector2d(0, 0));
+
+        gf2d_draw_rect(play, debugColor);
+        gf2d_draw_rect(levelEditor, debugColor);
+        gf2d_draw_rect(mouseRect, debugColor);
+
+
+        gf2d_sprite_draw(
+            mouse,
+            vector2d(mx, my),
+            NULL,
+            NULL,
+            NULL,
+            NULL,
+            &mouseColor,
+            (int)mf);
+
+        if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &play))
         {
-            enum { EASY, HARD };
-            static int op = EASY;
-            static int property = 20;
+            slog("enter game");
 
-            nk_layout_row_static(ctx, 30, 80, 1);
-            if (nk_button_label(ctx, "button"))
-                fprintf(stdout, "button pressed\n");
-            nk_layout_row_dynamic(ctx, 30, 2);
-            if (nk_option_label(ctx, "easy", op == EASY)) op = EASY;
-            if (nk_option_label(ctx, "hard", op == HARD)) op = HARD;
-            nk_layout_row_dynamic(ctx, 25, 1);
-            nk_property_int(ctx, "Compression:", 0, &property, 100, 10, 1);
 
-            nk_layout_row_dynamic(ctx, 20, 1);
-            nk_label(ctx, "background:", NK_TEXT_LEFT);
-            nk_layout_row_dynamic(ctx, 25, 1);
-            if (nk_combo_begin_color(ctx, nk_rgb_cf(bg), nk_vec2(nk_widget_width(ctx), 400))) {
-                nk_layout_row_dynamic(ctx, 120, 1);
-                bg = nk_color_picker(ctx, bg, NK_RGBA);
-                nk_layout_row_dynamic(ctx, 25, 1);
-                bg.r = nk_propertyf(ctx, "#R:", 0, bg.r, 1.0f, 0.01f, 0.005f);
-                bg.g = nk_propertyf(ctx, "#G:", 0, bg.g, 1.0f, 0.01f, 0.005f);
-                bg.b = nk_propertyf(ctx, "#B:", 0, bg.b, 1.0f, 0.01f, 0.005f);
-                bg.a = nk_propertyf(ctx, "#A:", 0, bg.a, 1.0f, 0.01f, 0.005f);
-                nk_combo_end(ctx);
+            for (int i = 255; i > 0; i -= 2)
+            {
+                gf2d_graphics_clear_screen();
+                //vector2d(test_player->hitBox.x, test_player->hitBox.y-100)
+                //gf2d_sprite_draw_image(test_player->sprite, test_player->position);
+                //entity_draw(test_player);
+
+                gf2d_sprite_draw_image(mainMenu, vector2d(0, 0));
+
+
+                SDL_SetTextureColorMod(
+                    mainMenu->texture,
+                    i,
+                    i,
+                    i);
+                SDL_SetTextureAlphaMod(
+                    mainMenu->texture,
+                    i);
+                SDL_SetTextureColorMod(
+                    test_player->sprite->texture,
+                    i,
+                    i,
+                    i);
+                SDL_SetTextureAlphaMod(
+                    test_player->sprite->texture,
+                    i);
+                gf2d_grahics_next_frame();
+
+            }
+
+
+
+
+
+            test_player->gameState = 1;
+
+
+            for (int i = 0; i < 255; i += 2)
+            {
+                gf2d_graphics_clear_screen();
+
+                gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+                entity_draw(test_player);
+
+                //gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+                SDL_SetTextureColorMod(
+                    sprite->texture,
+                    i,
+                    i,
+                    i);
+                SDL_SetTextureAlphaMod(
+                    sprite->texture,
+                    i);
+
+
+                SDL_SetTextureColorMod(
+                    test_player->sprite->texture,
+                    i,
+                    i,
+                    i);
+                SDL_SetTextureAlphaMod(
+                    test_player->sprite->texture,
+                    i);
+                gf2d_grahics_next_frame();
+
             }
         }
-        nk_end(ctx);
 
-        /* -------------- EXAMPLES ---------------- */
-#ifdef INCLUDE_CALCULATOR
-        calculator(ctx);
-#endif
-#ifdef INCLUDE_CANVAS
-        canvas(ctx);
-#endif
-#ifdef INCLUDE_OVERVIEW
-        overview(ctx);
-#endif
-#ifdef INCLUDE_NODE_EDITOR
-        node_editor(ctx);
-#endif
-        /* ----------------------------------------- */
-
-        SDL_SetRenderDrawColor(renderer, bg.r * 255, bg.g * 255, bg.b * 255, bg.a * 255);
-        SDL_RenderClear(renderer);
-
-        nk_sdl_render(NK_ANTI_ALIASING_ON);
-
-        SDL_RenderPresent(renderer);
+        gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
     }
-
-cleanup:
-    nk_sdl_shutdown();
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(win);
-    SDL_Quit();
-
-    //=====================NUKLEAR TESTING=======================
-
-
-
-
-
-
     
+    //Entity* itemTest = NewItem(vector2d(100, 100), 1);
     
+    Sprite* mirrorSprite = gf2d_sprite_load_image("images/items/mirrorShield.png");
+    Sprite*  BFSSprite = gf2d_sprite_load_image("images/items/BFS.png");
+    Sprite*  sneakersSprite= gf2d_sprite_load_image("images/items/sneakers.png");
+    Sprite* regenBraceletSprite = gf2d_sprite_load_image("images/items/regenBracelet.png");
+    Sprite* fireCapeSprite = gf2d_sprite_load_image("images/items/fireCape.png");
+    Sprite* healingSprite = gf2d_sprite_load_image("images/healing.png");
+
+    int regenTimer = 0;
+    int reflectTimer = 0;
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
@@ -407,6 +358,9 @@ cleanup:
         gf2d_graphics_clear_screen();// clears drawing buffers
         // all drawing should happen betweem clear_screen and next_frame
             //backgrounds drawn first
+
+
+      
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
 
            // slog("================= %i", test_player->playerCanTeleportToMapID);
@@ -463,54 +417,113 @@ cleanup:
                 
 
 
-
-                switch (test_player->playerCanTeleportToMapID && test_player->teleporting == 1)
+                if (test_player->teleporting == 1) 
                 {
-                case 0:
-                    testMap = vectormap_load("maps/testTown.json");
-                    sprite = gf2d_sprite_load_image(testMap->testTest);
-                    shop = shop_new(vector2d(275, 700));
+                    if (portalLeft)entity_free(portalLeft);
+                    if (portalRight)entity_free(portalRight);
 
-                    npc = npc_new(vector2d(800, 700));
+                    //slog("teleporting to map ID %i", test_player->playerCanTeleportToMapID);
+                    switch (test_player->playerCanTeleportToMapID)
+                    {
+                    case 0:
 
-                    portalRight = portal_new(vector2d(1100, 675), 0, 1);
+                        if (testMap->mapID == 2)
+                        {
+                            test_player->position = vector2d(100, 650);
+                        }
+                        else
+                        {
+                            test_player->position = vector2d(1100, 650);
 
-                    testSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
-                    manSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
-                    jumperSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
-                    rollerSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
-                    turretSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        }
 
-                    test_player->position = vector2d(1100, 650);
+                        testMap = vectormap_load("maps/testTown.json");
+                        sprite = gf2d_sprite_load_image(testMap->testTest);
+                        shop = shop_new(vector2d(275, 700));
 
-                    test_player->teleporting = 0;
+                        npc = npc_new(vector2d(800, 700));
 
-                    break;
-                case 1:
-                    testMap = vectormap_load("maps/test.json");
+                        portalLeft = portal_new(vector2d(100, 675), 0, 2);
+                        portalRight = portal_new(vector2d(1100, 675), 0, 1);
 
-                    sprite = gf2d_sprite_load_image(testMap->testTest);
+                        testSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        manSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        jumperSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        rollerSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        turretSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
 
-                    shop = shop_new(vector2d(-100, -700));
+                        
 
-                    npc = npc_new(vector2d(-400, -260));
+                        test_player->teleporting = 0;
 
-                    portalLeft = portalRight = portal_new(vector2d(100, 675), 1, 0);
+                        break;
+                    case 1:
+                        testMap = vectormap_load("maps/test.json");
 
-                    testSpawner = spawner_new(testMap->spawnerInfo[3].x, testMap->spawnerCoords[3], testMap->spawnerInfo[3].y, testMap->spawnerInfo[3].z);
-                    manSpawner = spawner_new(testMap->spawnerInfo[1].x, testMap->spawnerCoords[1], testMap->spawnerInfo[1].y, testMap->spawnerInfo[1].z);
-                    jumperSpawner = spawner_new(testMap->spawnerInfo[2].x, testMap->spawnerCoords[2], testMap->spawnerInfo[2].y, testMap->spawnerInfo[2].z);
-                    rollerSpawner = spawner_new(testMap->spawnerInfo[0].x, testMap->spawnerCoords[0], testMap->spawnerInfo[0].y, testMap->spawnerInfo[0].z);
-                    turretSpawner = spawner_new(testMap->spawnerInfo[4].x, testMap->spawnerCoords[4], testMap->spawnerInfo[4].y, testMap->spawnerInfo[4].z);
+                        sprite = gf2d_sprite_load_image(testMap->testTest);
 
-                    test_player->position = vector2d(100, 650);
+                        shop = shop_new(vector2d(-100, -700));
 
-                    test_player->teleporting = 0;
-                    break;
-                case 2:
-                    break;
+                        npc = npc_new(vector2d(-400, -260));
+
+                        portalLeft = portal_new(vector2d(100, 675), 1, 0);
+
+                        testSpawner = spawner_new(testMap->spawnerInfo[3].x, testMap->spawnerCoords[3], testMap->spawnerInfo[3].y, testMap->spawnerInfo[3].z);
+                        manSpawner = spawner_new(testMap->spawnerInfo[1].x, testMap->spawnerCoords[1], testMap->spawnerInfo[1].y, testMap->spawnerInfo[1].z);
+                        jumperSpawner = spawner_new(testMap->spawnerInfo[2].x, testMap->spawnerCoords[2], testMap->spawnerInfo[2].y, testMap->spawnerInfo[2].z);
+                        rollerSpawner = spawner_new(testMap->spawnerInfo[0].x, testMap->spawnerCoords[0], testMap->spawnerInfo[0].y, testMap->spawnerInfo[0].z);
+                        turretSpawner = spawner_new(testMap->spawnerInfo[4].x, testMap->spawnerCoords[4], testMap->spawnerInfo[4].y, testMap->spawnerInfo[4].z);
+
+                        test_player->position = vector2d(100, 650);
+
+                        test_player->teleporting = 0;
+                        break;
+                    case 2:
+                        testMap = vectormap_load("maps/demoMap.json");
+                        sprite = gf2d_sprite_load_image("images/backgrounds/demo.png");
+
+
+                        shop = shop_new(vector2d(-100, -700));
+
+                        npc = npc_new(vector2d(-400, -260));
+
+                        portalRight = portal_new(vector2d(1100, 675), 2, 0);
+
+                        testSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        manSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        jumperSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        rollerSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        turretSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+
+                        test_player->position = vector2d(1100, 650);
+
+                        test_player->teleporting = 0;
+
+                        break;
+                    case -1:
+                        testMap = vectormap_load("maps/demoMap.json");
+                        sprite = gf2d_sprite_load_image("images/backgrounds/demo.png");
+
+
+                        shop = shop_new(vector2d(-100, -700));
+
+                        npc = npc_new(vector2d(-400, -260));
+
+                        portalRight = portal_new(vector2d(1100, 675), 2, 0);
+
+                        testSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        manSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        jumperSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        rollerSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+                        turretSpawner = spawner_new(1, vector2d(-100, -100), 0, 999999);
+
+                        test_player->position = vector2d(1100, 650);
+
+                        test_player->teleporting = 0;
+                        break;
+
+                    }
                 }
-                
                 for (int i = 0; i < 255; i += 2)
                 {
                     gf2d_graphics_clear_screen();
@@ -561,6 +574,8 @@ cleanup:
             //change controls from wasd to arrow keys
             entity_draw(portalRight);
             entity_draw(portalLeft);
+            portal_think(portalRight, testMap);
+            portal_think(portalLeft, testMap);
             entity_draw(test_player);
             SimplePlatformCollision(test_player, testMap);
             BoundingBoxCollision(test_player, testMap);
@@ -568,8 +583,42 @@ cleanup:
             DoSkills(test_player);
             SkillThink(test_player, test_player->activeSkill, test_player->skillOnePosition);
        
-          
+            if (test_player->hasFireCape == 1)
+            {
+                BurnNearby();
+            }
+            if (test_player->hasRegenBracelet == 1)
+            {
+                regenTimer++;
 
+                if (regenTimer >= 540)
+                {
+                    gf2d_sprite_draw_image(healingSprite, vector2d(test_player->hitBox.x+16, test_player->hitBox.y-80));
+                    if (regenTimer >= 600)
+                    {
+                        test_player->health += 250;
+                        if (test_player->health > test_player->maxHealth) test_player->health = test_player->maxHealth;
+                        regenTimer = 0;
+                    }
+                }
+            }
+            if (test_player->isReflecting)
+            {
+                Vector2D tempVector;
+                reflectTimer++;
+                if (reflectTimer == 1)
+                {
+                    //tempVector = { test_player->position.x + gfc_crandom() * 200,test_player->position.y + gfc_crandom() * 200 };
+                    tempVector.x = test_player->position.x + gfc_random() * 400;
+                    tempVector.y = test_player->position.y + gfc_crandom() * 400;
+                }
+                if (reflectTimer > 60)
+                {
+                    reflectTimer = 0;
+                    test_player->isReflecting = 0;
+                }
+                gf2d_draw_line(test_player->position, tempVector, vector4d(250, 15, 15, 255));
+            }
             //TODO 
             //Spawner/Npc/mob thinking should not be called individually
 
@@ -633,6 +682,7 @@ cleanup:
                 gf2d_sprite_draw_image(test_player->healthPotSprite, spot);
 
             }
+            //entity_draw(itemTest);
 
             //TODO
             //again, garbage need menu system
@@ -668,18 +718,35 @@ cleanup:
             gf2d_sprite_draw_image(test_player->xp, vector2d(300, 40));
 
 
-            gf2d_sprite_draw(
-                mouse,
-                vector2d(mx,my),
-                NULL,
-                NULL,
-                NULL,
-                NULL,
-                &mouseColor,
-                (int)mf);
+
+            if (test_player->isMapOpen == 1)
+            {
+                gf2d_sprite_draw_image(map, vector2d(100, 110));
+
+               if(test_player->hasMirrorShield) gf2d_sprite_draw_image(mirrorSprite, vector2d(1017, 125));
+               if (test_player->hasBFS) gf2d_sprite_draw_image(BFSSprite, vector2d(1017, 189));
+               if (test_player->hasSneakers) gf2d_sprite_draw_image(sneakersSprite, vector2d(1017, 253));
+               if (test_player->hasRegenBracelet) gf2d_sprite_draw_image(regenBraceletSprite, vector2d(1017, 317));
+               if (test_player->hasFireCape) gf2d_sprite_draw_image(fireCapeSprite, vector2d(1017, 381));
+
+               gf2d_sprite_draw(
+                   mouse,
+                   vector2d(mx, my),
+                   NULL,
+                   NULL,
+                   NULL,
+                   NULL,
+                   &mouseColor,
+                   (int)mf);
+            }
+
+           
                 
          
-           
+            // ===================== MENU TESTING ============================
+
+
+            // ===================== MENU TESTING ============================
 
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
          
