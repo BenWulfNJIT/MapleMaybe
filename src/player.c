@@ -20,7 +20,7 @@ void player_think(Entity* self)
     self->hitBox.y = self->position.y - 32;
     self->hitBox.w = 64;
     self->hitBox.h = 64;
-
+    
     if (self->standingOnPlatform == 1 && self->velocity.y > 0)
     {
         self->velocity.y = 0;
@@ -105,6 +105,12 @@ Entity* player_new(Vector2D position)
     self->showExplosion = 0;
     self->showHealing = 0;
     self->canWin = 0;
+    self->canUpgrade = 0;
+    self->healthBonus = 0;
+    self->damageBonus = 0;
+    self->healthSlot = 0;
+    self->moveSpeedBonus = 0;
+    self->dodgeBonus = 0;
     self->think = player_think;
 
 
@@ -192,7 +198,7 @@ void ControlMovement(Entity* self)
 
     }
    
-    if (self->shopping && gfc_input_key_pressed("h") && self->currency >= 50 && self->healthPotCount < 5)
+    if (self->shopping && gfc_input_key_pressed("h") && self->currency >= 50 && self->healthPotCount < (5+self->healthSlot))
     {
         self->healthPotCount++;
         self->currency -= 50;
@@ -282,6 +288,9 @@ void ControlMovement(Entity* self)
     {
         self->velocity.x *= 2;
     }
+    if(self->velocity.x >0) self->velocity.x += self->moveSpeedBonus;
+    if(self->velocity.x <0) self->velocity.x -= self->moveSpeedBonus;
+   // slog("speed %f", self->velocity.x);
 }
 
 void DoSkills(Entity* self)

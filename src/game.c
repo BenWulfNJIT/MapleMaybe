@@ -367,6 +367,14 @@ int main(int argc, char * argv[])
     int explosionTimer = 120;
     int healingTimer = 120;
 
+    //levelup stuff
+
+    Sprite* upgradeMenu = gf2d_sprite_load_image("images/levelUp.png");
+    SDL_Rect healthUp = { 365,135, 493, 67 };
+    SDL_Rect damageUp = { 383,220, 459, 64 };
+    SDL_Rect healthPotUp = { 379, 301, 471, 67 };
+    SDL_Rect moveSpeedUp = {400, 395, 443, 50};
+    SDL_Rect dodgeUp = { 394, 480, 456, 69 };
 
     while(!done)
     {
@@ -807,7 +815,81 @@ int main(int argc, char * argv[])
             }
 
            
-                
+            while (test_player->canUpgrade == 1 && test_player->level <= 5)
+            {
+
+                SDL_PumpEvents();   // update SDL's internal event structures
+                keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
+                /*update things here*/
+
+               // gfc_input_update();
+                SDL_GetMouseState(&mx, &my);
+                mf += 0.1;
+                if (mf >= 16.0)mf = 0;
+                gf2d_graphics_clear_screen();
+                //vector2d(test_player->hitBox.x, test_player->hitBox.y-100)
+                //gf2d_sprite_draw_image(test_player->sprite, test_player->position);
+
+                gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+                entity_draw(test_player);
+
+                gf2d_sprite_draw_image(upgradeMenu, vector2d(100, 110));
+
+                gf2d_draw_rect(healthUp, vector4d(240, 10, 240, 255));
+                gf2d_draw_rect(damageUp, vector4d(240, 10, 240, 255));
+                gf2d_draw_rect(healthPotUp, vector4d(240, 10, 240, 255));
+                gf2d_draw_rect(moveSpeedUp, vector4d(240, 10, 240, 255));
+                gf2d_draw_rect(dodgeUp, vector4d(240, 10, 240, 255));
+
+
+                gf2d_sprite_draw(
+                    mouse,
+                    vector2d(mx, my),
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL,
+                    &mouseColor,
+                    (int)mf);
+                SDL_Rect mouseRect = { mx, my, 2, 2 };
+                gf2d_draw_rect(mouseRect, vector4d(240, 10, 240, 255));
+
+                gf2d_grahics_next_frame();
+
+                if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &healthUp))
+                {
+                    test_player->canUpgrade = 0;
+                    test_player->maxHealth += 100;
+                }
+                else if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &damageUp))
+                {
+                    test_player->canUpgrade = 0;
+                    test_player->damageBonus += 10;
+
+                }
+                else if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &healthPotUp))
+                {
+                    test_player->canUpgrade = 0;
+                    test_player->healthSlot += 1;
+
+                }
+                else if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &moveSpeedUp))
+                {
+                    test_player->canUpgrade = 0;
+                    test_player->moveSpeedBonus += 1;
+
+                }
+                else if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &dodgeUp))
+                {
+                    test_player->canUpgrade = 0;
+                    test_player->dodgeBonus += 1;
+
+                }
+
+                test_player->health = test_player->maxHealth;
+             
+            }
          
             // ===================== MENU TESTING ============================
 

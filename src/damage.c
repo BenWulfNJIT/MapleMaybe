@@ -5,6 +5,18 @@
 
 void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 {
+
+	if (attacker->team == 1)
+	{
+		damage += attacker->damageBonus;
+
+	}
+	if (recipient->team == 1 && gfc_random() * 10 <= recipient->dodgeBonus)
+	{
+		//slog("avoided damage");
+		recipient->damageBoostTime = 60;
+	}
+
 	if (recipient->team == -1) return;
 	if (attacker->team == 1 && attacker->hasBFS == 1)
 	{
@@ -55,6 +67,7 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 			{
 				attacker->level++;
 				attacker->experience -= 50;
+				attacker->canUpgrade = 1;
 			}
 		}
 		recipient->health = 0;

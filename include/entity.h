@@ -122,6 +122,14 @@ typedef struct Entity_S
     int         dashTimer;
     int         canWin;
 
+    //ability upgrades info
+    int         canUpgrade;
+    int         healthBonus;
+    int         damageBonus;
+    int         healthSlot;
+    int         moveSpeedBonus;
+    int         dodgeBonus;
+
     //Spawner info
     //Entity* entityToSpawn;
     Vector2D positionToSpawn;
