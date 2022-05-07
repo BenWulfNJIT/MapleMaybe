@@ -3,14 +3,15 @@
     "mapID": 2,
     "background": "images/backgrounds/demo.png",
     "bounding_box": [ 1200, 720 ],
-    "platforms": [
-     
-      [ 0, 700, 1200, 700 ]
-      
-     
-    
-  
-    ],
+  "platforms": [
+
+    [ 0, 700, 1200, 700 ]
+
+
+
+
+
+  ],
   
   
     "spawnInfo": [

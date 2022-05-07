@@ -19,6 +19,8 @@
 #include "menu.h"
 #include "items.h"
 #include "interactables.h"
+#include "simple_json.h"
+#include "editor.h"
 
 int main(int argc, char * argv[])
 {
@@ -285,7 +287,137 @@ int main(int argc, char * argv[])
             NULL,
             &mouseColor,
             (int)mf);
+        Sprite* editorMenu = gf2d_sprite_load_image("images/editorMenu.png");
+        SDL_Rect editDemo1 = {525, 260, 200,60};
+        SDL_Rect editDemo2 = { 525, 320, 200,60 };
+        SDL_Rect editDemo3 = { 525, 380, 200,60 };
 
+        int editing = 0;
+        int startLevelEditor = 0;
+        if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &levelEditor))
+        {
+            startLevelEditor = 1;
+            while (startLevelEditor == 1)
+            {
+                SDL_PumpEvents();
+                keys = SDL_GetKeyboardState(NULL);
+                SDL_GetMouseState(&mx, &my);
+                mf += 0.1;
+                if (mf >= 16.0)mf = 0;
+
+                SDL_Rect mouseRect = { mx, my, 2, 2 };
+                gf2d_graphics_clear_screen();
+
+
+                gf2d_sprite_draw_image(editorMenu, vector2d(525, 260));
+                if (SDL_HasIntersection(&mouseRect, &editDemo1))
+                {
+                    gf2d_draw_rect(editDemo1, vector4d(255,0,0,255));
+                }
+                if (SDL_HasIntersection(&mouseRect, &editDemo2))
+                {
+                    gf2d_draw_rect(editDemo2, vector4d(255, 0, 0, 255));
+                }
+                if (SDL_HasIntersection(&mouseRect, &editDemo3))
+                {
+                    gf2d_draw_rect(editDemo3, vector4d(255, 0, 0, 255));
+                }
+                if(SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &editDemo2))
+                {
+                    editing = 1;
+                    
+                    SJson* editMap;
+                    Vector4D* platList;
+                    Sprite* editBackgroundSprite;
+                    int platformCount;
+                    int tempCoord1, tempCoord2, tempCoord3, tempCoord4;
+                    platList = (Vector4D*)gfc_allocate_array(sizeof(Vector4D), 20);
+
+                    editMap = sj_load("maps/testTown.json");
+                    if (!editMap) slog("Failed to load map to edit");
+
+                    char* backgroundSpriteName = sj_get_string_value(sj_object_get_value(editMap, "background"));
+                    if (!backgroundSpriteName) slog("Failed to get background sprite name");
+
+                    editBackgroundSprite = gf2d_sprite_load_image(backgroundSpriteName);
+                    platformCount = sj_array_get_count(sj_object_get_value(editMap, "platforms"));
+                    slog("num platforms: %i", platformCount);
+                    for (int i = 0; i < platformCount; i++)
+                    {
+                        sj_get_integer_value (sj_array_get_nth(sj_array_get_nth(sj_object_get_value(editMap, "platforms"), i), 0), &tempCoord1);
+                        //slog("Wild test1: %i", tempCoord1);
+                        sj_get_integer_value(sj_array_get_nth(sj_array_get_nth(sj_object_get_value(editMap, "platforms"), i), 1), &tempCoord2);
+                        //slog("Wild test2: %i", tempCoord2);
+                        sj_get_integer_value(sj_array_get_nth(sj_array_get_nth(sj_object_get_value(editMap, "platforms"), i), 2), &tempCoord3);
+                        //slog("Wild test3: %i", tempCoord3);
+                        sj_get_integer_value(sj_array_get_nth(sj_array_get_nth(sj_object_get_value(editMap, "platforms"), i), 3), &tempCoord4);
+                        //slog("Wild test4: %i", tempCoord4);
+
+                        platList[i].x = tempCoord1;
+                        platList[i].y = tempCoord2;
+                        platList[i].z = tempCoord3;
+                        platList[i].w = tempCoord4;
+
+                    }
+                   
+                    //load json stuff here
+                    //save into variables
+                    //free json
+                    sj_free(editMap);
+                    while (editing == 1)
+                    {
+                        //draw background
+                        //handle user input to edit
+                        //draw platforms
+                        //give them a button to escape
+                        SDL_PumpEvents();
+                        keys = SDL_GetKeyboardState(NULL);
+                        SDL_GetMouseState(&mx, &my);
+                        mf += 0.1;
+                        if (mf >= 16.0)mf = 0;
+
+                        SDL_Rect mouseRect = { mx, my, 2, 2 };
+                        gf2d_graphics_clear_screen();
+                        gf2d_sprite_draw_image(editBackgroundSprite, vector2d(0, 0));
+
+                        //draw plats
+                        for (int i = 0; i < platformCount; i++)
+                        {
+                           
+
+                            gf2d_draw_line(vector2d(platList[i].x,platList[i].y), vector2d(platList[i].z, platList[i].w), vector4d(255, 0, 0, 255));
+                        }
+
+
+                        gf2d_sprite_draw(
+                            mouse,
+                            vector2d(mx, my),
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL,
+                            &mouseColor,
+                            (int)mf);
+
+                        gf2d_grahics_next_frame();
+                        
+                    }
+                }
+                gf2d_sprite_draw(
+                    mouse,
+                    vector2d(mx, my),
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL,
+                    &mouseColor,
+                    (int)mf);
+
+                gf2d_grahics_next_frame();
+            }
+
+        }
+        //C:\Users\bdwul\NJIT\Spring22\IT276\Game2D\maps
         if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &play))
         {
             slog("enter game");
