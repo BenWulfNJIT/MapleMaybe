@@ -1541,7 +1541,8 @@ int main(int argc, char * argv[])
             test_player->health = test_player->maxHealth;
         }
 
-        if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
+        if (keys[SDL_SCANCODE_LSHIFT])done = 1; // exit condition
+        
 
        //slog("Rendering at %f FPS", gf2d_graphics_get_frames_per_second());
     }

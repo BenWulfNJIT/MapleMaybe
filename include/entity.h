@@ -138,6 +138,7 @@ typedef struct Entity_S
     //sound?
     Mix_Chunk* jumpNoise;
 
+    int         pause;
     //Spawner info
     //Entity* entityToSpawn;
     Vector2D positionToSpawn;

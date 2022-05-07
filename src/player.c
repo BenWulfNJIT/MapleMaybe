@@ -122,6 +122,7 @@ Entity* player_new(Vector2D position)
     self->activeQuest = 1;
     self->quest1Counter = 0;
     self->questOpen = 0;
+    self->pause = 0;
     self->think = player_think;
 
 
@@ -162,6 +163,15 @@ void ControlMovement(Entity* self)
    // slog("canPurchase = %i", self->canPurchase);
 
    
+    if (self->pause == 0 && gfc_input_key_pressed("ESCAPE"))
+    {
+        slog("open menu");
+    }
+    else if (self->pause == 1 && gfc_input_key_pressed("ESCAPE"))
+    {
+        slog("close menu");
+    }
+
     if (self->questOpen == 0 && gfc_input_key_pressed("q"))
     {
         self->questOpen = 1;
@@ -185,7 +195,7 @@ void ControlMovement(Entity* self)
     }
 
 
-    if (self->playerCanTeleportToMapID != -1 && gfc_input_key_pressed("w"))
+    if (self->playerCanTeleportToMapID != -1 && gfc_input_key_pressed("UP"))
     {
         slog("Test");
         self->teleporting = 1;
@@ -286,25 +296,25 @@ void ControlMovement(Entity* self)
         self->doubleJump = 0;
     }
 
-    if (gfc_input_key_held("a") && !gfc_input_key_held("d"))
+    if (gfc_input_key_held("LEFT") && !gfc_input_key_held("RIGHT"))
     {
         //accelerate to walk
         self->facing = 0;
         self->velocity.x = -speed;
     }
-    else if (gfc_input_key_released("a") && !gfc_input_key_held("d"))
+    else if (gfc_input_key_released("LEFT") && !gfc_input_key_held("RIGHT"))
     {
         //slow down to stop
         self->velocity.x = 0;
         self->quest1Counter++;
 
     }
-    else if (gfc_input_key_held("d") && !gfc_input_key_held("a"))
+    else if (gfc_input_key_held("RIGHT") && !gfc_input_key_held("LEFT"))
     {
         self->facing = 1;
         self->velocity.x = speed;
     }
-    else if (gfc_input_key_released("d") && !gfc_input_key_pressed("a"))
+    else if (gfc_input_key_released("RIGHT") && !gfc_input_key_pressed("LEFT"))
     {
         self->velocity.x = 0;
         self->quest1Counter++;
@@ -314,7 +324,7 @@ void ControlMovement(Entity* self)
         }
 
     }
-    else if (gfc_input_key_held("a") && gfc_input_key_held("d"))
+    else if (gfc_input_key_held("LEFT") && gfc_input_key_held("RIGHT"))
     {
         self->velocity.x = 0;
     }
