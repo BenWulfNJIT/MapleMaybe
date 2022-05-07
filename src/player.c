@@ -166,10 +166,12 @@ void ControlMovement(Entity* self)
     if (self->pause == 0 && gfc_input_key_pressed("ESCAPE"))
     {
         slog("open menu");
+        self->pause = 1;
     }
     else if (self->pause == 1 && gfc_input_key_pressed("ESCAPE"))
     {
         slog("close menu");
+        self->pause = 0;
     }
 
     if (self->questOpen == 0 && gfc_input_key_pressed("q"))

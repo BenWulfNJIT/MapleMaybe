@@ -243,6 +243,11 @@ int main(int argc, char * argv[])
 
     int selecting = 0;
 
+    Sprite* pauseMenu = gf2d_sprite_load_image("images/pause.png");
+    SDL_Rect continuebutton = {257, 386, 317,143};
+    SDL_Rect quitButton = {689, 394, 317, 143};
+
+
     while (test_player->gameState == 0)
     {
 
@@ -1396,6 +1401,56 @@ int main(int argc, char * argv[])
          
             // ===================== MENU TESTING ============================
 
+            while (test_player->pause == 1)
+            {
+                SDL_PumpEvents();   // update SDL's internal event structures
+                keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
+                /*update things here*/
+
+               // gfc_input_update();
+                SDL_GetMouseState(&mx, &my);
+                mf += 0.1;
+                if (mf >= 16.0)mf = 0;
+                SDL_Rect mouseRect = { mx, my, 2, 2 };
+
+                gf2d_graphics_clear_screen();
+                //vector2d(test_player->hitBox.x, test_player->hitBox.y-100)
+                //gf2d_sprite_draw_image(test_player->sprite, test_player->position);
+
+                gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+                entity_draw(test_player);
+
+                gf2d_sprite_draw_image(pauseMenu, vector2d(100, 110));
+                gf2d_draw_rect(mouseRect, vector4d(240, 10, 240, 255));
+
+                gf2d_draw_rect(continuebutton, vector4d(240, 10, 240, 255));
+                gf2d_draw_rect(quitButton, vector4d(240, 10, 240, 255));
+            
+
+
+                gf2d_sprite_draw(
+                    mouse,
+                    vector2d(mx, my),
+                    NULL,
+                    NULL,
+                    NULL,
+                    NULL,
+                    &mouseColor,
+                    (int)mf);
+                gf2d_draw_rect(mouseRect, vector4d(240, 10, 240, 255));
+                if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &continuebutton))
+                {
+                    test_player->pause = 0;
+                }
+                else if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &quitButton))
+                {
+                    test_player->pause = 0;
+                    done = 1;
+
+                }
+                gf2d_grahics_next_frame();
+            }
 
             // ===================== MENU TESTING ============================
 
