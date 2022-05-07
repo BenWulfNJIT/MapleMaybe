@@ -1,6 +1,6 @@
 #ifndef __ENTITY_H__
 #define __ENTITY_H__
-
+#include <SDL_mixer.h>
 #include "gf2d_sprite.h"
 #include "vector_map.h"
 typedef struct Entity_S
@@ -134,6 +134,9 @@ typedef struct Entity_S
     int         activeQuest; /**quests 1-5*/
     int         questOpen;
     int         quest1Counter;
+
+    //sound?
+    Mix_Chunk* jumpNoise;
 
     //Spawner info
     //Entity* entityToSpawn;

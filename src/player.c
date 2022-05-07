@@ -4,6 +4,10 @@
 #include "player.h"
 #include "skill.h"
 #include "portal.h"
+#include <SDL_mixer.h>
+
+
+
 
 void player_think(Entity* self)
 {
@@ -33,6 +37,10 @@ Entity* player_new(Vector2D position)
     Entity* self;
     self = entity_new();
     if (!self)return NULL;
+
+    self->jumpNoise = Mix_LoadWAV("audio/jump.wav");
+    Mix_VolumeChunk(self->jumpNoise, 10);
+
     self->sprite = gf2d_sprite_load_all("images/chars/thor.png", 64, 114, 1);
     self->skillOneSprite = gf2d_sprite_load_all("images/skills/thorSkill1.png", 128, 64, 1);
     self->skillTwoSprite = gf2d_sprite_load_all("images/skills/thorSkill2.png", 256, 32, 1);
@@ -127,6 +135,7 @@ void ControlMovement(Entity* self)
 {
     float speed, jump;
     Entity* skill;
+  
 
     //skill->sprite = gf2d_sprite_load_image("images/fireball.png");
     Vector2D skillPos;
@@ -250,16 +259,30 @@ void ControlMovement(Entity* self)
     if (gfc_input_key_released(" ") && self->classNum == 4 && self->standingOnPlatform) 
     {
         self->velocity.y = jump*self->jumpPower;
+        if (Mix_PlayChannel(-1, self->jumpNoise, 0) == -1)
+        {
+            return 1;
+        }
         self->jumpPower = 0.8;
     }
 
     if (gfc_input_key_pressed(" ") && self->standingOnPlatform && self->classNum != 4 && self->classNum != 2)
     {
         self->velocity.y = jump;
+      
+
+        if (Mix_PlayChannel(-1, self->jumpNoise, 0) == -1)
+        {
+            return 1;
+        }
     }
     else if (gfc_input_key_pressed(" ") && self->classNum == 3  && !self->standingOnPlatform && self->doubleJump == 1)
     {
         self->velocity.y = jump;
+        if (Mix_PlayChannel(-1, self->jumpNoise, 0) == -1)
+        {
+            return 1;
+        }
         self->doubleJump = 0;
     }
 

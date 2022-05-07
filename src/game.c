@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include "gf2d_draw.h"
 #include "gfc_input.h"
 #include "gf2d_graphics.h"
@@ -61,7 +62,25 @@ int main(int argc, char * argv[])
     entity_manager_init(1024);
     //slog("test1");
 
-    
+    // =========================== music testing ========================= 
+    Mix_Music* music = NULL;
+
+    if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+    {
+        return false;
+    }
+    music = Mix_LoadMUS("audio/background.mp3");
+    //If there was a problem loading the music
+    if (music == NULL)
+    {
+        slog("Could not load music");
+    }
+    else
+    {
+        slog("should've loaded music");
+    }
+    // =========================== music testing ========================= 
+
 
     gfc_input_init("config/input.cfg");
     //slog("test2");
@@ -832,8 +851,15 @@ int main(int argc, char * argv[])
         gf2d_graphics_clear_screen();// clears drawing buffers
         // all drawing should happen betweem clear_screen and next_frame
             //backgrounds drawn first
-
-
+        Mix_VolumeMusic(10);
+        if (Mix_PlayingMusic() == 0)
+        {
+            //Play the music
+            if (Mix_PlayMusic(music, -1) == -1)
+            {
+                return 1;
+            }
+        }
       
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
 
