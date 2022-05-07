@@ -66,6 +66,10 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 			if (attacker->experience >= 50)
 			{
 				attacker->level++;
+				if (attacker->level == 5 && attacker->activeQuest == 3)
+				{
+					attacker->activeQuest = 4;
+				}
 				attacker->experience -= 50;
 				attacker->canUpgrade = 1;
 			}
@@ -101,6 +105,15 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 		}
 		if (recipient->spawnMobNumber == 6) attacker->canWin = 1;
 
+		if (attacker->team == 1 && attacker->activeQuest == 2 && recipient->team == 2)
+		{
+			attacker->activeQuest = 3;
+		}
+
+		if (attacker->team == 1 && attacker->activeQuest == 5 && recipient->team == 2 && recipient->spawnMobNumber == 6)
+		{
+			attacker->activeQuest = 6;
+		}
 
 		if (recipient->team == 1) return;
 		else entity_free(recipient);

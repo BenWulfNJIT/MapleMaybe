@@ -376,6 +376,17 @@ int main(int argc, char * argv[])
     SDL_Rect moveSpeedUp = {400, 395, 443, 50};
     SDL_Rect dodgeUp = { 394, 480, 456, 69 };
 
+    //quest sprites
+    Sprite* quest1 = gf2d_sprite_load_image("images/quest1.png");
+    Sprite* quest2 = gf2d_sprite_load_image("images/quest2.png");
+    Sprite* quest3 = gf2d_sprite_load_image("images/quest3.png");
+    Sprite* quest4 = gf2d_sprite_load_image("images/quest4.png");
+    Sprite* quest5 = gf2d_sprite_load_image("images/quest5.png");
+    Sprite* questSuccess = gf2d_sprite_load_image("images/questSuccess.png");
+
+
+
+
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
@@ -758,6 +769,43 @@ int main(int argc, char * argv[])
             }
             //entity_draw(itemTest);
 
+            //quest here
+            if (test_player->hasBFS && test_player->activeQuest == 4)
+            {
+                test_player->activeQuest = 5;
+            }
+            if (test_player->questOpen == 1)
+            {
+                switch (test_player->activeQuest)
+                {
+                case 1:
+                    gf2d_sprite_draw_image(quest1, vector2d(350, 235));
+                    break;
+                case 2:
+                    gf2d_sprite_draw_image(quest2, vector2d(350, 235));
+                    break;
+                case 3:
+                    gf2d_sprite_draw_image(quest3, vector2d(350, 235));
+
+                    break;
+                case 4:
+                    gf2d_sprite_draw_image(quest4, vector2d(350, 235));
+
+                    break;
+                case 5:
+                    gf2d_sprite_draw_image(quest5, vector2d(350, 235));
+
+                    break;
+                case 6:
+                    gf2d_sprite_draw_image(questSuccess, vector2d(350, 235));
+
+                    break;
+                default:
+                    // gf2d_sprite_draw_image(questSuccess, vector2d(690, 10));
+
+                    break;
+                }
+            }
             //TODO
             //again, garbage need menu system
 

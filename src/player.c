@@ -111,6 +111,9 @@ Entity* player_new(Vector2D position)
     self->healthSlot = 0;
     self->moveSpeedBonus = 0;
     self->dodgeBonus = 0;
+    self->activeQuest = 1;
+    self->quest1Counter = 0;
+    self->questOpen = 0;
     self->think = player_think;
 
 
@@ -150,6 +153,15 @@ void ControlMovement(Entity* self)
    // slog("canPurchase = %i", self->canPurchase);
 
    
+    if (self->questOpen == 0 && gfc_input_key_pressed("q"))
+    {
+        self->questOpen = 1;
+    }
+    else if (self->questOpen == 1 && gfc_input_key_pressed("q"))
+    {
+        self->questOpen = 0;
+    }
+
 
     if (self->isMapOpen == 0 && gfc_input_key_pressed("m"))
     {
@@ -261,6 +273,8 @@ void ControlMovement(Entity* self)
     {
         //slow down to stop
         self->velocity.x = 0;
+        self->quest1Counter++;
+
     }
     else if (gfc_input_key_held("d") && !gfc_input_key_held("a"))
     {
@@ -270,6 +284,12 @@ void ControlMovement(Entity* self)
     else if (gfc_input_key_released("d") && !gfc_input_key_pressed("a"))
     {
         self->velocity.x = 0;
+        self->quest1Counter++;
+        if (self->activeQuest == 1 && self->quest1Counter >= 20)
+        {
+            self->activeQuest = 2;
+        }
+
     }
     else if (gfc_input_key_held("a") && gfc_input_key_held("d"))
     {

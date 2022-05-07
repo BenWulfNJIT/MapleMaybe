@@ -130,6 +130,11 @@ typedef struct Entity_S
     int         moveSpeedBonus;
     int         dodgeBonus;
 
+    //quest info
+    int         activeQuest; /**quests 1-5*/
+    int         questOpen;
+    int         quest1Counter;
+
     //Spawner info
     //Entity* entityToSpawn;
     Vector2D positionToSpawn;
