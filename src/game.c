@@ -215,6 +215,14 @@ int main(int argc, char * argv[])
 
     Vector4D debugColor = { 240, 30, 30, 255 };
 
+    Sprite* characterSelect = gf2d_sprite_load_image("images/characterSelect.png");
+    SDL_Rect thorSelect = { 75, 300, 175, 275 };
+    SDL_Rect lokiSelect = { 300, 300, 175, 275 };
+    SDL_Rect odinSelect = { 530, 300, 175, 275 };
+    SDL_Rect helaSelect = { 758, 300, 175, 275 };
+    SDL_Rect fenrirSelect = { 970, 300, 175, 275 };
+
+    int selecting = 0;
 
     while (test_player->gameState == 0)
     {
@@ -239,9 +247,9 @@ int main(int argc, char * argv[])
 
         gf2d_sprite_draw_image(mainMenu, vector2d(0, 0));
 
-        gf2d_draw_rect(play, debugColor);
-        gf2d_draw_rect(levelEditor, debugColor);
-        gf2d_draw_rect(mouseRect, debugColor);
+       // gf2d_draw_rect(play, debugColor);
+        //gf2d_draw_rect(levelEditor, debugColor);
+       // gf2d_draw_rect(mouseRect, debugColor);
 
 
         gf2d_sprite_draw(
@@ -258,16 +266,11 @@ int main(int argc, char * argv[])
         {
             slog("enter game");
 
-
             for (int i = 255; i > 0; i -= 2)
             {
                 gf2d_graphics_clear_screen();
-                //vector2d(test_player->hitBox.x, test_player->hitBox.y-100)
-                //gf2d_sprite_draw_image(test_player->sprite, test_player->position);
-                //entity_draw(test_player);
 
                 gf2d_sprite_draw_image(mainMenu, vector2d(0, 0));
-
 
                 SDL_SetTextureColorMod(
                     mainMenu->texture,
@@ -289,33 +292,25 @@ int main(int argc, char * argv[])
 
             }
 
-
-
-
-
-            test_player->gameState = 1;
-
+            
 
             for (int i = 0; i < 255; i += 2)
             {
                 gf2d_graphics_clear_screen();
 
-                gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+                gf2d_sprite_draw_image(characterSelect, vector2d(0, 0));
 
-                entity_draw(test_player);
-
-                //gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+                //entity_draw(test_player);
 
                 SDL_SetTextureColorMod(
-                    sprite->texture,
+                    characterSelect->texture,
                     i,
                     i,
                     i);
                 SDL_SetTextureAlphaMod(
-                    sprite->texture,
+                    characterSelect->texture,
                     i);
-
-
+/*
                 SDL_SetTextureColorMod(
                     test_player->sprite->texture,
                     i,
@@ -324,9 +319,443 @@ int main(int argc, char * argv[])
                 SDL_SetTextureAlphaMod(
                     test_player->sprite->texture,
                     i);
-                gf2d_grahics_next_frame();
+                    */
+               
+                selecting = 1;
+                    gf2d_grahics_next_frame();
 
             }
+            //test_player->gameState = 1;
+        }
+        while (selecting == 1)
+        {
+            SDL_PumpEvents();   // update SDL's internal event structures
+            keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
+            /*update things here*/
+
+           // gfc_input_update();
+            SDL_GetMouseState(&mx, &my);
+            mf += 0.1;
+            if (mf >= 16.0)mf = 0;
+
+            SDL_Rect mouseRect = { mx, my, 2, 2 };
+
+
+            gf2d_graphics_clear_screen();// clears drawing buffers
+            // all drawing should happen betweem clear_screen and next_frame
+                //backgrounds drawn first
+
+
+
+            gf2d_sprite_draw_image(characterSelect, vector2d(0, 0));
+
+            // gf2d_draw_rect(play, debugColor);
+             //gf2d_draw_rect(levelEditor, debugColor);
+            // gf2d_draw_rect(mouseRect, debugColor);
+            gf2d_draw_rect(thorSelect, vector4d(245, 10, 245, 255));
+            gf2d_draw_rect(lokiSelect, vector4d(245, 10, 245, 255));
+            gf2d_draw_rect(odinSelect, vector4d(245, 10, 245, 255));
+            gf2d_draw_rect(helaSelect, vector4d(245, 10, 245, 255));
+            gf2d_draw_rect(fenrirSelect, vector4d(245, 10, 245, 255));
+
+            gf2d_sprite_draw(
+                mouse,
+                vector2d(mx, my),
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                &mouseColor,
+                (int)mf);
+
+
+            // ================== begin class select shiz =======================
+            if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &thorSelect))
+            {
+
+
+                test_player->sprite = gf2d_sprite_load_all("images/chars/thor.png", 64, 114, 1);
+
+                test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/thorSkill1.png", 128, 64, 1);
+                test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/thorSkill2.png", 256, 32, 1);
+                test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/thorSkill3.png", 64, 256, 1);
+                test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/thorSkill4.png", 512, 1024, 1);
+                test_player->health = test_player->maxHealth;
+
+                test_player->skillOneCD = 0;
+                test_player->skillTwoCD = 0;
+                test_player->skillThreeCD = 0;
+                test_player->skillFourCD = 0;
+
+                test_player->classNum = 0;
+                test_player->level = 1;
+                test_player->experience = 0;
+                for (int i = 255; i > 0; i -= 2)
+                {
+                    gf2d_graphics_clear_screen();
+
+                    gf2d_sprite_draw_image(characterSelect, vector2d(0, 0));
+
+                    SDL_SetTextureColorMod(
+                        characterSelect->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        characterSelect->texture,
+                        i);
+                    SDL_SetTextureColorMod(
+                        test_player->sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        test_player->sprite->texture,
+                        i);
+                    gf2d_grahics_next_frame();
+
+                }
+
+                for (int i = 0; i < 255; i += 2)
+                {
+                    gf2d_graphics_clear_screen();
+
+                    gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+                    entity_draw(test_player);
+
+                    SDL_SetTextureColorMod(
+                        sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        sprite->texture,
+                        i);
+
+                    SDL_SetTextureColorMod(
+                        test_player->sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        test_player->sprite->texture,
+                        i);
+
+
+                    gf2d_grahics_next_frame();
+
+                }
+                selecting = 0;
+                test_player->gameState = 1;
+            }
+            if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &lokiSelect))
+            {
+                test_player->sprite = gf2d_sprite_load_all("images/chars/loki.png", 64, 114, 1);
+                test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/lokiSkill1.png", 128, 64, 1);
+                test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/lokiSkill2.png", 256, 256, 1);
+                test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/lokiSkill3.png", 128, 128, 1);
+                test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/lokiSkill4.png", 32, 32, 1);
+                test_player->health = test_player->maxHealth;
+
+                test_player->skillOneCD = 0;
+                test_player->skillTwoCD = 0;
+                test_player->skillThreeCD = 0;
+                test_player->skillFourCD = 0;
+                test_player->classNum = 1;
+                test_player->level = 1;
+                test_player->experience = 0;
+                for (int i = 255; i > 0; i -= 2)
+                {
+                    gf2d_graphics_clear_screen();
+
+                    gf2d_sprite_draw_image(characterSelect, vector2d(0, 0));
+
+                    SDL_SetTextureColorMod(
+                        characterSelect->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        characterSelect->texture,
+                        i);
+                    SDL_SetTextureColorMod(
+                        test_player->sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        test_player->sprite->texture,
+                        i);
+                    gf2d_grahics_next_frame();
+
+                }
+
+                for (int i = 0; i < 255; i += 2)
+                {
+                    gf2d_graphics_clear_screen();
+
+                    gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+                    entity_draw(test_player);
+
+                    SDL_SetTextureColorMod(
+                        sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        sprite->texture,
+                        i);
+
+                    SDL_SetTextureColorMod(
+                        test_player->sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        test_player->sprite->texture,
+                        i);
+
+
+                    gf2d_grahics_next_frame();
+
+                }
+                selecting = 0;
+                test_player->gameState = 1;
+            }
+            if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &odinSelect))
+            {
+                test_player->sprite = gf2d_sprite_load_all("images/chars/odin.png", 64, 114, 1);
+                test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/odinSkill1.png", 128, 64, 1);
+                test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/odinSkill2.png", 32, 32, 1);
+                test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/odinSkill3.png", 512, 32, 1);
+                test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/odinSkill4.png", 1024, 256, 1);
+                test_player->health = test_player->maxHealth;
+
+                test_player->skillOneCD = 0;
+                test_player->skillTwoCD = 0;
+                test_player->skillThreeCD = 0;
+                test_player->skillFourCD = 0;
+                test_player->classNum = 2;
+                test_player->level = 1;
+                test_player->experience = 0;
+                for (int i = 255; i > 0; i -= 2)
+                {
+                    gf2d_graphics_clear_screen();
+
+                    gf2d_sprite_draw_image(characterSelect, vector2d(0, 0));
+
+                    SDL_SetTextureColorMod(
+                        characterSelect->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        characterSelect->texture,
+                        i);
+                    SDL_SetTextureColorMod(
+                        test_player->sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        test_player->sprite->texture,
+                        i);
+                    gf2d_grahics_next_frame();
+
+                }
+
+                for (int i = 0; i < 255; i += 2)
+                {
+                    gf2d_graphics_clear_screen();
+
+                    gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+                    entity_draw(test_player);
+
+                    SDL_SetTextureColorMod(
+                        sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        sprite->texture,
+                        i);
+
+                    SDL_SetTextureColorMod(
+                        test_player->sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        test_player->sprite->texture,
+                        i);
+
+
+                    gf2d_grahics_next_frame();
+
+                }
+                selecting = 0;
+                test_player->gameState = 1;
+            }
+            if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &helaSelect))
+            {
+                test_player->sprite = gf2d_sprite_load_all("images/chars/hela.png", 64, 114, 1);
+                test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/helaSkill1.png", 128, 64, 1);
+                test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/helaSkill2.png", 64, 64, 1);
+                test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/helaSkill3.png", 64, 64, 1);
+                test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/helaSkill4.png", 128, 128, 1);
+                test_player->health = test_player->maxHealth;
+
+                test_player->skillOneCD = 0;
+                test_player->skillTwoCD = 0;
+                test_player->skillThreeCD = 0;
+                test_player->skillFourCD = 0;
+                test_player->classNum = 3;
+                test_player->level = 1;
+                test_player->experience = 0;
+                for (int i = 255; i > 0; i -= 2)
+                {
+                    gf2d_graphics_clear_screen();
+
+                    gf2d_sprite_draw_image(characterSelect, vector2d(0, 0));
+
+                    SDL_SetTextureColorMod(
+                        characterSelect->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        characterSelect->texture,
+                        i);
+                    SDL_SetTextureColorMod(
+                        test_player->sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        test_player->sprite->texture,
+                        i);
+                    gf2d_grahics_next_frame();
+
+                }
+
+                for (int i = 0; i < 255; i += 2)
+                {
+                    gf2d_graphics_clear_screen();
+
+                    gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+                    entity_draw(test_player);
+
+                    SDL_SetTextureColorMod(
+                        sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        sprite->texture,
+                        i);
+
+                    SDL_SetTextureColorMod(
+                        test_player->sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        test_player->sprite->texture,
+                        i);
+
+
+                    gf2d_grahics_next_frame();
+
+                }
+                selecting = 0;
+                test_player->gameState = 1;
+            }
+            if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &fenrirSelect))
+            {
+                test_player->sprite = gf2d_sprite_load_all("images/chars/fenrir.png", 64, 114, 1);
+                test_player->skillOneSprite = gf2d_sprite_load_all("images/skills/fenrirSkill1.png", 128, 64, 1);
+                test_player->skillTwoSprite = gf2d_sprite_load_all("images/skills/fenrirSkill2.png", 256, 64, 1);
+                test_player->skillThreeSprite = gf2d_sprite_load_all("images/skills/fenrirSkill3.png", 64, 16, 1);
+                test_player->skillFourSprite = gf2d_sprite_load_all("images/skills/fenrirSkill4.png", 128, 128, 1);
+                test_player->health = test_player->maxHealth;
+                test_player->skillOneCD = 0;
+                test_player->skillTwoCD = 0;
+                test_player->skillThreeCD = 0;
+                test_player->skillFourCD = 0;
+                test_player->classNum = 4;
+                test_player->level = 1;
+                test_player->experience = 0;
+
+                for (int i = 255; i > 0; i -= 2)
+                {
+                    gf2d_graphics_clear_screen();
+
+                    gf2d_sprite_draw_image(characterSelect, vector2d(0, 0));
+
+                    SDL_SetTextureColorMod(
+                        characterSelect->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        characterSelect->texture,
+                        i);
+                    SDL_SetTextureColorMod(
+                        test_player->sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        test_player->sprite->texture,
+                        i);
+                    gf2d_grahics_next_frame();
+
+                }
+
+                for (int i = 0; i < 255; i += 2)
+                {
+                    gf2d_graphics_clear_screen();
+
+                    gf2d_sprite_draw_image(sprite, vector2d(0, 0));
+
+                    entity_draw(test_player);
+
+                    SDL_SetTextureColorMod(
+                        sprite->texture,
+                        i,
+                        i,
+                        i);
+                    SDL_SetTextureAlphaMod(
+                        sprite->texture,
+                        i);
+                    
+                    SDL_SetTextureColorMod(
+                                        test_player->sprite->texture,
+                                        i,
+                                        i,
+                                        i);
+                     SDL_SetTextureAlphaMod(
+                                        test_player->sprite->texture,
+                                        i);
+                                        
+
+                    gf2d_grahics_next_frame();
+
+                }
+
+                selecting = 0;
+                test_player->gameState = 1;
+            }
+
+               
+
+            // ================== end class select shiz   =======================
+            gf2d_grahics_next_frame();
+
         }
 
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
