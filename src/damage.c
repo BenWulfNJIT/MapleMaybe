@@ -79,24 +79,27 @@ void InflictDamage(Entity* attacker, Entity* recipient, float damage)
 		if (attacker->team == 1)
 		{
 			int tempItemID = (int)(gfc_random() * 5 + 1);
+			Vector2D tempPos = recipient->position;
+			tempPos.x -= 64;
+			tempPos.y -= 64;
 			switch (tempItemID)
 			{
 			case 1:
-				if (attacker->hasMirrorShield == 0) NewItem(recipient->position, tempItemID);
+				if (attacker->hasMirrorShield == 0) NewItem(tempPos, tempItemID);
 					break;
 			case 2:
 
 				break;
 			case 3:
-				if (attacker->hasSneakers == 0) NewItem(recipient->position, tempItemID);
+				if (attacker->hasSneakers == 0) NewItem(tempPos, tempItemID);
 
 				break;
 			case 4:
-				if (attacker->hasRegenBracelet == 0) NewItem(recipient->position, tempItemID);
+				if (attacker->hasRegenBracelet == 0) NewItem(tempPos, tempItemID);
 
 				break;
 			case 5:
-				if (attacker->hasFireCape == 0) NewItem(recipient->position, tempItemID);
+				if (attacker->hasFireCape == 0) NewItem(tempPos, tempItemID);
 
 				break;
 			}

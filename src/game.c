@@ -851,7 +851,7 @@ int main(int argc, char * argv[])
         gf2d_graphics_clear_screen();// clears drawing buffers
         // all drawing should happen betweem clear_screen and next_frame
             //backgrounds drawn first
-        Mix_VolumeMusic(10);
+        Mix_VolumeMusic(5);
         if (Mix_PlayingMusic() == 0)
         {
             //Play the music
@@ -860,7 +860,7 @@ int main(int argc, char * argv[])
                 return 1;
             }
         }
-      
+        
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
 
            // slog("================= %i", test_player->playerCanTeleportToMapID);
