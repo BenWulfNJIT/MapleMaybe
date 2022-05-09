@@ -137,7 +137,7 @@ typedef struct Entity_S
 
     //sound?
     Mix_Chunk* jumpNoise;
-
+    Mix_Chunk* winNoise;
     int         pause;
     //Spawner info
     //Entity* entityToSpawn;

@@ -23,6 +23,7 @@
 #include "simple_json.h"
 #include "editor.h"
 #include "server.h"
+#include <SDL_mixer.h>
 
 
 
@@ -1231,7 +1232,7 @@ int main(int argc, char * argv[])
         gf2d_graphics_clear_screen();// clears drawing buffers
         // all drawing should happen betweem clear_screen and next_frame
             //backgrounds drawn first
-        Mix_VolumeMusic(5);
+        Mix_VolumeMusic(15);
         if (Mix_PlayingMusic() == 0)
         {
             //Play the music
@@ -1800,6 +1801,10 @@ int main(int argc, char * argv[])
             if (test_player->canWin == 1 && test_player->position.x < 100 && test_player->position.y < 600)
             {
                 cueGameWin = 1;
+                if (Mix_PlayChannel(-1, test_player->winNoise, 0) == -1)
+                {
+                    //return 1;
+                }
             }
 
             if (cueGameWin == 1)

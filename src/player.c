@@ -39,7 +39,10 @@ Entity* player_new(Vector2D position)
     if (!self)return NULL;
 
     self->jumpNoise = Mix_LoadWAV("audio/jump.wav");
-    Mix_VolumeChunk(self->jumpNoise, 10);
+    Mix_VolumeChunk(self->jumpNoise, 40);
+
+    self->winNoise = Mix_LoadWAV("audio/win.wav");
+    Mix_VolumeChunk(self->winNoise, 5);
 
     self->sprite = gf2d_sprite_load_all("images/chars/thor.png", 64, 114, 1);
     self->skillOneSprite = gf2d_sprite_load_all("images/skills/thorSkill1.png", 128, 64, 1);
