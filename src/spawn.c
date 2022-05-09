@@ -35,8 +35,8 @@ Entity* spawner_new(int entityToSpawn, Vector2D position, int maxSpawn, int freq
 
 void SpawnerThink(Entity* spawner, Entity* spawnList, VectorMap* map)
 {
-    int numToSpawn, currentNum;
-    Entity* tempEnt;
+    int numToSpawn;
+   // Entity* tempEnt;
 
     if (spawner->spawnCount != 0)
     {
@@ -49,13 +49,13 @@ void SpawnerThink(Entity* spawner, Entity* spawnList, VectorMap* map)
             switch (spawner->spawnMobNumber)
             {
             case 1 :
-                bug_think(&spawnList[i], map);
+                bug_think(&spawnList[i]);
                 break;
             case 2:
                 man_think(&spawnList[i], map);
                 break;
             case 3:
-                jumper_think(&spawnList[i], map);
+                jumper_think(&spawnList[i]);
                 break;
             case 4:
                 roller_think(&spawnList[i], map);

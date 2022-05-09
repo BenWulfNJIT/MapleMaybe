@@ -10,7 +10,7 @@ void spear_think(Entity* self)
     
     
     Entity* target = GetNearestMob(self);
-    float speed;
+    //float speed;
     //if (target->team == 1) return;
     slog("team of target: %i", target->team);
     

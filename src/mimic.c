@@ -1,5 +1,6 @@
 #include "mimic.h"
 #include "gf2d_draw.h"
+#include "damage.h"
 Entity* SpawnMimic(Vector2D position)
 {
     Entity* self;
@@ -54,8 +55,8 @@ void MimicThink(Entity* self)
         }
     }
 
-    int mx, my;
-    double distance;
+  //  int mx, my;
+  //  double distance;
     self->dashTimer++;
 
     if (player->position.x > self->position.x)

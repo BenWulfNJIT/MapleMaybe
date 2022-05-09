@@ -16,28 +16,32 @@
 #include "shop.h"
 #include "npc.h"
 #include "portal.h"
+#include "player.h"
 #include "menu.h"
 #include "items.h"
 #include "interactables.h"
 #include "simple_json.h"
 #include "editor.h"
+#include "server.h"
+
+
 
 int main(int argc, char * argv[])
 {
     /*variable declarations*/
     int done = 0;
     const Uint8 * keys;
-    Sprite* sprite, * test, *mainMenu;
-    
+    Sprite* sprite, *mainMenu;
+    int cueGameWin = 0;
     int mx,my, healthPercent;
     float mf = 0;
     Sprite *mouse;
-    Sprite* healthBar;
+    //Sprite* healthBar;
     Vector4D mouseColor = {255,100,255,200};
     Vector4D healthColor = { 255,255,255,255 };
 
     VectorMap *testMap;
-    Entity* bug, *test_player, *testSkill, *testSpawner, *bugSpawnList, 
+    Entity *test_player, *testSkill, *testSpawner, *bugSpawnList, 
         *manSpawner, *manSpawnList, 
         *jumperSpawner, *jumperSpawnList,
         *rollerSpawner, *rollerSpawnList,
@@ -107,7 +111,7 @@ int main(int argc, char * argv[])
     Sprite* map = gf2d_sprite_load_image("images/map.png");
     Sprite* mapMarker = gf2d_sprite_load_image("images/mapMarker.png");
 
-    
+    Sprite* wonGame = gf2d_sprite_load_image("images/win.png");
     //portalLeft = portal_new(vector2d(-100, -100), 0, 0);
     portalLeft = portal_new(vector2d(100, 700), 0, 2);
 
@@ -237,6 +241,13 @@ int main(int argc, char * argv[])
     Vector4D debugColor = { 240, 30, 30, 255 };
 
     Sprite* characterSelect = gf2d_sprite_load_image("images/characterSelect.png");
+    Sprite* arrowRight = gf2d_sprite_load_image("images/arrowRight.png");
+    Sprite* arrowLeft = gf2d_sprite_load_image("images/arrowLeft.png");
+    int currentBackground = 1;
+
+    SDL_Rect moveLeft = {0,0,64,32};
+    SDL_Rect moveRight = {1200-64,0,64,32};
+
     SDL_Rect thorSelect = { 75, 300, 175, 275 };
     SDL_Rect lokiSelect = { 300, 300, 175, 275 };
     SDL_Rect odinSelect = { 530, 300, 175, 275 };
@@ -292,8 +303,13 @@ int main(int argc, char * argv[])
         SDL_Rect editDemo2 = { 525, 320, 200,60 };
         SDL_Rect editDemo3 = { 525, 380, 200,60 };
 
+        int changingMap = 0;
         int editing = 0;
+        int drawing = 0;
+        Vector2D startPoint, endPoint;
         int startLevelEditor = 0;
+        int addedPlatCount = 0;
+        int currentSprite = 0;
         if (SDL_GetMouseState(&mx, &my) == 1 && SDL_HasIntersection(&mouseRect, &levelEditor))
         {
             startLevelEditor = 1;
@@ -363,7 +379,7 @@ int main(int argc, char * argv[])
                     //load json stuff here
                     //save into variables
                     //free json
-                    sj_free(editMap);
+                    //sj_free(editMap);
                     while (editing == 1)
                     {
                         //draw background
@@ -379,14 +395,82 @@ int main(int argc, char * argv[])
                         SDL_Rect mouseRect = { mx, my, 2, 2 };
                         gf2d_graphics_clear_screen();
                         gf2d_sprite_draw_image(editBackgroundSprite, vector2d(0, 0));
+                        gf2d_sprite_draw_image(arrowRight, vector2d(1200-64, 0));
+                        gf2d_sprite_draw_image(arrowLeft, vector2d(0, 0));
+                       // gf2d_draw_rect(moveLeft, vector4d(255, 0, 0, 255));
+                       // gf2d_draw_rect(moveRight, vector4d(255, 0, 0, 255));
 
                         //draw plats
-                        for (int i = 0; i < platformCount; i++)
+                        for (int i = 0; i < platformCount + addedPlatCount+ 1; i++)
                         {
                            
-
+                           // if (!&platList[i])continue;
                             gf2d_draw_line(vector2d(platList[i].x,platList[i].y), vector2d(platList[i].z, platList[i].w), vector4d(255, 0, 0, 255));
                         }
+
+                        
+                        if (SDL_GetMouseState(&mx, &my) == 1 && drawing == 0)
+                        {
+                            drawing = 1;
+                            startPoint.x = mx;
+                            startPoint.y = my;
+                        }
+                       // slog("Mouse State: %i", SDL_GetMouseState(&mx, &my));
+                        if (SDL_GetMouseState(&mx, &my) == 4)
+                        {
+                            
+                            //slog("trying to erase");
+                            for (int i = 0; i < platformCount + addedPlatCount+1; i++)
+                            {
+                                if (mx > platList[i].x && mx < platList[i].z && my == platList[i].y)
+                                {
+                                    platList[i].x = -1;
+                                    platList[i].y = -1;
+                                    platList[i].z = -1;
+                                    platList[i].w = -1;
+
+                                }
+                            }
+                        }
+                        if (drawing == 1)
+                        {
+                            
+                            gf2d_draw_line(startPoint, vector2d(mx, startPoint.y), vector4d(255, 0, 0, 255));
+                            if (SDL_GetMouseState(&mx, &my) != 1)
+                            {
+                                drawing = 0;
+                                //save platform here
+                                endPoint.x = mx;
+                                endPoint.y = startPoint.y;
+                                if (abs(endPoint.x - startPoint.x) < 15) continue;
+
+                                addedPlatCount++;
+                                platList[platformCount + addedPlatCount].x = startPoint.x;
+                                platList[platformCount + addedPlatCount].y = startPoint.y;
+                                platList[platformCount + addedPlatCount].z = endPoint.x;
+                                platList[platformCount + addedPlatCount].w = endPoint.y;
+
+                                slog("Count: %i", platformCount + addedPlatCount);
+                                /*
+                              SJson* arrayTest = sj_array_new();
+
+                              sj_array_append(arrayTest,sj_new_float(platList[platformCount + addedPlatCount].x));
+                              sj_array_append(arrayTest, sj_new_float(platList[platformCount + addedPlatCount].y));
+                              sj_array_append(arrayTest, sj_new_float(platList[platformCount + addedPlatCount].z));
+                              sj_array_append(arrayTest, sj_new_float(platList[platformCount + addedPlatCount].w));
+
+
+                              sj_array_append(sj_object_get_value(editMap, "platforms"), arrayTest);
+                              
+                              sj_save(editMap, "maps/testTown.json");
+
+                             */
+
+
+                        
+                            }
+                        }
+
 
 
                         gf2d_sprite_draw(
@@ -398,9 +482,148 @@ int main(int argc, char * argv[])
                             NULL,
                             &mouseColor,
                             (int)mf);
+                        if ((SDL_GetMouseState(&mx, &my) == 1)  && (SDL_HasIntersection(&mouseRect, &moveRight)) && (currentBackground <= 3) && changingMap == 0)
+                        {
+                            slog("entered");
+                            changingMap = 1;
+                            currentBackground++;
+
+                            switch (currentBackground)
+                            {
+                            case 1:
+                                editBackgroundSprite = gf2d_sprite_load_image("images/backgrounds/town.png");
+                                break;
+                            case 2:
+                                editBackgroundSprite = gf2d_sprite_load_image("images/backgrounds/crayonBackground.png");
+                                break;
+                            case 3:
+                                editBackgroundSprite = gf2d_sprite_load_image("images/backgrounds/demo.png");
+
+                                break;
+                            case 4:
+                                editBackgroundSprite = gf2d_sprite_load_image("images/backgrounds/town2.png");
+
+                                break;
+                          
+                            }
+
+                        }
+                        if ((SDL_GetMouseState(&mx, &my) == 1) && (SDL_HasIntersection(&mouseRect, &moveLeft)) && (currentBackground >= 2) && changingMap == 0)
+                        {
+                            slog("entered");
+                            changingMap = 1;
+                            currentBackground--;
+
+                            switch (currentBackground)
+                            {
+                            case 1:
+                                editBackgroundSprite = gf2d_sprite_load_image("images/backgrounds/town.png");
+                                break;
+                            case 2:
+                                editBackgroundSprite = gf2d_sprite_load_image("images/backgrounds/crayonBackground.png");
+                                break;
+                            case 3:
+                                editBackgroundSprite = gf2d_sprite_load_image("images/backgrounds/demo.png");
+
+                                break;
+                            case 4:
+                                editBackgroundSprite = gf2d_sprite_load_image("images/backgrounds/town2.png");
+
+                                break;
+
+                            }
+
+                        }
+                        if (changingMap == 1 && SDL_GetMouseState(&mx, &my) != 1)changingMap = 0;
 
                         gf2d_grahics_next_frame();
                         
+                        if (keys[SDL_SCANCODE_ESCAPE] == 1)
+                        {
+                            editing = 0;
+                            done = 0;
+                            startLevelEditor = 0;
+                           /*
+                            int tempCount = sj_array_get_count(sj_object_get_value(editMap, "platforms"));
+                            slog("file count: %i, platCount: %i", tempCount, platformCount);
+                           //slog("ending count: %i", sj_array_get_count(sj_object_get_value(editMap, "platforms")));
+                            for (int i = 0; i < tempCount; i++)
+                            {
+                                int tempx, tempy, tempz, tempw;
+                                
+                                sj_array_get_nth(sj_object_get_value(editMap, "platforms"), i);
+                                sj_get_integer_value(sj_array_get_nth(sj_array_get_nth(sj_object_get_value(editMap, "platforms"), i), 0), &tempx);
+                                sj_get_integer_value(sj_array_get_nth(sj_array_get_nth(sj_object_get_value(editMap, "platforms"), i), 1), &tempy);
+                                sj_get_integer_value(sj_array_get_nth(sj_array_get_nth(sj_object_get_value(editMap, "platforms"), i), 2), &tempz);
+                                sj_get_integer_value(sj_array_get_nth(sj_array_get_nth(sj_object_get_value(editMap, "platforms"), i), 3), &tempw);
+                                
+
+                                slog("FileCoord: [%i, %i, %i, %i]", tempx, tempy, tempz, tempw);
+                                slog("platListCoords: [%i, %i, %i, %i]", (int)platList[i+1].x, (int)platList[i+1].y, (int)platList[i+1].z, (int)platList[i+1].w);
+
+                                if ((int)platList[i + 1].x == -1 && (int)platList[i + 1].y == -1 && (int)platList[i + 1].z == -1 && (int)platList[i + 1].w == -1)
+                                {
+                                    slog("Found bad plat");
+                                }
+
+                            }
+                            */
+
+
+                            // ========================== SAVE TESTING ========================================
+                            
+                           SJson* arrayTest = sj_array_new();
+
+                            //sj_array_append(arrayTest, sj_new_float(platList[platformCount + addedPlatCount].x));
+                            //sj_array_append(arrayTest, sj_new_float(platList[platformCount + addedPlatCount].y));
+                            //sj_array_append(arrayTest, sj_new_float(platList[platformCount + addedPlatCount].z));
+                            //sj_array_append(arrayTest, sj_new_float(platList[platformCount + addedPlatCount].w));
+                         
+                            for (int i = 0; i < addedPlatCount; i++)
+                            {
+                                //slog("maybe? [%f], [%f], [%f], [%f]", platList[platformCount + i + 1].x, platList[platformCount + i + 1].y, platList[platformCount + i + 1].z, platList[platformCount + i + 1].w);
+                                if (platList[platformCount + i + 1].x == -1)continue;
+                                sj_array_append(arrayTest, sj_new_float(platList[platformCount + i + 1].x));
+                                sj_array_append(arrayTest, sj_new_float(platList[platformCount + i + 1].y));
+                                sj_array_append(arrayTest, sj_new_float(platList[platformCount + i + 1].z));
+                                sj_array_append(arrayTest, sj_new_float(platList[platformCount + i + 1].w));
+
+                                sj_array_append(sj_object_get_value(editMap, "platforms"), arrayTest);
+
+                                arrayTest = NULL;
+                                arrayTest = sj_array_new();
+
+                            }
+                            //sj_array_append(sj_object_get_value(editMap, "platforms"), arrayTest);
+
+                            //SJson *temp = sj_object_get_value(editMap, "background");
+                           // temp = sj_new_str("AAAAAAAAA");
+                           // sj_echo(editMap);
+                           // sj_echo(temp);
+                            //sj_object_get_value(editMap, "background") = temp;
+                            //sj_object_insert(editMap, "background", temp);
+                           // sj_echo(testingSprite);
+                          ////  testingSprite = sj_new_str("aaa");
+                           // sj_echo(testingSprite);
+                           // sj_save(testingSprite, "maps/testTown.json");
+                            
+                            //sj_object_delete_key(sj_object_get_value(editMap, "background"), "background");
+                            
+                            //sj_object_insert(testingSprite, "background", sj_new_str("aaaa"));
+                            //sj_array_append(sj_object_get_value(editMap, "background"), testingSprite);
+                           // sj_object_insert(editMap,"background", NULL);
+                            
+                          
+
+                           sj_save(editMap, "maps/testTown.json");
+
+
+                          
+                            
+                            // ========================== SAVE TESTING ========================================
+
+
+                        }
                     }
                 }
                 gf2d_sprite_draw(
@@ -508,11 +731,11 @@ int main(int argc, char * argv[])
             // gf2d_draw_rect(play, debugColor);
              //gf2d_draw_rect(levelEditor, debugColor);
             // gf2d_draw_rect(mouseRect, debugColor);
-            gf2d_draw_rect(thorSelect, vector4d(245, 10, 245, 255));
-            gf2d_draw_rect(lokiSelect, vector4d(245, 10, 245, 255));
-            gf2d_draw_rect(odinSelect, vector4d(245, 10, 245, 255));
-            gf2d_draw_rect(helaSelect, vector4d(245, 10, 245, 255));
-            gf2d_draw_rect(fenrirSelect, vector4d(245, 10, 245, 255));
+            //gf2d_draw_rect(thorSelect, vector4d(245, 10, 245, 255));
+            //gf2d_draw_rect(lokiSelect, vector4d(245, 10, 245, 255));
+            //gf2d_draw_rect(odinSelect, vector4d(245, 10, 245, 255));
+           // gf2d_draw_rect(helaSelect, vector4d(245, 10, 245, 255));
+           // gf2d_draw_rect(fenrirSelect, vector4d(245, 10, 245, 255));
 
             gf2d_sprite_draw(
                 mouse,
@@ -970,8 +1193,28 @@ int main(int argc, char * argv[])
     Sprite* questSuccess = gf2d_sprite_load_image("images/questSuccess.png");
 
 
+    //vectormap_free("maps/testTown.json");
+    testMap = vectormap_load("maps/testTown.json");
 
+    //ServerInit();
+    switch (currentBackground)
+    {
+    case 1:
+        sprite = gf2d_sprite_load_image("images/backgrounds/town.png");
+        break;
+    case 2:
+        sprite = gf2d_sprite_load_image("images/backgrounds/crayonBackground.png");
+        break;
+    case 3:
+        sprite = gf2d_sprite_load_image("images/backgrounds/demo.png");
 
+        break;
+    case 4:
+        sprite = gf2d_sprite_load_image("images/backgrounds/town2.png");
+
+        break;
+
+    }
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
@@ -1081,7 +1324,28 @@ int main(int argc, char * argv[])
                         }
 
                         testMap = vectormap_load("maps/testTown.json");
-                        sprite = gf2d_sprite_load_image(testMap->testTest);
+                        //sprite = gf2d_sprite_load_image(testMap->testTest);
+                        switch (currentBackground)
+                        {
+                        case 1:
+                            sprite = gf2d_sprite_load_image("images/backgrounds/town.png");
+                            break;
+                        case 2:
+                            sprite = gf2d_sprite_load_image("images/backgrounds/crayonBackground.png");
+                            break;
+                        case 3:
+                            sprite = gf2d_sprite_load_image("images/backgrounds/demo.png");
+
+                            break;
+                        case 4:
+                            sprite = gf2d_sprite_load_image("images/backgrounds/town2.png");
+                            
+                            break;
+                        default:
+                            sprite = gf2d_sprite_load_image("images/backgrounds/town.png");
+
+                            break;
+                        }
                         shop = shop_new(vector2d(275, 700));
 
                         npc = npc_new(vector2d(800, 700));
@@ -1476,11 +1740,11 @@ int main(int argc, char * argv[])
 
                 gf2d_sprite_draw_image(upgradeMenu, vector2d(100, 110));
 
-                gf2d_draw_rect(healthUp, vector4d(240, 10, 240, 255));
-                gf2d_draw_rect(damageUp, vector4d(240, 10, 240, 255));
-                gf2d_draw_rect(healthPotUp, vector4d(240, 10, 240, 255));
-                gf2d_draw_rect(moveSpeedUp, vector4d(240, 10, 240, 255));
-                gf2d_draw_rect(dodgeUp, vector4d(240, 10, 240, 255));
+               // gf2d_draw_rect(healthUp, vector4d(240, 10, 240, 255));
+               // gf2d_draw_rect(damageUp, vector4d(240, 10, 240, 255));
+               // gf2d_draw_rect(healthPotUp, vector4d(240, 10, 240, 255));
+                //gf2d_draw_rect(moveSpeedUp, vector4d(240, 10, 240, 255));
+               // gf2d_draw_rect(dodgeUp, vector4d(240, 10, 240, 255));
 
 
                 gf2d_sprite_draw(
@@ -1533,6 +1797,15 @@ int main(int argc, char * argv[])
          
             // ===================== MENU TESTING ============================
 
+            if (test_player->canWin == 1 && test_player->position.x < 100 && test_player->position.y < 600)
+            {
+                cueGameWin = 1;
+            }
+
+            if (cueGameWin == 1)
+            {
+                gf2d_sprite_draw_image(wonGame, vector2d(100, 110));
+            }
             while (test_player->pause == 1)
             {
                 SDL_PumpEvents();   // update SDL's internal event structures
@@ -1556,8 +1829,8 @@ int main(int argc, char * argv[])
                 gf2d_sprite_draw_image(pauseMenu, vector2d(100, 110));
                 gf2d_draw_rect(mouseRect, vector4d(240, 10, 240, 255));
 
-                gf2d_draw_rect(continuebutton, vector4d(240, 10, 240, 255));
-                gf2d_draw_rect(quitButton, vector4d(240, 10, 240, 255));
+                //gf2d_draw_rect(continuebutton, vector4d(240, 10, 240, 255));
+                //gf2d_draw_rect(quitButton, vector4d(240, 10, 240, 255));
             
 
 

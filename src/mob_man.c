@@ -4,6 +4,7 @@
 #include "physics.h"
 #include "collision.h"
 #include "vector_map.h"
+#include "damage.h"
 #define ES_DEAD 1
 
 void man_think(Entity* self, VectorMap* map)
@@ -26,8 +27,8 @@ void man_think(Entity* self, VectorMap* map)
         }
     }
 
-    int mx, my;
-    double distance;
+   // int mx, my;
+   // double distance;
     
     
     int leftBound = 300;

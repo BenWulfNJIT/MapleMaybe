@@ -135,11 +135,11 @@ Entity* player_new(Vector2D position)
 void ControlMovement(Entity* self)
 {
     float speed, jump;
-    Entity* skill;
+    //Entity* skill;
   
 
     //skill->sprite = gf2d_sprite_load_image("images/fireball.png");
-    Vector2D skillPos;
+   // Vector2D skillPos;
 
     if (self->classNum == 0) speed = self->walkSpeed * 1.5;
     else speed = self->walkSpeed;
@@ -273,7 +273,7 @@ void ControlMovement(Entity* self)
         self->velocity.y = jump*self->jumpPower;
         if (Mix_PlayChannel(-1, self->jumpNoise, 0) == -1)
         {
-            return 1;
+            //return 1;
         }
         self->jumpPower = 0.8;
     }
@@ -285,7 +285,7 @@ void ControlMovement(Entity* self)
 
         if (Mix_PlayChannel(-1, self->jumpNoise, 0) == -1)
         {
-            return 1;
+            //return 1;
         }
     }
     else if (gfc_input_key_pressed(" ") && self->classNum == 3  && !self->standingOnPlatform && self->doubleJump == 1)
@@ -293,7 +293,7 @@ void ControlMovement(Entity* self)
         self->velocity.y = jump;
         if (Mix_PlayChannel(-1, self->jumpNoise, 0) == -1)
         {
-            return 1;
+            //return 1;
         }
         self->doubleJump = 0;
     }

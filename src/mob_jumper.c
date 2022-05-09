@@ -1,6 +1,7 @@
 #include "simple_logger.h"
 #include "gf2d_draw.h"
 #include "mob_jumper.h"
+#include "damage.h"
 
 #define ES_DEAD 1
 
@@ -23,8 +24,8 @@ void jumper_think(Entity* self)
         }
     }
 
-    int mx, my;
-    double distance;
+   // int mx, my;
+   // double distance;
 
    
 

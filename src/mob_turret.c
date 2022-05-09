@@ -12,7 +12,7 @@ void turret_think(Entity* self, VectorMap* map)
     Entity* player;
     player = GetPlayer();
 
-    Vector2D eye,target;
+    Vector2D eye;
     if (self->carried == 1)
     {
         self->position.x = player->position.x;
@@ -28,8 +28,8 @@ void turret_think(Entity* self, VectorMap* map)
         }
     }
 
-    int mx, my;
-    double distance;
+   // int mx, my;
+    //double distance;
 
     //if (self->movementLock == 1) self->velocity.x = 0;
     //else self->velocity.x = gfc_random() * 2 - 1;

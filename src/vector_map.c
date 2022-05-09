@@ -28,7 +28,7 @@ VectorMap *vectormap_load(char *filename)
         *spawn1, *spawn2, *spawn3, *spawn4, *spawn5;
     VectorMap* map;
     Vector2D tempSpawnVec;
-    int i, r, c, e1, e2, e3, e4, bbx, bby, sx, sy, mobID, spawnMax, spawnRate, mapID;
+    int i, e1, e2, e3, e4, bbx, bby, sx, sy, mobID, spawnMax, spawnRate, mapID;
 
     if (!filename)return NULL;
 
